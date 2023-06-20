@@ -1,4 +1,4 @@
-name: Lint OpenOligo
+name: Lint and Test OpenOligo
 
 on: 
   push:
