@@ -1,5 +1,7 @@
 # OpenOligo
 
+[![Lint OpenOligo](https://github.com/TechnocultureResearch/OpenOligo/actions/workflows/lint.yaml/badge.svg)](https://github.com/TechnocultureResearch/OpenOligo/actions/workflows/lint.yaml)
+
 OpenOligo is an open-source platform for programmatically interacting with and managing DNA synthesis processes.
 
 ## Prerequisites
