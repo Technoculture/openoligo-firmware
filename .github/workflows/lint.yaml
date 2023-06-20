@@ -1,0 +1,28 @@
+name: Lint OpenOligo
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: |
+        poetry install
+    - name: Lint with flake8
+      run: |
+        flake8 openoligo
+    - name: Format with Black
+      run: |
+        black --check openoligo
+    - name: Lint with pylint
+      run: |
+        pylint openoligo
+
