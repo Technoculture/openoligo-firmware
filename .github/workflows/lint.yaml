@@ -29,12 +29,12 @@ jobs:
     - name: Lint with pylint
       run: |
         poetry run pylint openoligo
+    - name: Test with pytest
+      run: |
+        poetry run pytest
     - name: Lint with flake8
       run: |
         poetry run flake8 openoligo
     - name: Format with Black
       run: |
         poetry run black --check openoligo
-    - name: Test with pytest
-      run: |
-        poetry run pytest
