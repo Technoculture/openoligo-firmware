@@ -1,3 +1,5 @@
+LIBNAME:=openoligo
+
 help:
 	@echo "Usage: make [target]"
 	@echo
@@ -6,16 +8,20 @@ help:
 	@echo "  run 		run the application"
 	@echo "  lint 		run linter"
 	@echo "  type 		run type checker"
+	@echo "  test 		run tests"
 
 run:
-	@poetry run openoligo
+	@poetry run python main.py
 
 lint:
-	poetry run flake8 openoligo
-	poetry run black openoligo
-	poetry run isort openoligo
+	poetry run flake8 $(LIBNAME)
+	poetry run black $(LIBNAME)
+	poetry run isort $(LIBNAME)
 
 type:
-	poetry run mypy openoligo
+	poetry run mypy $(LIBNAME)
 
-.PHONY: ghtest lint type help
+test: type
+	poetry run pytest 
+
+.PHONY: ghtest lint type help run test

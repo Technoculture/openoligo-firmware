@@ -9,17 +9,19 @@ from openoligo.driver.types import Switchable
 class SimulatedSwitch(Switchable):
     pin: int
     name: str
+    switch_count: int = 0
     _state: bool = False
 
     def set(self, switch: bool):
         self._state = switch
+        self.switch_count += 1
 
     @property
     def value(self) -> bool:
         return self._state
 
     def toggle(self):
-        self._state = not self._state
+        self.set(not self.value)
 
 
 async def periodic_toggle(
@@ -33,7 +35,7 @@ async def periodic_toggle(
     :param loop_forever: If True, toggles the device indefinitely, else toggles it for 'count' times
     :param count: The number of times to toggle the device (ignored if loop_forever is True)
     """
-    assert interval > 0
+    assert interval > 0, "Interval must be greater than 0"
     assert count > 0 or loop_forever, "Must toggle at least once"
 
     try:

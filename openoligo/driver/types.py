@@ -6,6 +6,7 @@ class Switchable(Protocol):
         """Set the state of the switch."""
         ...
 
+    @property
     def value(self) -> bool:
         """Get the current value of the switch."""
         ...
