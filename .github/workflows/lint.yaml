@@ -22,11 +22,11 @@ jobs:
         poetry install
     - name: Lint with flake8
       run: |
-        flake8 openoligo
+        poetry run flake8 openoligo
     - name: Format with Black
       run: |
-        black --check openoligo
+        poetry run black --check openoligo
     - name: Lint with pylint
       run: |
-        pylint openoligo
+        poetry run pylint openoligo
 
