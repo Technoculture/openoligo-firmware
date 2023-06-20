@@ -26,12 +26,15 @@ jobs:
     - name: Install dependencies
       run: |
         poetry install
+    - name: Lint with pylint
+      run: |
+        poetry run pylint openoligo
     - name: Lint with flake8
       run: |
         poetry run flake8 openoligo
     - name: Format with Black
       run: |
         poetry run black --check openoligo
-    - name: Lint with pylint
+    - name: Test with pytest
       run: |
-        poetry run pylint openoligo
+        poetry run pytest
