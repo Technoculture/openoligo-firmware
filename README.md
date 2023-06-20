@@ -35,6 +35,7 @@ pip install poetry
 To install the dependencies needed for the project, navigate to the project directory (where the pyproject.toml is located) in your terminal, and run:
 
 ```bash
+poetry lock
 poetry install
 ```
 
