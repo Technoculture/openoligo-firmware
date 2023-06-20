@@ -2,10 +2,10 @@
 name = "OpenOligo"
 version = "0.1.0"
 description = "An open-source platform for programmatically interacting with and managing Nucleic acid sequences synthesis processes."
-license = "MIT"
+license = "Apache-2.0"
 authors = ["Satyam Tiwary <satyam@technoculture.io>"]
 readme = "README.md"
-keywords = ["DNA", "synthesis", "Kilobaser", "biology", "genetics", "open-source"]
+keywords = ["DNA", "synthesis", "genetics", "open-source"]
 
 [tool.poetry.scripts]
 openoligo = 'main:main'

@@ -51,12 +51,14 @@ This project includes a Makefile that makes it easier to run common tasks. Here 
 - `make help`: Print help information about the available targets.
 - `make lint`: Run linters on the code, including flake8, black (for code formatting checks), and isort (for import ordering checks).
 - `make type`: Run the mypy type checker on the code.
+- `make test`: Run tests
 
 To use the Makefile, open your command prompt or terminal, navigate to the project directory, and run the `make` command followed by the target. For example, to run linters on the code, use:
 
 ```bash
 make lint
+make test
 ```
 
-Please make sure that you have make installed on your system. On Windows, you may need to install make via a package manager like Chocolatey, or use a POSIX compatibility layer like Git Bash or Cygwin.
+> Please make sure that you have make installed on your system. On Windows, you may need to install make via a package manager like Chocolatey, or use a POSIX compatibility layer like Git Bash or Cygwin.
 
