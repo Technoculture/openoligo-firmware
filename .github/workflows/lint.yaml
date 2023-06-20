@@ -35,4 +35,3 @@ jobs:
     - name: Lint with pylint
       run: |
         poetry run pylint openoligo
-

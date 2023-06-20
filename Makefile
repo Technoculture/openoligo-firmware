@@ -14,6 +14,7 @@ run:
 	@poetry run python main.py
 
 lint:
+	poetry run pylint $(LIBNAME)
 	poetry run flake8 $(LIBNAME)
 	poetry run black $(LIBNAME)
 	poetry run isort $(LIBNAME)

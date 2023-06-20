@@ -1,27 +1,38 @@
+"""
+Switches can be used to control devices that can be turned on and off.
+"""
 import asyncio
 import logging
 from dataclasses import dataclass
 
-from openoligo.driver.types import Switchable
+from openoligo.driver.types import Switchable, SwitchingError
 
 
 @dataclass
 class SimulatedSwitch(Switchable):
+    """
+    This class represents a simulated switch. It is useful for testing purposes.
+    It can also be used as a base class for other switchable devices.
+    """
+
     pin: int
     name: str
     switch_count: int = 0
     _state: bool = False
 
     def set(self, switch: bool):
+        """Set state of the switch ON or OFF."""
         self._state = switch
         self.switch_count += 1
 
     @property
     def value(self) -> bool:
+        """Get the current value of the switch."""
         return self._state
 
     def toggle(self):
-        self.set(not self.value)
+        """Toggle the state of the switch."""
+        self.set(not self._state)
 
 
 async def periodic_toggle(
@@ -44,5 +55,5 @@ async def periodic_toggle(
             switch.toggle()
             logging.info(switch)
             await asyncio.sleep(interval)
-    except Exception as e:
-        logging.error(f"Error occurred while toggling switch: {e}")
+    except SwitchingError as error:
+        logging.error("Error occurred while toggling switch: %s", error)
