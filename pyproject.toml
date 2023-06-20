@@ -26,5 +26,4 @@ requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
 
 [tool.black]
-line-length = 88
-
+line-length = 100

@@ -13,11 +13,11 @@ OpenOligo is an open-source platform for programmatically interacting with and m
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/OpenOligo.git
+git clone https://github.com/techno/OpenOligo.git
 cd OpenOligo
 ```
 
-Replace yourusername with your actual GitHub username.
+Replace <yourusername> with your actual GitHub username.
 
 ### 2. Install Python
 Download and install Python from the official site.
@@ -49,7 +49,6 @@ This project includes a Makefile that makes it easier to run common tasks. Here 
 - `make help`: Print help information about the available targets.
 - `make lint`: Run linters on the code, including flake8, black (for code formatting checks), and isort (for import ordering checks).
 - `make type`: Run the mypy type checker on the code.
-- `make ghtest`: Run the GitHub Action locally using `act`. 
 
 To use the Makefile, open your command prompt or terminal, navigate to the project directory, and run the `make` command followed by the target. For example, to run linters on the code, use:
 
