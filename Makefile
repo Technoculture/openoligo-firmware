@@ -1,5 +1,6 @@
 LIBNAME:=openoligo
 EXECNAME:=main.py
+TESTDIR:=tests
 
 help:
 	@echo "Usage: make [target]"
@@ -19,9 +20,9 @@ run:
 
 lint:
 	poetry run pylint $(LIBNAME)
-	poetry run flake8 $(LIBNAME)
-	poetry run black $(LIBNAME)
-	poetry run isort $(LIBNAME)
+	poetry run flake8 $(LIBNAME) $(TESTDIR)
+	poetry run black $(LIBNAME) $(TESTDIR)
+	poetry run isort $(LIBNAME) $(TESTDIR)
 
 type:
 	poetry run mypy $(LIBNAME)

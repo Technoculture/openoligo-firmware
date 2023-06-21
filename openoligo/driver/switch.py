@@ -31,6 +31,16 @@ class SimulatedSwitch(Switchable):
         return self._state
 
 
+class PneumaticValve(SimulatedSwitch):
+    """
+    This class represents a pneumatic valve. It is useful for testing purposes.
+    It can also be used as a base class for other switchable devices.
+    """
+
+    def __init__(self, pin: int, name: str):
+        super().__init__(pin, name)
+
+
 async def toggle(switch: Switchable):
     """
     Toggle the state of a switchable device.
