@@ -10,6 +10,10 @@ class Switchable(Protocol):
     be able to set, get the current value and toggle the state of the switch.
     """
 
+    def __init__(self, pin: int, name: str):
+        """Initialize the switchable device."""
+        raise NotImplementedError
+
     async def set(self, switch: bool):
         """Set the state of the switch."""
         raise NotImplementedError
@@ -23,4 +27,10 @@ class Switchable(Protocol):
 class SwitchingError(Exception):
     """
     An exception that represents a failure in switching operation.
+    """
+
+
+class InvalidManifoldSizeError(Exception):
+    """
+    An exception that represents an invalid manifold size.
     """

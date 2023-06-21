@@ -38,10 +38,20 @@ async def test_periodic_toggle():
         await periodic_toggle(switch=s1, interval=-1, loop_forever=False, count=1)
 
 
-def test_pneumatic_valve_init():
+@pytest.mark.asyncio
+async def test_pneumatic_valve_init():
     p1 = PneumaticValve(pin=1, name="test_valve")
     assert isinstance(p1, SimulatedSwitch)
     assert isinstance(p1, Switchable)
+    # print(p1)
+
+    assert p1.name == "test_valve"
+    assert p1.pin == 1
+    assert not p1.value  # = False
+    await toggle(p1)
+    assert p1.value  # = True
+    await p1.set(False)
+    assert not p1.value  # = False
 
 
 @pytest.mark.asyncio
@@ -52,3 +62,8 @@ async def test_periodic_toggle_exception_handling():
     with patch("logging.error") as mock_log:  # patch logging to check if it logs the exception
         await periodic_toggle(switch=s1, interval=0.01, loop_forever=False, count=1)
         mock_log.assert_called_once_with(ANY)
+
+
+# if __name__ == "__main__":
+#     import asyncio
+#     asyncio.run(test_pneumatic_valve_init())
