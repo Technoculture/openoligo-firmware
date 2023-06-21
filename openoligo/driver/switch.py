@@ -20,7 +20,7 @@ class SimulatedSwitch(Switchable):
     switch_count: int = 0
     _state: bool = False
 
-    def set(self, switch: bool):
+    async def set(self, switch: bool):
         """Set state of the switch ON or OFF."""
         self._state = switch
         self.switch_count += 1
@@ -30,9 +30,15 @@ class SimulatedSwitch(Switchable):
         """Get the current value of the switch."""
         return self._state
 
-    def toggle(self):
-        """Toggle the state of the switch."""
-        self.set(not self._state)
+
+async def toggle(switch: Switchable):
+    """
+    Toggle the state of a switchable device.
+
+    :param switch: The device to be toggled
+    """
+    await switch.set(not switch.value)
+    logging.debug("Toggled the switch: %s", switch)
 
 
 async def periodic_toggle(
@@ -52,8 +58,8 @@ async def periodic_toggle(
     try:
         while loop_forever or count > 0:
             count -= 1 if count > 0 else 0
-            switch.toggle()
-            logging.info(switch)
+            await toggle(switch)
+            logging.debug(switch)
             await asyncio.sleep(interval)
     except SwitchingError as error:
-        logging.error("Error occurred while toggling switch: %s", error)
+        logging.error(error)

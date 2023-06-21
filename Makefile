@@ -1,17 +1,21 @@
 LIBNAME:=openoligo
+EXECNAME:=main.py
 
 help:
 	@echo "Usage: make [target]"
 	@echo
 	@echo "Targets:"
-	@echo "  help 		print this help"
+	@echo "  all 		Run linting, type checking and tests 	<== If in doubt, use this target"
 	@echo "  run 		run the application"
 	@echo "  lint 		run linter"
 	@echo "  type 		run type checker"
 	@echo "  test 		run tests"
+	@echo "  help 		print this help"
+
+all: lint test
 
 run:
-	@poetry run python main.py
+	@poetry run python $(EXECNAME)
 
 lint:
 	poetry run pylint $(LIBNAME)
@@ -25,4 +29,7 @@ type:
 test: type
 	poetry run pytest 
 
-.PHONY: ghtest lint type help run test
+publish:
+	poetry publish --build
+
+.PHONY: ghtest lint type help run test publish

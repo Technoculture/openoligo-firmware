@@ -10,17 +10,13 @@ class Switchable(Protocol):
     be able to set, get the current value and toggle the state of the switch.
     """
 
-    def set(self, switch: bool):
+    async def set(self, switch: bool):
         """Set the state of the switch."""
         raise NotImplementedError
 
     @property
     def value(self) -> bool:
         """Get the current value of the switch."""
-        raise NotImplementedError
-
-    def toggle(self):
-        """Toggle the state of the switch."""
         raise NotImplementedError
 
 
