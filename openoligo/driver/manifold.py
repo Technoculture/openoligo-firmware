@@ -4,11 +4,12 @@ Manifolds are a collection of valves.
 from dataclasses import dataclass, field
 from typing import List, Type
 
+from openoligo.driver.switch import toggle
 from openoligo.driver.types import InvalidManifoldSizeError, Switchable
 
 
 @dataclass
-class SwitchSet:
+class Manifold:
     """
     This class represents a set of switches.
     The switches are created at initialization based on the provided size.
@@ -38,3 +39,21 @@ class SwitchSet:
         if index < 0 or index >= self.size:
             raise ValueError(f"Index out of range: {index}")
         return self.switches[index].value
+
+
+async def set_manifold(manifold: Manifold, state: bool):
+    """Set the state of a list of switches."""
+    for switch in manifold.switches:
+        await switch.set(state)
+
+
+async def toggle_manifold(manifold: Manifold):
+    """Toggle the state of a list of switches."""
+    for switch in manifold.switches:
+        await toggle(switch)
+
+
+async def set_one_hot(manifold: Manifold, index: int):
+    """Set state for the index to ON and all others to OFF"""
+    for i in range(manifold.size):
+        await manifold.set(i, i == index)
