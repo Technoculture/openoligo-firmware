@@ -6,23 +6,22 @@ from openoligo.driver.switch import SimulatedSwitch
 from openoligo.driver.types import InvalidManifoldSizeError
 
 
-@pytest.mark.asyncio
 @pytest.mark.parametrize("size", [4, 8, 10, 16, 20])
-async def test_manifold(size):
+def test_manifold(size):
     manifold = Manifold(SimulatedSwitch, size)
     assert len(manifold.switches) == size
     assert all(not manifold.value(i) for i in range(size))
 
     for i in range(size):
-        await manifold.set(i, True)
+        manifold.set(i, True)
         assert manifold.value(i)  # == True
-        await manifold.set(i, False)
+        manifold.set(i, False)
         assert not manifold.value(i)  # == False
 
     with pytest.raises(ValueError):
-        await manifold.set(-1, True)
+        manifold.set(-1, True)
     with pytest.raises(ValueError):
-        await manifold.set(size, True)
+        manifold.set(size, True)
     with pytest.raises(ValueError):
         manifold.value(-1)
     with pytest.raises(ValueError):
@@ -39,17 +38,16 @@ def test_manifold_invalid_switch_type():
         Manifold(int, 4)  # type: ignore
 
 
-@pytest.mark.asyncio
-async def test_set_manifold():
+def test_set_manifold():
     manifold = Manifold(SimulatedSwitch, 4)
-    await set_manifold(manifold, True)
+    set_manifold(manifold, True)
     assert all(manifold.value(i) for i in range(4))
-    await set_one_hot(manifold, 2)
+    set_one_hot(manifold, 2)
     assert (
         manifold.value(2)
         and not manifold.value(0)
         and not manifold.value(1)
         and not manifold.value(3)
     )
-    await toggle_manifold(manifold)
+    toggle_manifold(manifold)
     assert not manifold.value(2) and manifold.value(0) and manifold.value(1) and manifold.value(3)

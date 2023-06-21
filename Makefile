@@ -7,6 +7,7 @@ help:
 	@echo
 	@echo "Targets:"
 	@echo "  all 		Run linting, type checking and tests 	<== If in doubt, use this target"
+	@echo "  install 	Install the package"
 	@echo "  run 		run the application"
 	@echo "  format 	Format the code"
 	@echo "  lint 		run linter"
@@ -36,4 +37,11 @@ test: type
 publish:
 	poetry publish --build
 
-.PHONY: ghtest lint type help run test publish
+install:
+	@if [ -f /proc/cpuinfo ] && grep -q Raspberry /proc/cpuinfo; then \
+		poetry install --extras "rpi"; \
+	else \
+		poetry install; \
+	fi
+
+.PHONY: ghtest lint type help run test publish install

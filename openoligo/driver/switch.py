@@ -1,9 +1,10 @@
 """
 Switches can be used to control devices that can be turned on and off.
 """
-import asyncio
 import logging
+import time
 from dataclasses import dataclass
+from typing import Callable
 
 from openoligo.driver.types import Switchable, SwitchingError
 
@@ -17,12 +18,14 @@ class SimulatedSwitch(Switchable):
 
     pin: int
     name: str
+    on_set: Callable[[bool], None] = lambda _: None
     switch_count: int = 0
     _state: bool = False
 
-    async def set(self, switch: bool):
+    def set(self, state: bool):
         """Set state of the switch ON or OFF."""
-        self._state = switch
+        self._state = state
+        self.on_set(state)
         self.switch_count += 1
 
     @property
@@ -38,22 +41,37 @@ class PneumaticValve(SimulatedSwitch):
     """
 
     def __init__(self, pin: int, name: str):
-        super().__init__(pin, name)
+        super().__init__(pin, name, on_set=lambda _: None)
 
 
-async def toggle(switch: Switchable):
+class Pump(SimulatedSwitch):
+    """
+    This class represents a pump. It is useful for testing purposes.
+    It can also be used as a base class for other switchable devices.
+    """
+
+    def __init__(self, pin: int, name: str):
+        super().__init__(pin, name, on_set=lambda _: None)
+
+    def set(self, state: bool):
+        super().set(state)
+        if state:
+            logging.info("Starting pump %s on pin %s", self.name, self.pin)
+        else:
+            logging.info("Stopping pump %s on pin %s", self.name, self.pin)
+
+
+def toggle(switch: Switchable):
     """
     Toggle the state of a switchable device.
 
     :param switch: The device to be toggled
     """
-    await switch.set(not switch.value)
+    switch.set(not switch.value)
     logging.debug("Toggled the switch: %s", switch)
 
 
-async def periodic_toggle(
-    switch: Switchable, interval: float, loop_forever: bool = True, count: int = 0
-):
+def periodic_toggle(switch: Switchable, interval: float, loop_forever: bool = True, count: int = 0):
     """
     Periodically toggle the state of a switchable device.
 
@@ -68,8 +86,8 @@ async def periodic_toggle(
     try:
         while loop_forever or count > 0:
             count -= 1 if count > 0 else 0
-            await toggle(switch)
+            toggle(switch)
             logging.debug(switch)
-            await asyncio.sleep(interval)
+            time.sleep(interval)
     except SwitchingError as error:
         logging.error(error)

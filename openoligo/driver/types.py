@@ -1,7 +1,7 @@
 """
 This module contains definitions of protocols and exceptions related to switchable devices.
 """
-from typing import Protocol
+from typing import Callable, Protocol
 
 
 class Switchable(Protocol):
@@ -10,11 +10,11 @@ class Switchable(Protocol):
     be able to set, get the current value and toggle the state of the switch.
     """
 
-    def __init__(self, pin: int, name: str):
+    def __init__(self, pin: int, name: str, *, on_set: Callable[[bool], None] = lambda _: None):
         """Initialize the switchable device."""
         raise NotImplementedError
 
-    async def set(self, switch: bool):
+    def set(self, state: bool):
         """Set the state of the switch."""
         raise NotImplementedError
 

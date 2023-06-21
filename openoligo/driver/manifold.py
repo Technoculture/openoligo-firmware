@@ -28,11 +28,11 @@ class Manifold:
             )
         self.switches = [self.switch_type(i, f"Switch {i}") for i in range(self.size)]
 
-    async def set(self, index: int, state: bool):
+    def set(self, index: int, state: bool):
         """Set state of the switch at a given index ON or OFF."""
         if index < 0 or index >= self.size:
             raise ValueError(f"Index out of range: {index}")
-        await self.switches[index].set(state)
+        self.switches[index].set(state)
 
     def value(self, index: int) -> bool:
         """Get the current value of the switch at a given index."""
@@ -41,19 +41,19 @@ class Manifold:
         return self.switches[index].value
 
 
-async def set_manifold(manifold: Manifold, state: bool):
+def set_manifold(manifold: Manifold, state: bool):
     """Set the state of a list of switches."""
     for switch in manifold.switches:
-        await switch.set(state)
+        switch.set(state)
 
 
-async def toggle_manifold(manifold: Manifold):
+def toggle_manifold(manifold: Manifold):
     """Toggle the state of a list of switches."""
     for switch in manifold.switches:
-        await toggle(switch)
+        toggle(switch)
 
 
-async def set_one_hot(manifold: Manifold, index: int):
+def set_one_hot(manifold: Manifold, index: int):
     """Set state for the index to ON and all others to OFF"""
     for i in range(manifold.size):
-        await manifold.set(i, i == index)
+        manifold.set(i, i == index)
