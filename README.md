@@ -4,7 +4,20 @@
 
 OpenOligo is an open-source platform for programmatically interacting with and managing DNA synthesis processes.
 
-## Prerequisites
+## Getting Started
+```bash
+pip install openoligo
+```
+
+### A simple Example
+```py
+from openoligo.driver.switch import SimulatedSwitch, periodic_toggle
+
+switch1 = SimulatedSwitch(pin=1, name="Switch 1")
+periodic_toggle(switch1, 1, loop_forever=True)
+```
+
+## For Contibuting
 
 - Python 3.8+
 - Poetry for Python dependency management.
