@@ -57,13 +57,15 @@ class Manifold(Generic[T]):
         for valve in self.valves:
             toggle(valve)
 
-    def one_hot(self, index: int):
+    def activate_flow(self, index: int):
         """Set state for the index to ON and all others to OFF"""
-        self.n_hot([index])
+        self.activate_n_flows([index])
 
-    def n_hot(self, indices: List[int]):
+    def activate_n_flows(self, indices: List[int]):
         """Set state for the indices to ON and all others to OFF"""
         for i in indices:
+            if not isinstance(i, int):
+                raise TypeError(f"Each index must be an integer, got {type(i)}")
             if i < 0 or i >= self.size:
                 raise ValueError(f"Index out of range: {i}")
         for i in range(self.size):

@@ -43,7 +43,7 @@ def test_set_manifold():
         manifold.value(i) for i in range(4)
     ), "Failed to set all valves to True (Close all flows)"
 
-    manifold.one_hot(2)
+    manifold.activate_flow(2)
     assert (
         manifold.value(2)
         and not manifold.value(0)
@@ -56,17 +56,17 @@ def test_set_manifold():
 
 
 @pytest.mark.parametrize("indices", [[0, 3], [0, 1, 3], [2]])
-def test_n_hot(indices):
+def test_activate_n_flows(indices):
     manifold = Manifold(MockValve, 4)
-    manifold.n_hot(indices)
+    manifold.activate_n_flows(indices)
     assert all(manifold.value(i) for i in indices), "Failed to set n_hot to {}".format(indices)
     assert not any(
         manifold.value(i) for i in range(4) if i not in indices
     ), "Failed to set n_hot to {}".format(indices)
 
 
-@pytest.mark.parametrize("indices", [[5, 4], [-1], [4], [10, 20]])
-def test_n_hot_invalid_indices(indices):
+@pytest.mark.parametrize("indices", [[5, 4], [-1], [4, 8], [10, 20]])
+def test_activate_n_flows_invalid_indices(indices):
     manifold = Manifold(MockValve, 4)
     with pytest.raises(ValueError):
-        manifold.n_hot(indices)
+        manifold.activate_n_flows(indices)
