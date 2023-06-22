@@ -14,3 +14,4 @@ from openoligo.driver.switch import (PneumaticNoValve, Pump, periodic_toggle,
 from openoligo.driver.types import (GpioMode, InvalidManifoldSizeError,
                                     Switchable, SwitchingError, Valvable,
                                     ValveState, ValveType)
+from openoligo.utils.wait import ms, wait

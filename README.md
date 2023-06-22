@@ -11,6 +11,7 @@ pip install openoligo
 ```
 
 ### A simple Example
+
 ```py
 from time import sleep
 from openoligo import Manifold, MockValve
@@ -18,9 +19,9 @@ from openoligo import Manifold, MockValve
 m = Manifold(MockValve, 4)
 
 m.one_hot(3)
-sleep(1)
+wait(ms(300))
 m.one_hot(2)
-sleep(2)
+wait(1)
 
 print(m)
 ```
