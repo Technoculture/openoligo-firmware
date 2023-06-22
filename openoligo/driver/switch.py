@@ -3,30 +3,27 @@ Switches can be used to control devices that can be turned on and off.
 """
 import logging
 import time
-from dataclasses import dataclass
-from typing import Callable
+from dataclasses import dataclass, field
 
-from openoligo.driver.types import Switchable, SwitchingError
+from openoligo.driver.types import (Switchable, SwitchingError, Valvable,
+                                    ValveState, ValveType)
 
 
 @dataclass
-class SimulatedSwitch(Switchable):
+class MockSwitch(Switchable):
     """
     This class represents a simulated switch. It is useful for testing purposes.
     It can also be used as a base class for other switchable devices.
     """
 
-    pin: int
     name: str
-    on_set: Callable[[bool], None] = lambda _: None
-    switch_count: int = 0
-    _state: bool = False
+    _switch_count: int = field(default=0, init=False)
+    _state: bool = field(default=False, init=False)
 
     def set(self, state: bool):
         """Set state of the switch ON or OFF."""
         self._state = state
-        self.on_set(state)
-        self.switch_count += 1
+        self._switch_count += 1
 
     @property
     def value(self) -> bool:
@@ -34,31 +31,75 @@ class SimulatedSwitch(Switchable):
         return self._state
 
 
-class PneumaticValve(SimulatedSwitch):
+@dataclass
+class MockValve(Valvable):
+    """
+    This class represents a simulated valve. It is useful for testing purposes.
+    """
+
+    pin: int
+    name: str
+    valve_type: ValveType = field(default=ValveType.NORMALLY_OPEN)
+    _switch_count: int = field(init=False, default=0)
+    _state: ValveState = field(init=False)
+
+    def __post_init__(self):
+        """Initialize the valve."""
+        self._state = (
+            ValveState.CLOSED_FLOW
+            if self.valve_type == ValveType.NORMALLY_CLOSED
+            else ValveState.OPEN_FLOW
+        )
+
+    def open(self):
+        """Open the valve."""
+        self.set(True)
+
+    def close(self):
+        """Close the valve."""
+        self.set(False)
+
+    def set(self, state: bool):
+        """Set the state of the valve."""
+        self._state = ValveState.OPEN_FLOW if state else ValveState.CLOSED_FLOW
+        self._switch_count += 1
+
+    @property
+    def value(self) -> bool:
+        """Get the current value of the valve."""
+        return self._state == ValveState.OPEN_FLOW
+
+    @property
+    def get_type(self) -> ValveType:
+        """Get the type of the valve."""
+        return self.valve_type
+
+    def __repr__(self) -> str:
+        return f"{self.pin}[{self.value}]"
+
+
+class PneumaticNoValve(MockValve):
     """
     This class represents a pneumatic valve. It is useful for testing purposes.
     It can also be used as a base class for other switchable devices.
     """
 
-    def __init__(self, pin: int, name: str):
-        super().__init__(pin, name, on_set=lambda _: None)
+    def __init__(self, pin: int, name: str, valve_type: ValveType = ValveType.NORMALLY_OPEN):
+        super().__init__(pin, name, valve_type)
 
 
-class Pump(SimulatedSwitch):
+class Pump(MockSwitch):
     """
     This class represents a pump. It is useful for testing purposes.
     It can also be used as a base class for other switchable devices.
     """
 
-    def __init__(self, pin: int, name: str):
-        super().__init__(pin, name, on_set=lambda _: None)
-
     def set(self, state: bool):
         super().set(state)
         if state:
-            logging.info("Starting pump %s on pin %s", self.name, self.pin)
+            logging.info("Starting pump %s on pin %s", self.name, self.name)
         else:
-            logging.info("Stopping pump %s on pin %s", self.name, self.pin)
+            logging.info("Stopping pump %s on pin %s", self.name, self.name)
 
 
 def toggle(switch: Switchable):

@@ -8,7 +8,7 @@ readme = "README.md"
 keywords = ["DNA", "synthesis", "genetics", "open-source"]
 
 [tool.poetry.scripts]
-openoligo = 'main:main'
+oligo-server= 'app.server:main'
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -21,6 +21,8 @@ black = "^23.3.0"
 pylint = "^2.17.4"
 mypy = "^1.3.0"
 isort = "^5.12.0"
+jupyter = "^1.0.0"
+jupyterlab = "^4.0.2"
 
 [build-system]
 requires = ["poetry>=0.12"]

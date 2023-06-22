@@ -1,5 +1,5 @@
 LIBNAME:=openoligo
-EXECNAME:=main.py
+EXECNAME:=server.py
 TESTDIR:=tests
 
 help:

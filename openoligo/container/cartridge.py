@@ -3,17 +3,35 @@ Reagents and cartridges for the OpenOligo project.
 """
 from types import SimpleNamespace
 
-from openoligo.container.types import (Reagent, ReagentCategory, ReagentType,
-                                       Slot, SlotID)
+from openoligo.container.types import (Bottle, Reagent, ReagentCategory,
+                                       ReagentType)
 
 reagents = SimpleNamespace(
     acetonitrile=Reagent(
         name="acetonitrile", type=ReagentType.LIQUID, category=ReagentCategory.SOLVENT
     ),
+    acetone=Reagent(name="acetone", type=ReagentType.LIQUID, category=ReagentCategory.SOLVENT),
 )
 
 
 dna_cartridge = SimpleNamespace(
-    a1=Slot(slot_id=SlotID.A1, reagent=reagents.acetonitrile, associated_valve=1),
-    a2=Slot(slot_id=SlotID.A2, reagent=reagents.acetonitrile, associated_valve=2),
+    atgc = SimpleNamespace(
+        a1=Bottle(reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01")
+    ), 
+    methylated = SimpleNamespace(
+        a1=Bottle(reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01")
+    ),
+    azide = SimpleNamespace(
+        a1=Bottle(reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01")
+    )
+)
+
+
+rna_cartridge = SimpleNamespace(
+    augc = SimpleNamespace(
+        a1=Bottle(reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01"),
+    ),
+    methylated = SimpleNamespace(
+        a1=Bottle(reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01"),
+    ),
 )

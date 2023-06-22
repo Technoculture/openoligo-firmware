@@ -9,7 +9,7 @@ from typing import Optional
 
 
 class BottleSize(Enum):
-    """The type of container."""
+    """The size of bottle."""
 
     SMALL = 1
     LARGE = 2
@@ -25,12 +25,16 @@ class ReagentType(Enum):
 class ReagentCategory(str, Enum):
     """The category of reagent."""
 
-    CAPPING = "capping"
-    DEPROTECTION = "deprotection"
-    COUPLING = "coupling"
+    DETRITYLATION = "detritylation"
     ACTIVATION = "activation"
+    COUPLING = "coupling"
+    CAPPING = "capping"
+    OXIDATION = "oxidation"
+    DEPROTECTION = "deprotection"
+
     PHOSPHORAMIDITE = "phosphoramidite"
     SOLVENT = "solvent"
+    GAS = "gas"
 
 
 class SlotID(Enum):
@@ -74,6 +78,15 @@ class SlotID(Enum):
 
 
 @dataclass
+class Slot:
+    """A slot in the cartridge."""
+
+    slot_id: SlotID
+    associated_valve: int
+    size: BottleSize = BottleSize.SMALL
+
+
+@dataclass
 class Reagent:
     """A reagent."""
 
@@ -81,14 +94,17 @@ class Reagent:
     type: ReagentType
     category: ReagentCategory
     description: str = ""
+    solvent_slot: Optional[Slot] = None
 
 
 @dataclass
-class Slot:
-    """A slot in the cartridge."""
+class Bottle:
+    """A bottle containing a particular reagent."""
 
-    slot_id: SlotID
-    associated_valve: int
-    reagent: Optional[Reagent]
+    manufacturing_date: str
+    shelf_life: int = 45
+    slot: Optional[Slot] = None
+    reagent: Optional[Reagent] = None
     size: BottleSize = BottleSize.SMALL
-    associated_solvent: Optional[Reagent] = None
+    open_bottle_date: Optional[str] = None
+    expiry_date: Optional[str] = None
