@@ -15,23 +15,33 @@ reagents = SimpleNamespace(
 
 
 dna_cartridge = SimpleNamespace(
-    atgc = SimpleNamespace(
-        a1=Bottle(reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01")
-    ), 
-    methylated = SimpleNamespace(
-        a1=Bottle(reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01")
+    atgc=SimpleNamespace(
+        a1=Bottle(
+            reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01"
+        )
     ),
-    azide = SimpleNamespace(
-        a1=Bottle(reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01")
-    )
+    methylated=SimpleNamespace(
+        a1=Bottle(
+            reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01"
+        )
+    ),
+    azide=SimpleNamespace(
+        a1=Bottle(
+            reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01"
+        )
+    ),
 )
 
 
 rna_cartridge = SimpleNamespace(
-    augc = SimpleNamespace(
-        a1=Bottle(reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01"),
+    augc=SimpleNamespace(
+        a1=Bottle(
+            reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01"
+        ),
     ),
-    methylated = SimpleNamespace(
-        a1=Bottle(reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01"),
+    methylated=SimpleNamespace(
+        a1=Bottle(
+            reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01"
+        ),
     ),
 )

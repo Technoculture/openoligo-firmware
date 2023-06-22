@@ -23,8 +23,12 @@ def test_nc_no_switch():
 
     s1.close()
     s2.close()
-    assert s1._state == ValveState.CLOSED_FLOW, "NC valve _state should be closed, after close() call"
-    assert s2._state == ValveState.CLOSED_FLOW, "NO valve _state should be closed, after close() call"
+    assert (
+        s1._state == ValveState.CLOSED_FLOW
+    ), "NC valve _state should be closed, after close() call"
+    assert (
+        s2._state == ValveState.CLOSED_FLOW
+    ), "NO valve _state should be closed, after close() call"
 
 
 def test_simulated_switch():

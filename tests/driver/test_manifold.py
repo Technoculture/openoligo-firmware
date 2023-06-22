@@ -18,12 +18,12 @@ def test_manifold(size):
         assert not manifold.value(i), "Failed to set {}th valve to False".format(i)
 
     with pytest.raises(ValueError):
-       manifold.set(-1, True)  # bad index
+        manifold.set(-1, True)  # bad index
     with pytest.raises(ValueError):
-       manifold.set(size, True)  # bad index
+        manifold.set(size, True)  # bad index
     assert not manifold.value(-1)  # not bad index !!!
     with pytest.raises(ValueError):
-       manifold.value(size)  # bad index
+        manifold.value(size)  # bad index
 
 
 def test_manifold_invalid_size():
@@ -45,10 +45,10 @@ def test_set_manifold():
 
     manifold.one_hot(2)
     assert (
-      manifold.value(2)
-      and not manifold.value(0)
-      and not manifold.value(1)
-      and not manifold.value(3)
+        manifold.value(2)
+        and not manifold.value(0)
+        and not manifold.value(1)
+        and not manifold.value(3)
     ), "Failed to set one_hot to 2"
 
     manifold.toggle()
@@ -60,7 +60,9 @@ def test_n_hot(indices):
     manifold = Manifold(MockValve, 4)
     manifold.n_hot(indices)
     assert all(manifold.value(i) for i in indices), "Failed to set n_hot to {}".format(indices)
-    assert not any(manifold.value(i) for i in range(4) if i not in indices), "Failed to set n_hot to {}".format(indices)
+    assert not any(
+        manifold.value(i) for i in range(4) if i not in indices
+    ), "Failed to set n_hot to {}".format(indices)
 
 
 @pytest.mark.parametrize("indices", [[5, 4], [-1], [4], [10, 20]])

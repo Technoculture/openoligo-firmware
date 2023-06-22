@@ -1,6 +1,7 @@
 LIBNAME:=openoligo
 EXECNAME:=server.py
 TESTDIR:=tests
+EXAMPLEDIR:=examples
 
 help:
 	@echo "Usage: make [target]"
@@ -21,8 +22,8 @@ run:
 	@poetry run python $(EXECNAME)
 
 format:
-	poetry run black $(LIBNAME) $(TESTDIR)
-	poetry run isort $(LIBNAME) $(TESTDIR)
+	poetry run black $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
+	poetry run isort $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
 
 lint: format
 	poetry run pylint $(LIBNAME)

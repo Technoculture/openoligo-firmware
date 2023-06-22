@@ -1,8 +1,8 @@
 from unittest import TestCase
-from unittest.mock import patch, mock_open
-from unittest.mock import Mock
-from openoligo.driver.gpio import (GPIOInterface, GpioMode, MockGPIO, RPiGPIO,
-                                   get_gpio, is_rpi, Board)
+from unittest.mock import Mock, mock_open, patch
+
+from openoligo.driver.gpio import (Board, GPIOInterface, GpioMode, MockGPIO,
+                                   RPiGPIO, get_gpio, is_rpi)
 from openoligo.driver.rpi_pins import RPi
 
 
@@ -37,7 +37,7 @@ def test_mock_gpio():
 
 
 class TestGetGpio(TestCase):
-    @patch('builtins.open', new_callable=mock_open, read_data="Raspberry")
+    @patch("builtins.open", new_callable=mock_open, read_data="Raspberry")
     def test_get_gpio_on_raspberry(self, mock_file):
         gpio = get_gpio()
         assert isinstance(gpio, GPIOInterface)

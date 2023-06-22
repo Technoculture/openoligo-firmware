@@ -6,7 +6,7 @@ from typing import Generic, List, Type, TypeVar
 
 from openoligo.driver.switch import toggle
 from openoligo.driver.types import (InvalidManifoldSizeError, Valvable,
-                                    ValveState, ValveType)
+                                    ValveType)
 
 T = TypeVar("T", bound=Valvable)
 
@@ -44,8 +44,8 @@ class Manifold(Generic[T]):
         """Get the current value of the switch at a given index."""
         try:
             return self.valves[index].value
-        except IndexError:
-            raise ValueError(f"Index out of range: {index}")
+        except IndexError as exc:
+            raise ValueError(f"Index out of range: {index}") from exc
 
     def all(self, state: bool):
         """Set the state of a list of switches."""
