@@ -1,4 +1,6 @@
-from openoligo import Manifold, MockValve, ms, wait
+##!/usr/bin/env python
+from openoligo import Manifold, MockValve
+from openoligo.utils import ms, wait
 
 
 def main():

@@ -39,7 +39,7 @@ publish:
 	poetry publish --build
 
 coverage:
-	poetry run coverage-badge -o .github/coverage.svg
+	poetry run coverage-badge -o .github/coverage.svg -f
 
 install:
 	poetry lock

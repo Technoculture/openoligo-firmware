@@ -14,7 +14,8 @@ pip install openoligo
 ### A simple Example
 
 ```py
-from openoligo import Manifold, MockValve, wait, ms
+from openoligo import Manifold, MockValve
+from openoligo.utils import wait, ms
 
 m = Manifold(MockValve, 4)
 
