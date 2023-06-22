@@ -1,20 +1,28 @@
 # OpenOligo
 
-[![Lint OpenOligo](https://github.com/TechnocultureResearch/OpenOligo/actions/workflows/lint.yaml/badge.svg)](https://github.com/TechnocultureResearch/OpenOligo/actions/workflows/lint.yaml)
+[![Lint OpenOligo](https://github.com/TechnocultureResearch/OpenOligo/actions/workflows/lint.yaml/badge.svg)](https://github.com/TechnocultureResearch/OpenOligo/actions/workflows/lint.yaml) 
+[![PyPI version](https://badge.fury.io/py/openoligo.svg)](https://badge.fury.io/py/openoligo)
 
 OpenOligo is an open-source platform for programmatically interacting with and managing DNA synthesis processes.
 
 ## Getting Started
-```bash
+```sh
 pip install openoligo
 ```
 
 ### A simple Example
 ```py
-from openoligo.driver.switch import SimulatedSwitch, periodic_toggle
+from time import sleep
+from openoligo import Manifold, MockValve
 
-switch1 = SimulatedSwitch(pin=1, name="Switch 1")
-periodic_toggle(switch1, 1, loop_forever=True)
+m = Manifold(MockValve, 4)
+
+m.one_hot(3)
+sleep(1)
+m.one_hot(2)
+sleep(2)
+
+print(m)
 ```
 
 ## For Contibuting
