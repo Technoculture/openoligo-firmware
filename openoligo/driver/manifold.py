@@ -64,8 +64,6 @@ class Manifold(Generic[T]):
     def activate_n_flows(self, indices: List[int]):
         """Set state for the indices to ON and all others to OFF"""
         for i in indices:
-            if not isinstance(i, int):
-                raise TypeError(f"Each index must be an integer, got {type(i)}")
             if i < 0 or i >= self.size:
                 raise ValueError(f"Index out of range: {i}")
         for i in range(self.size):

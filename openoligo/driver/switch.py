@@ -24,6 +24,7 @@ class MockSwitch(Switchable):
         """Set state of the switch ON or OFF."""
         self._state = state
         self._switch_count += 1
+        logging.info("%s set to %s", self.name, state)
 
     @property
     def value(self) -> bool:
@@ -63,6 +64,7 @@ class MockValve(Valvable):
         """Set the state of the valve."""
         self._state = ValveState.OPEN_FLOW if state else ValveState.CLOSED_FLOW
         self._switch_count += 1
+        logging.debug("Valve %s set to %s", self.name, self._state)
 
     @property
     def value(self) -> bool:
@@ -100,6 +102,14 @@ class Pump(MockSwitch):
             logging.info("Starting pump %s on pin %s", self.name, self.name)
         else:
             logging.info("Stopping pump %s on pin %s", self.name, self.name)
+
+    def on(self):  # pylint: disable=invalid-name
+        """Start the pump."""
+        self.set(True)
+
+    def off(self):
+        """Stop the pump."""
+        self.set(False)
 
 
 def toggle(switch: Switchable):

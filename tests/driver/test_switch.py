@@ -82,6 +82,10 @@ def test_pump_init():
     assert p1.value, "Value should be True (on) after toggle"
     p1.set(False)
     assert not p1.value, "Value should be False (off) after set(False)"
+    p1.on()
+    assert p1.value, "Value should be True (on) after on()"
+    p1.off()
+    assert not p1.value, "Value should be False (off) after off()"
 
 
 def test_periodic_toggle_exception_handling():
