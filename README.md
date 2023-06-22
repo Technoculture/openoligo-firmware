@@ -2,7 +2,7 @@
 
 [![Lint OpenOligo](https://github.com/TechnocultureResearch/OpenOligo/actions/workflows/lint.yaml/badge.svg)](https://github.com/TechnocultureResearch/OpenOligo/actions/workflows/lint.yaml) 
 [![PyPI version](https://badge.fury.io/py/openoligo.svg)](https://badge.fury.io/py/openoligo)
-[![Coverage](./.github/coverage.svg)
+![Coverage](./.github/coverage.svg)
 
 OpenOligo is an open-source platform for programmatically interacting with and managing DNA synthesis processes.
 
