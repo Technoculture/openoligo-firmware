@@ -16,7 +16,7 @@ help:
 	@echo "  test 		run tests"
 	@echo "  help 		print this help"
 
-all: lint test
+all: lint test coverage
 
 run:
 	@poetry run python $(EXECNAME)
@@ -38,7 +38,11 @@ test: type
 publish:
 	poetry publish --build
 
+coverage:
+	poetry run coverage-badge -o .github/coverage.svg
+
 install:
+	poetry lock
 	@if [ -f /proc/cpuinfo ] && grep -q Raspberry /proc/cpuinfo; then \
 		poetry install --extras "rpi"; \
 	else \
