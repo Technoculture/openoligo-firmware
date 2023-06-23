@@ -1,7 +1,11 @@
 from time import time
+from unittest.mock import Mock
+
+import pytest
 
 from openoligo.driver.manifold import Manifold
 from openoligo.driver.switch import MockValve
+from openoligo.driver.types import SwitchingError
 from openoligo.steps.flow_sequence import perform_flow_sequence
 from openoligo.steps.types import FlowWaitPair
 from openoligo.utils.wait import ms
@@ -32,3 +36,15 @@ def test_perform_flow_sequence():
     assert t1 - t0 >= 0.23, "Function should have taken at least 230ms to run"
     # The function should have taken at most 600ms to run
     assert t1 - t0 <= 0.3, "Function should have taken at most 300ms to run"
+
+
+def test_perform_flow_sequence_exception():
+    # Mock the Manifold and the exception
+    manifold_mock = Mock()
+    manifold_mock.activate_flow.side_effect = SwitchingError()
+
+    flow_wait_pairs = [(1, 2.5), (2, 3.5)]  # Example values
+
+    # Using pytest.raises to check for the expected exception
+    with pytest.raises(SwitchingError):
+        perform_flow_sequence(manifold_mock, flow_wait_pairs)

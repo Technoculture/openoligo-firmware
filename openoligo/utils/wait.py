@@ -3,7 +3,7 @@ Utilities for waiting.
 """
 import logging
 import time
-from typing import Any
+from typing import Callable
 
 
 def wait(seconds: float) -> None:
@@ -18,6 +18,9 @@ def ms(seconds: float) -> float:  # pylint: disable=invalid-name
     return seconds / 1000
 
 
-def with_wait(func: Any, seconds: float) -> None:  # pylint: disable=unused-argument
+def with_wait(
+    func: Callable, seconds: float, *args, **kwargs
+) -> None:  # pylint: disable=unused-argument
     """Call a function, then wait for a given number of seconds."""
+    func(*args, **kwargs)
     wait(seconds)
