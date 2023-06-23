@@ -1,5 +1,4 @@
-from openoligo.container.cartridge import (dna_cartridge, reagents,
-                                           rna_cartridge)
+from openoligo.container.cartridge import dna_cartridge, reagents, rna_cartridge
 
 
 def test_dna_cartridge():

@@ -4,6 +4,7 @@ Utilities for flow sequence steps.
 import logging
 
 from openoligo.driver.manifold import Manifold
+
 # from openoligo.driver.types import SwitchingError
 from openoligo.steps.types import FlowWaitPairs
 from openoligo.utils.wait import with_wait
