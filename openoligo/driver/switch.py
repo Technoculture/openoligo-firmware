@@ -5,8 +5,7 @@ import logging
 import time
 from dataclasses import dataclass, field
 
-from openoligo.driver.types import (Switchable, SwitchingError, Valvable,
-                                    ValveState, ValveType)
+from openoligo.driver.types import Switchable, SwitchingError, Valvable, ValveState, ValveType
 
 
 @dataclass

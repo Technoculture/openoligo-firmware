@@ -5,8 +5,7 @@ from dataclasses import dataclass, field
 from typing import Generic, List, Type, TypeVar
 
 from openoligo.driver.switch import toggle
-from openoligo.driver.types import (InvalidManifoldSizeError, Valvable,
-                                    ValveType)
+from openoligo.driver.types import InvalidManifoldSizeError, Valvable, ValveType
 
 T = TypeVar("T", bound=Valvable)
 

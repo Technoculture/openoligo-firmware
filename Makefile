@@ -23,7 +23,6 @@ run:
 
 format:
 	poetry run black $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
-	poetry run isort $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
 
 format_check:
 	poetry run black --check $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
