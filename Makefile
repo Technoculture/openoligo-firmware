@@ -16,7 +16,7 @@ help:
 	@echo "  test 		run tests"
 	@echo "  help 		print this help"
 
-all: lint test coverage
+all: format lint test coverage
 
 run:
 	@poetry run python $(EXECNAME)
@@ -25,7 +25,10 @@ format:
 	poetry run black $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
 	poetry run isort $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
 
-lint: format
+format_check:
+	poetry run black --check $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
+
+lint:
 	poetry run pylint $(LIBNAME)
 	poetry run flake8 $(LIBNAME) $(TESTDIR)
 
