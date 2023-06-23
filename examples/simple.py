@@ -1,5 +1,15 @@
-## Run the following command in order to run this example:
-##  poetry run python examples/simple.py
+#!/usr/bin/env python
+
+"""
+ Run the following command in order to run this example:
+      poetry run python examples/simple.py
+ Or,
+      poetry shell # to enter the virtual environment
+      python examples/simple.py
+ Or,
+      cd examples
+      ./simple.py
+"""
 
 import logging
 

@@ -19,7 +19,7 @@ def perform_flow_sequence(manifold: Manifold, flow_wait_pairs: FlowWaitPairs):
     """
     for valve, wait_time in flow_wait_pairs:
         # try:
-        logging.debug("Activating valve %d, and starting wait for %.2fs", valve, wait_time)
+        logging.debug("Activating valve %d, and starting wait for %.2f seconds", valve, wait_time)
         with_wait(manifold.activate_flow, wait_time, valve)
         # except SwitchingError as exc:
         #    print(f"An error occurred while activating flow {valve}: {str(exc)}")

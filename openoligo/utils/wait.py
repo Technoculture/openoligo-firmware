@@ -8,9 +8,9 @@ from typing import Callable
 
 def wait(seconds: float) -> None:
     """Wait for a given number of seconds."""
-    logging.debug("Start waiting for %.2fs", seconds)
+    logging.debug("Start waiting for %.2f seconds", seconds)
     time.sleep(seconds)
-    logging.debug("Finished waiting for %.2fs", seconds)
+    logging.debug("Done waiting for %.2f seconds", seconds)
 
 
 def ms(seconds: float) -> float:  # pylint: disable=invalid-name

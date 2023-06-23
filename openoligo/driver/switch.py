@@ -23,7 +23,7 @@ class MockSwitch(Switchable):
         """Set state of the switch ON or OFF."""
         self._state = state
         self._switch_count += 1
-        logging.info("%s set to %s", self.name, state)
+        logging.info("Switch (%s) set to [bold]%s[/]", self.name, state, extra={"markup": True})
 
     @property
     def value(self) -> bool:
@@ -63,7 +63,9 @@ class MockValve(Valvable):
         """Set the state of the valve."""
         self._state = ValveState.OPEN_FLOW if state else ValveState.CLOSED_FLOW
         self._switch_count += 1
-        logging.debug("Valve %s set to %s", self.name, self._state)
+        logging.debug(
+            "Valve (%s) set to [bold]%s[/]", self.name, self._state, extra={"markup": True}
+        )
 
     @property
     def value(self) -> bool:

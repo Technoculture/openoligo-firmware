@@ -2,7 +2,7 @@
 Driver imports for convenience.
 """
 
-from openoligo.driver.gpio import Board, get_gpio, is_rpi
+from openoligo.driver.board import Board, is_rpi
 from openoligo.driver.manifold import Manifold
 from openoligo.driver.rpi_pins import RPi
 from openoligo.driver.switch import MockValve, PneumaticNoValve, Pump, periodic_toggle, toggle
@@ -18,7 +18,6 @@ from openoligo.driver.types import (
 
 __all__ = [
     "Board",
-    "get_gpio",
     "is_rpi",
     "Manifold",
     "MockValve",
