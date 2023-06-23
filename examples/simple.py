@@ -1,18 +1,26 @@
-#!/usr/bin/env python
+## Run the following command in order to run this example:
+##  poetry run python examples/simple.py
+
+import logging
 
 from openoligo import Manifold, MockValve
-from openoligo.utils import ms, with_wait
+from openoligo.steps import perform_flow_sequence
+from openoligo.utils import ms
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 def main():
     m = Manifold(MockValve, 4)
 
-    with_wait(m.activate_flow(3), 2)
-    print("Flow 3: Activated")
-    with_wait(m.activate_flow(0), ms(300))
-    print("Flow 0: Activated")
-    with_wait(m.activate_flow(2), 1)
-    print("Flow 2: Activated")
+    perform_flow_sequence(
+        m,
+        [
+            (0, ms(100)),
+            (2, 1),
+            (1, ms(200)),
+        ],
+    )
 
 
 if __name__ == "__main__":

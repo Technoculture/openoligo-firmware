@@ -1,13 +1,16 @@
 """
 Utilities for waiting.
 """
+import logging
 import time
 from typing import Any
 
 
 def wait(seconds: float) -> None:
     """Wait for a given number of seconds."""
+    logging.debug("Start waiting for %.2fs", seconds)
     time.sleep(seconds)
+    logging.debug("Finished waiting for %.2fs", seconds)
 
 
 def ms(seconds: float) -> float:  # pylint: disable=invalid-name
@@ -17,4 +20,4 @@ def ms(seconds: float) -> float:  # pylint: disable=invalid-name
 
 def with_wait(func: Any, seconds: float) -> None:  # pylint: disable=unused-argument
     """Call a function, then wait for a given number of seconds."""
-    time.sleep(seconds)
+    wait(seconds)

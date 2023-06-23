@@ -30,7 +30,7 @@ lint: format
 	poetry run flake8 $(LIBNAME) $(TESTDIR)
 
 type:
-	poetry run mypy $(LIBNAME)
+	poetry run mypy $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
 
 test: type
 	poetry run pytest 

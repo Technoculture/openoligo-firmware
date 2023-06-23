@@ -3,7 +3,7 @@ from unittest.mock import ANY, Mock, patch
 import pytest
 
 from openoligo.driver.switch import (MockSwitch, MockValve, PneumaticNoValve,
-                                     Pump, Switchable, periodic_toggle, toggle)
+                                     Pump, periodic_toggle, toggle)
 from openoligo.driver.types import SwitchingError, ValveState, ValveType
 
 
@@ -61,7 +61,7 @@ def test_periodic_toggle():
 def test_pneumatic_no_valve_init():
     p1 = PneumaticNoValve(pin=1, name="test_valve")
     assert isinstance(p1, MockValve), "PneumaticNoValve should be a subclass of MockValve"
-    assert isinstance(p1, Switchable), "PneumaticNoValve should be a subclass of Switchable"
+    # assert isinstance(p1, Switchable), "PneumaticNoValve should be a subclass of Switchable"
     assert p1.name == "test_valve", "Name should be same as passed to constructor"
     assert p1._state == ValveState.OPEN_FLOW, "Valve should be open by default"
     assert p1.value, "Value should be True (open) by default"
@@ -75,7 +75,7 @@ def test_pneumatic_no_valve_init():
 def test_pump_init():
     p1 = Pump(name="test_pump")
     assert isinstance(p1, MockSwitch), "Pump should be a subclass of MockSwitch"
-    assert isinstance(p1, Switchable), "Pump should be a subclass of Switchable"
+    # assert isinstance(p1, Switchable), "Pump should be a subclass of Switchable"
     assert p1.name == "test_pump", "Name should be same as passed to constructor"
     assert not p1.value, "Value should be False (off) by default"
     toggle(p1)

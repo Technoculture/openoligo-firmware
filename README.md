@@ -15,11 +15,17 @@ pip install openoligo
 
 ```py
 from openoligo import Manifold, MockValve
-from openoligo.utils import with_wait, ms
+from openoligo.steps import perform_flow_sequence
+from openoligo.utils import ms
 
-m = Manifold(MockValve, 16)
+m = Manifold(MockValve, 4)
 
-with_wait(m.activate_flow(12), 2)
-with_wait(m.activate_flow(7), ms(300))
-with_wait(m.activate_flow(2), 1)
+perform_flow_sequence(
+    m,
+    [
+        (0, ms(100)),
+        (2, 1),
+        (1, ms(200)),
+    ],
+)
 ```
