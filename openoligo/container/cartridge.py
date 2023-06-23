@@ -3,7 +3,8 @@ Reagents and cartridges for the OpenOligo project.
 """
 from types import SimpleNamespace
 
-from openoligo.container.types import Bottle, Reagent, ReagentCategory, ReagentType
+from openoligo.container.types import (Bottle, Reagent, ReagentCategory,
+                                       ReagentType)
 
 reagents = SimpleNamespace(
     acetonitrile=Reagent(

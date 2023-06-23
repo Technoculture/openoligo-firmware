@@ -1,15 +1,8 @@
 from unittest import TestCase
 from unittest.mock import Mock, mock_open, patch
 
-from openoligo.driver.gpio import (
-    Board,
-    GPIOInterface,
-    GpioMode,
-    MockGPIO,
-    RPiGPIO,
-    get_gpio,
-    is_rpi,
-)
+from openoligo.driver.gpio import (Board, GPIOInterface, GpioMode, MockGPIO,
+                                   RPiGPIO, get_gpio, is_rpi)
 from openoligo.driver.rpi_pins import RPi
 
 

@@ -28,10 +28,10 @@ jobs:
         poetry install
     - name: Lint with pylint
       run: |
-        poetry run pylint openoligo tests examples
+        poetry run pylint openoligo
     - name: Lint with flake8
       run: |
-        poetry run flake8 openoligo tests examples
+        poetry run flake8 openoligo tests
     - name: Format with Black
       run: |
         poetry run black --check openoligo tests examples

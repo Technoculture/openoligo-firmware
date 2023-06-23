@@ -2,14 +2,8 @@ from unittest.mock import ANY, Mock, patch
 
 import pytest
 
-from openoligo.driver.switch import (
-    MockSwitch,
-    MockValve,
-    PneumaticNoValve,
-    Pump,
-    periodic_toggle,
-    toggle,
-)
+from openoligo.driver.switch import (MockSwitch, MockValve, PneumaticNoValve,
+                                     Pump, periodic_toggle, toggle)
 from openoligo.driver.types import SwitchingError, ValveState, ValveType
 
 
