@@ -6,6 +6,7 @@ classes and functions that are needed.
 
 # flake8: noqa
 
+from openoligo import log_config  # pylint: disable=unused-import
 from openoligo.driver import *
 from openoligo.utils import *
 

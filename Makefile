@@ -49,4 +49,7 @@ install:
 		poetry install; \
 	fi
 
-.PHONY: ghtest lint type help run test publish install
+t:
+	@tre -E '__pycache__|.git|.DS_Store|build|dist|.github|.flake8|__init__.py|scratch|tests'
+
+.PHONY: ghtest lint type help run test publish install t
