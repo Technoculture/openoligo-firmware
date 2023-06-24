@@ -6,6 +6,7 @@ import time
 from dataclasses import dataclass, field
 
 from openoligo.driver.rpi_pins import RPi
+from openoligo.driver.board import Board
 from openoligo.driver.types import Switchable, SwitchingError, Valvable, ValveState, ValveType
 
 
@@ -13,10 +14,16 @@ from openoligo.driver.types import Switchable, SwitchingError, Valvable, ValveSt
 class BaseSwitch(Switchable):
     """
     A switch that actually controls a GPIO pin on the Raspberry Pi.
+
+    Attributes:
+        name: Name of the switch.
+        gpio_pin: GPIO pin number.
+        board: Board object to access the GPIO pins.
     """
 
     name: str
     gpio_pin: RPi
+    board: Board
     _switch_count: int = field(default=0, init=False)
     _state: bool = field(default=False, init=False)
 
@@ -24,11 +31,19 @@ class BaseSwitch(Switchable):
         """Set state of the switch ON or OFF."""
         self._state = state
         self._switch_count += 1
+        self.board.set(self.gpio_pin, state)
         logging.info("Switch (%s) set to [bold]%s[/]", self.name, state, extra={"markup": True})
 
     @property
     def value(self) -> bool:
-        """Get the current value of the switch."""
+        """
+        Get the current value of the switch.
+
+        raises:
+            SwitchingError: If the switch is not set.
+        """
+        if self._state is not self.board.value(self.gpio_pin):
+            raise SwitchingError(f"Switch ({self.name}) is not set")
         return self._state
 
 
@@ -40,6 +55,8 @@ class BaseValve(Valvable):
 
     pin: int
     name: str
+    gpio_pin: RPi
+    board: Board
     valve_type: ValveType = field(default=ValveType.NORMALLY_OPEN)
     _switch_count: int = field(init=False, default=0)
     _state: ValveState = field(init=False)
@@ -88,8 +105,8 @@ class PneumaticNoValve(BaseValve):
     It can also be used as a base class for other switchable devices.
     """
 
-    def __init__(self, pin: int, name: str, valve_type: ValveType = ValveType.NORMALLY_OPEN):
-        super().__init__(pin, name, valve_type)
+    def __init__(self, pin: int, name: str, gpio_pin: RPi, board: Board):
+        super().__init__(pin, name, gpio_pin, board, ValveType.NORMALLY_CLOSED)
 
 
 class Pump(BaseSwitch):

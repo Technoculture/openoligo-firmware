@@ -2,6 +2,7 @@
 
 - Python 3.8+
 - Poetry for Python dependency management.
+- Ansible and sshpass for deploying to RPi (Should be present in local network)
 - Docker (Optional)
 
 # Getting Started
@@ -56,3 +57,13 @@ make test
 ```
 
 > Please make sure that you have make installed on your system. On Windows, you may need to install make via a package manager like Chocolatey, or use a POSIX compatibility layer like Git Bash or Cygwin.
+
+# Deploying to a Raspberry Pi
+- [Issue: Unable to install on Raspberry Pi](https://github.com/orgs/python-poetry/discussions/7057)
+
+```sh
+pip -U pip setuptools
+pip install --only-binary cryptography poetry
+```
+
+- [How to install ZeroMQ on Raspberry Pi](https://github.com/MonsieurV/ZeroMQ-RPi)

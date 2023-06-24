@@ -131,10 +131,13 @@ class Board:
 
     __version__ = "0.1.0"
 
-    def __init__(self, mode: GpioMode = GpioMode.OUT):
+    def __init__(self):
         """Initialize the board."""
         self.gpio = get_gpio()
         self.gpio_type = type(self.gpio)
+
+    def setup(self, mode: GpioMode = GpioMode.OUT):
+        """Set up the board."""
         for pin in RPi:
             self.gpio.setup(pin, mode)
 

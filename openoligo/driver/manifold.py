@@ -4,6 +4,8 @@ Manifolds are a collection of valves.
 from dataclasses import dataclass, field
 from typing import Generic, List, Type, TypeVar
 
+from openoligo.driver.rpi_pins import RPi
+from openoligo.driver.board import Board
 from openoligo.driver.switch import toggle
 from openoligo.driver.types import InvalidManifoldSizeError, Valvable, ValveType
 
@@ -21,6 +23,7 @@ class Manifold(Generic[T]):
 
     valve_class: Type[T]
     size: int
+    board: Board
     manifold_type: ValveType = ValveType.NORMALLY_OPEN
     valves: List[T] = field(init=False)
 
@@ -30,7 +33,8 @@ class Manifold(Generic[T]):
                 f"Invalid switch size: {self.size}. Must be one of {self.VALID_SIZES}"
             )
         self.valves = [
-            self.valve_class(i, f"Valve {i}", self.manifold_type) for i in range(self.size)
+            self.valve_class(i, f"Valve {i}", RPi.PIN3, board, self.manifold_type)
+            for i in range(self.size)
         ]
 
     def set(self, index: int, state: bool):
