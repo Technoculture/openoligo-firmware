@@ -6,6 +6,8 @@ from Bio.Seq import Seq  # type: ignore
 from tqdm import tqdm
 from openoligo.utils import wait
 
+# from openoligo.steps import
+
 
 def synthesize(seq: Seq) -> None:
     """
@@ -21,7 +23,7 @@ def synthesize(seq: Seq) -> None:
 
             # TODO: Add actual synthesis code here  # pylint: disable=fixme
 
-            pbar.update(1)
             wait(1)
+            pbar.update(1)
 
     logging.info("Synthesis complete for DNA sequence: '%s'", seq)
