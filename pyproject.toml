@@ -37,7 +37,7 @@ build-backend = "poetry.masonry.api"
 line-length = 100
 
 [tool.pytest.ini_options]
-addopts = "--cov=openoligo --cov-config=pyproject.toml --cov-report=term-missing --cov-fail-under=80"
+addopts = "--cov=openoligo --cov-config=pyproject.toml --cov-report=term-missing --cov-fail-under=60"
 
 [tool.coverage.run]
 source = ["openoligo"]

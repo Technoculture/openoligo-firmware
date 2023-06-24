@@ -4,45 +4,71 @@ and to clean columns.
 """
 import logging
 from openoligo.container.types import Slot
-
-# from openoligo.steps.types import FlowBranch
+from openoligo.steps.types import FlowBranch
 
 
 def send(src: Slot, dest: Slot) -> None:
     """
     Flow reagents to column.
 
-    :param from: Slot to flow reagents from.
-    :param to: Slot to flow reagents to.
-    :return: None
+    args:
+        src: Slot to flow reagents from.
+        dest: Slot to flow reagents to.
+
+    return: None
     """
-    logging.info("Flowing reagents from %s to %s", src, dest)
+    logging.debug("Flowing reagents from %s to %s", src, dest)
 
 
-def solvent_wash(slot: Slot) -> None:
+def send_to_reactor(src: Slot) -> None:
+    """
+    Flow a reagent to the reactor.
+
+    args:
+        src: Slot to flow reagents from.
+
+    return: None
+    """
+    logging.debug("Flowing reagents from %s to reactor", src)
+
+
+def solvent_wash(branch: FlowBranch) -> None:
     """
     Wash column with solvent.
 
-    :param slot: Slot to wash.
-    :return: None
+    args:
+        branch: FlowBranch to wash.
+
+    return: None
     """
-    logging.info("Washing column in %s with solvent", slot)
+    logging.debug("Washing flow branch %s with solvent", branch)
 
 
-def dry() -> None:
+def solvent_wash_all() -> None:
+    """
+    Wash all flow branches with solvent.
+    """
+
+    for branch in FlowBranch:
+        solvent_wash(branch)
+
+
+def dry(branch: FlowBranch) -> None:
     """
     Dry column.
 
-    :return: None
+    args:
+        branch: FlowBranch to dry.
+
+    return: None
     """
-    logging.info("Drying column")
+    logging.debug("Drying flow branch %s", branch)
 
 
-def clean() -> None:
+def dry_all() -> None:
     """
-    Clean column.
+    Dry all flow branches.
+    """
 
-    :return: None
-    """
-    # solvent_wash(Slot.SOL)
-    dry()
+    for branch in FlowBranch:
+        dry(branch)
