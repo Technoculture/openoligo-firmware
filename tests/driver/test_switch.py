@@ -3,19 +3,20 @@ from unittest.mock import ANY, Mock, patch
 import pytest
 
 from openoligo.driver.switch import (
-    MockSwitch,
-    MockValve,
+    BaseSwitch,
+    BaseValve,
     PneumaticNoValve,
     Pump,
     periodic_toggle,
     toggle,
 )
+from openoligo.driver.rpi_pins import RPi
 from openoligo.driver.types import SwitchingError, ValveState, ValveType
 
 
 def test_nc_no_switch():
-    s1 = MockValve(pin=1, name="test_switch", valve_type=ValveType.NORMALLY_CLOSED)
-    s2 = MockValve(pin=2, name="test_switch", valve_type=ValveType.NORMALLY_OPEN)
+    s1 = BaseValve(pin=1, name="test_switch", valve_type=ValveType.NORMALLY_CLOSED)
+    s2 = BaseValve(pin=2, name="test_switch", valve_type=ValveType.NORMALLY_OPEN)
 
     assert s1._state == ValveState.CLOSED_FLOW, "NC valve _state should be closed by default"
     assert not s1.value, "NC valve value should be closed by default"
@@ -38,7 +39,7 @@ def test_nc_no_switch():
 
 
 def test_simulated_switch():
-    s1 = MockSwitch(name="test_switch")
+    s1 = BaseSwitch(name="test_switch", gpio_pin=RPi.PIN3)
     assert s1.name == "test_switch"
     assert not s1.value  # = False
     toggle(s1)
@@ -48,7 +49,7 @@ def test_simulated_switch():
 
 
 def test_periodic_toggle():
-    s1 = MockSwitch(name="test_switch")
+    s1 = BaseSwitch(name="test_switch", gpio_pin=RPi.PIN5)
 
     # run the function for 5 toggles
     periodic_toggle(switch=s1, interval=0.01, loop_forever=False, count=5)
@@ -66,7 +67,7 @@ def test_periodic_toggle():
 
 def test_pneumatic_no_valve_init():
     p1 = PneumaticNoValve(pin=1, name="test_valve")
-    assert isinstance(p1, MockValve), "PneumaticNoValve should be a subclass of MockValve"
+    assert isinstance(p1, BaseValve), "PneumaticNoValve should be a subclass of BaseValve"
     # assert isinstance(p1, Switchable), "PneumaticNoValve should be a subclass of Switchable"
     assert p1.name == "test_valve", "Name should be same as passed to constructor"
     assert p1._state == ValveState.OPEN_FLOW, "Valve should be open by default"
@@ -79,8 +80,8 @@ def test_pneumatic_no_valve_init():
 
 
 def test_pump_init():
-    p1 = Pump(name="test_pump")
-    assert isinstance(p1, MockSwitch), "Pump should be a subclass of MockSwitch"
+    p1 = Pump(name="test_pump", gpio_pin=RPi.PIN3)
+    assert isinstance(p1, BaseSwitch), "Pump should be a subclass of BaseSwitch"
     # assert isinstance(p1, Switchable), "Pump should be a subclass of Switchable"
     assert p1.name == "test_pump", "Name should be same as passed to constructor"
     assert not p1.value, "Value should be False (off) by default"
@@ -104,5 +105,5 @@ def test_periodic_toggle_exception_handling():
 
 @pytest.mark.parametrize("valve_type", [ValveType.NORMALLY_CLOSED, ValveType.NORMALLY_OPEN])
 def test_get_type(valve_type):
-    m = MockValve(pin=1, name="test_switch", valve_type=valve_type)
+    m = BaseValve(pin=1, name="test_switch", valve_type=valve_type)
     assert m.get_type == valve_type, "get_type should return the valve type"

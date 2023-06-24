@@ -4,7 +4,7 @@ from unittest.mock import Mock
 import pytest
 
 from openoligo.driver.manifold import Manifold
-from openoligo.driver.switch import MockValve
+from openoligo.driver.switch import BaseValve
 from openoligo.driver.types import SwitchingError
 from openoligo.steps.flow_sequence import perform_flow_sequence
 from openoligo.steps.types import FlowWaitPair
@@ -13,7 +13,7 @@ from openoligo.utils.wait import ms
 
 def test_perform_flow_sequence():
     """Test the perform_flow_sequence function."""
-    m = Manifold(MockValve, 4)
+    m = Manifold(BaseValve, 4)
     # Test that the function returns the expected results
     # when the flow sequence is empty
     assert all(m.value(i) for i in range(m.size)), "Valves should be open by default"

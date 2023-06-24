@@ -15,11 +15,11 @@ pip install openoligo
 ### A simple Example
 
 ```py
-from openoligo import Manifold, MockValve
+from openoligo import Manifold, BaseValve
 from openoligo.steps import perform_flow_sequence
 from openoligo.utils import ms
 
-m = Manifold(MockValve, 4)
+m = Manifold(BaseValve, 4)
 
 perform_flow_sequence(
     m,

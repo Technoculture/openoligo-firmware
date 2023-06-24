@@ -3,44 +3,10 @@ Reagents and cartridges for the OpenOligo project.
 """
 from types import SimpleNamespace
 
-from openoligo.container.types import Bottle, Reagent, ReagentCategory, ReagentType
+# from openoligo.fixed_keys_dict import FixedKeysDict
+from openoligo.container.types import Reagent, ReagentCategory
 
 reagents = SimpleNamespace(
-    acetonitrile=Reagent(
-        name="acetonitrile", type=ReagentType.LIQUID, category=ReagentCategory.SOLVENT
-    ),
-    acetone=Reagent(name="acetone", type=ReagentType.LIQUID, category=ReagentCategory.SOLVENT),
-)
-
-
-dna_cartridge = SimpleNamespace(
-    atgc=SimpleNamespace(
-        a1=Bottle(
-            reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01"
-        )
-    ),
-    methylated=SimpleNamespace(
-        a1=Bottle(
-            reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01"
-        )
-    ),
-    azide=SimpleNamespace(
-        a1=Bottle(
-            reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01"
-        )
-    ),
-)
-
-
-rna_cartridge = SimpleNamespace(
-    augc=SimpleNamespace(
-        a1=Bottle(
-            reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01"
-        ),
-    ),
-    methylated=SimpleNamespace(
-        a1=Bottle(
-            reagent=reagents.acetonitrile, manufacturing_date="2020-01-01", expiry_date="2020-01-01"
-        ),
-    ),
+    acetonitrile=Reagent(name="acetonitrile", accronym="ACN", category=ReagentCategory.SOLVENT),
+    acetone=Reagent(name="acetone", accronym="ACET", category=ReagentCategory.SOLVENT),
 )

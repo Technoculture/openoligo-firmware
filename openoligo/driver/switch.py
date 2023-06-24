@@ -5,17 +5,18 @@ import logging
 import time
 from dataclasses import dataclass, field
 
+from openoligo.driver.rpi_pins import RPi
 from openoligo.driver.types import Switchable, SwitchingError, Valvable, ValveState, ValveType
 
 
 @dataclass
-class MockSwitch(Switchable):
+class BaseSwitch(Switchable):
     """
-    This class represents a simulated switch. It is useful for testing purposes.
-    It can also be used as a base class for other switchable devices.
+    A switch that actually controls a GPIO pin on the Raspberry Pi.
     """
 
     name: str
+    gpio_pin: RPi
     _switch_count: int = field(default=0, init=False)
     _state: bool = field(default=False, init=False)
 
@@ -32,7 +33,7 @@ class MockSwitch(Switchable):
 
 
 @dataclass
-class MockValve(Valvable):
+class BaseValve(Valvable):
     """
     This class represents a simulated valve. It is useful for testing purposes.
     """
@@ -81,7 +82,7 @@ class MockValve(Valvable):
         return f"{self.pin}[{self.value}]"
 
 
-class PneumaticNoValve(MockValve):
+class PneumaticNoValve(BaseValve):
     """
     This class represents a pneumatic valve. It is useful for testing purposes.
     It can also be used as a base class for other switchable devices.
@@ -91,7 +92,7 @@ class PneumaticNoValve(MockValve):
         super().__init__(pin, name, valve_type)
 
 
-class Pump(MockSwitch):
+class Pump(BaseSwitch):
     """
     This class represents a pump. It is useful for testing purposes.
     It can also be used as a base class for other switchable devices.

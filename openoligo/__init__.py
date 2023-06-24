@@ -16,7 +16,7 @@ __all__ = [
     "RPi",
     "PneumaticNoValve",
     "Pump",
-    "MockValve",
+    "BaseValve",
     "periodic_toggle",
     "ValveState",
     "ValveType",

@@ -1,13 +1,13 @@
 import pytest
 
 from openoligo.driver.manifold import Manifold
-from openoligo.driver.switch import MockValve
+from openoligo.driver.switch import BaseValve
 from openoligo.driver.types import InvalidManifoldSizeError
 
 
 @pytest.mark.parametrize("size", [4, 8, 10, 16, 20])
 def test_manifold(size):
-    manifold = Manifold(valve_class=MockValve, size=size)
+    manifold = Manifold(valve_class=BaseValve, size=size)
     assert len(manifold.valves) == size
     # assert all(not manifold.value(i) for i in range(size))
 
@@ -28,7 +28,7 @@ def test_manifold(size):
 
 def test_manifold_invalid_size():
     with pytest.raises(InvalidManifoldSizeError):
-        Manifold(MockValve, 5)
+        Manifold(BaseValve, 5)
 
 
 def test_manifold_invalid_switch_type():
@@ -37,7 +37,7 @@ def test_manifold_invalid_switch_type():
 
 
 def test_set_manifold():
-    manifold = Manifold(MockValve, 4)
+    manifold = Manifold(BaseValve, 4)
     manifold.all(True)
     assert all(
         manifold.value(i) for i in range(4)
@@ -57,7 +57,7 @@ def test_set_manifold():
 
 @pytest.mark.parametrize("indices", [[0, 3], [0, 1, 3], [2]])
 def test_activate_n_flows(indices):
-    manifold = Manifold(MockValve, 4)
+    manifold = Manifold(BaseValve, 4)
     manifold.activate_n_flows(indices)
     assert all(manifold.value(i) for i in indices), "Failed to set n_hot to {}".format(indices)
     assert not any(
@@ -67,6 +67,6 @@ def test_activate_n_flows(indices):
 
 @pytest.mark.parametrize("indices", [[5, 4], [-1], [4, 8], [10, 20]])
 def test_activate_n_flows_invalid_indices(indices):
-    manifold = Manifold(MockValve, 4)
+    manifold = Manifold(BaseValve, 4)
     with pytest.raises(ValueError):
         manifold.activate_n_flows(indices)

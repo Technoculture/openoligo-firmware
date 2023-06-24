@@ -7,19 +7,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
 
-
-class BottleSize(Enum):
-    """The size of bottle."""
-
-    SMALL = 1
-    LARGE = 2
-
-
-class ReagentType(Enum):
-    """The type of reagent."""
-
-    LIQUID = 1
-    LYOPHILIZED = 2
+from openoligo.fixed_keys_dict import FixedKeysDict
+from openoligo.driver.manifold import Manifold
 
 
 class ReagentCategory(str, Enum):
@@ -37,7 +26,7 @@ class ReagentCategory(str, Enum):
     GAS = "gas"
 
 
-class SlotID(Enum):
+class BottleSlotID(Enum):
     """The ID of the bottle slot."""
 
     A1 = 1
@@ -81,9 +70,13 @@ class SlotID(Enum):
 class Slot:
     """A slot in the cartridge."""
 
-    slot_id: SlotID
-    associated_valve: int
-    size: BottleSize = BottleSize.SMALL
+    idn: BottleSlotID
+    valve: int
+    manifold: Manifold
+
+
+valid_keys = {member.name for member in BottleSlotID}
+Slots = FixedKeysDict[Slot](valid_keys=valid_keys)
 
 
 @dataclass
@@ -91,20 +84,13 @@ class Reagent:
     """A reagent."""
 
     name: str
-    type: ReagentType
+    accronym: str
     category: ReagentCategory
-    description: str = ""
-    solvent_slot: Optional[Slot] = None
 
 
 @dataclass
 class Bottle:
     """A bottle containing a particular reagent."""
 
-    manufacturing_date: str
-    shelf_life: int = 45
+    reagent: str = ""
     slot: Optional[Slot] = None
-    reagent: Optional[Reagent] = None
-    size: BottleSize = BottleSize.SMALL
-    open_bottle_date: Optional[str] = None
-    expiry_date: Optional[str] = None

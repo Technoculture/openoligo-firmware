@@ -90,5 +90,5 @@ def synthesize(seq: Seq) -> None:
 
 
 if __name__ == "__main__":
-    synthesize("ATCGAAATTTTT")
+    synthesize(Seq("ATCGAAATTTTT"))
     print("Done!")

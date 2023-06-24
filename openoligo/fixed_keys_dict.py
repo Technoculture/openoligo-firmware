@@ -22,38 +22,6 @@ class FixedKeysDict(Generic[V]):
         self._valid_keys = valid_keys
         self._dict: dict[str, V] = {}
 
-    def __setattr__(self, name: str, value: V) -> None:
-        """
-        Set an attribute. If the attribute is a valid key, the value is set
-        in the internal dictionary. Otherwise, set the attribute normally.
-
-        Args:
-            name (str): The attribute name.
-            value (V): The attribute value.
-        """
-        if name in self._valid_keys:
-            self._dict[name] = value
-        else:
-            super().__setattr__(name, value)
-
-    def __getattr__(self, name: str) -> Optional[V]:
-        """
-        Get an attribute. If the attribute is a valid key, the value is fetched
-        from the internal dictionary. If not a valid key, an AttributeError is raised.
-
-        Args:
-            name (str): The attribute name.
-
-        Returns:
-            The attribute value.
-
-        Raises:
-            AttributeError: If `name` is not a valid key.
-        """
-        if name in self._valid_keys:
-            return self._dict.get(name)
-        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
-
     def __setitem__(self, key: str, value: V) -> None:
         """
         Set a key-value pair in the internal dictionary.
