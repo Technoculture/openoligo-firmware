@@ -46,19 +46,37 @@ def oxidize() -> None:
     wait(1)
 
 
+def cleave() -> None:
+    """
+    Cleave the DNA sequence from the solid support.
+    """
+    logging.debug("Cleaving the DNA sequence from the solid support")
+    # send_to_reactor("Cleaving the DNA sequence from the solid support")
+    wait(1)
+
+
+def deprotect() -> None:
+    """
+    Remove the protecting groups from the DNA sequence.
+    """
+    logging.debug("Removing protecting groups from the DNA sequence")
+    # send_to_reactor("Removing protecting groups from the DNA sequence")
+    wait(1)
+
+
 def synthesize(seq: Seq) -> None:
     """
     Synthesize a DNA sequence.
 
     args:
         seq: DNA sequence to synthesize.
-
-    return: None
     """
     logging.debug("Initiating synthesis of DNA sequence: '%s'", seq)
-    with tqdm(total=len(seq)) as pbar:
+    with tqdm(total=len(seq) + 2) as pbar:
         solvent_wash_all()
         dry_all()
+
+        pbar.update(1)
 
         for base_index, base in enumerate(seq):
             logging.debug("Adding %sth base '%s' to growing DNA strand", base_index, base)
@@ -85,5 +103,10 @@ def synthesize(seq: Seq) -> None:
 
             wait(1)
             pbar.update(1)
+
+        cleave()
+        deprotect()
+
+        pbar.update(1)
 
     logging.debug("Synthesis complete for DNA sequence: '%s'", seq)
