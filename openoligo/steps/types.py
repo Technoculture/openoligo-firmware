@@ -13,5 +13,5 @@ class FlowBranch(Enum):
     Flow branch enumeration.
     """
 
-    REAGENTS = "reagents"
     REACTION = "reaction"
+    REAGENTS = "reagents"

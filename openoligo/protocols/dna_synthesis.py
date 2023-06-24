@@ -14,8 +14,8 @@ def detritylate() -> None:
     Involves the reagent to be sent to the reactor, and then the reactor to be washed and dried.
     """
     logging.debug("Add 3% trichloroacetic acid in dichloromethane to the reactor")
-    # send_to_reactor("3% trichloroacetic acid in dichloromethane")
-    wait(1)
+    # send_to_reactor("CAP")
+    wait(50)  # 50 seconds
 
 
 def activate() -> None:
@@ -23,7 +23,9 @@ def activate() -> None:
     0.1 M phosphoramidite monomer and 0.5 M tetrazole in acetonitrile
     """
     logging.debug("Add 0.1 M phosphoramidite monomer and 0.5 M tetrazole to the reactor")
-    # send_to_reactor("0.1 M phosphoramidite monomer and 0.5 M tetrazole in acetonitrile")
+    # 1. Trigger transports
+    #    send_to_reactor("0.1 M phosphoramidite monomer and 0.5 M tetrazole in acetonitrile")
+    # 2. Wait for residence time
     wait(1)
 
 
