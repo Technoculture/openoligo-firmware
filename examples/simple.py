@@ -13,24 +13,14 @@
 
 import logging
 
-from openoligo import Manifold, BaseValve
-from openoligo.steps import perform_flow_sequence
+from openoligo import Manifold, Valve
 from openoligo.utils import ms
 
 logging.basicConfig(level=logging.DEBUG)
 
 
 def main():
-    m = Manifold(BaseValve, 4)
-
-    perform_flow_sequence(
-        m,
-        [
-            (0, ms(100)),
-            (2, 1),
-            (1, ms(200)),
-        ],
-    )
+    m = Manifold(Valve, 4)
 
 
 if __name__ == "__main__":

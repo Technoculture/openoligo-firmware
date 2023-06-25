@@ -2,21 +2,17 @@ from unittest.mock import ANY, Mock, patch
 
 import pytest
 
-from openoligo.driver.switch import (
-    BaseSwitch,
-    BaseValve,
-    PneumaticNoValve,
-    Pump,
-    periodic_toggle,
-    toggle,
+from openoligo.driver.devices import (
+    Switch,
+    Valve,
 )
-from openoligo.driver.rpi_pins import RPi
-from openoligo.driver.types import SwitchingError, ValveState, ValveType
+from openoligo.driver.pins import RPi
+from openoligo.driver.types import ValveState, ValveType
 
 
 def test_nc_no_switch():
-    s1 = BaseValve(pin=1, name="test_switch", valve_type=ValveType.NORMALLY_CLOSED)
-    s2 = BaseValve(pin=2, name="test_switch", valve_type=ValveType.NORMALLY_OPEN)
+    s1 = Valve(pin=1, name="test_switch", valve_type=ValveType.NORMALLY_CLOSED)
+    s2 = Valve(pin=2, name="test_switch", valve_type=ValveType.NORMALLY_OPEN)
 
     assert s1._state == ValveState.CLOSED_FLOW, "NC valve _state should be closed by default"
     assert not s1.value, "NC valve value should be closed by default"
@@ -39,71 +35,12 @@ def test_nc_no_switch():
 
 
 def test_simulated_switch():
-    s1 = BaseSwitch(name="test_switch", gpio_pin=RPi.PIN3)
+    s1 = Switch(name="test_switch", gpio_pin=RPi.PIN3)
     assert s1.name == "test_switch"
     assert not s1.value  # = False
-    toggle(s1)
-    assert s1.value  # = True
-    s1.set(False)
-    assert not s1.value  # = False
-
-
-def test_periodic_toggle():
-    s1 = BaseSwitch(name="test_switch", gpio_pin=RPi.PIN5)
-
-    # run the function for 5 toggles
-    periodic_toggle(switch=s1, interval=0.01, loop_forever=False, count=5)
-    assert s1._switch_count == 5
-
-    with pytest.raises(AssertionError):
-        periodic_toggle(switch=s1, interval=0, loop_forever=False, count=1)
-    with pytest.raises(AssertionError):
-        periodic_toggle(switch=s1, interval=0.01, loop_forever=False, count=0)
-    with pytest.raises(AssertionError):
-        periodic_toggle(switch=s1, interval=0.01, loop_forever=False, count=-1)
-    with pytest.raises(AssertionError):
-        periodic_toggle(switch=s1, interval=-1, loop_forever=False, count=1)
-
-
-def test_pneumatic_no_valve_init():
-    p1 = PneumaticNoValve(pin=1, name="test_valve")
-    assert isinstance(p1, BaseValve), "PneumaticNoValve should be a subclass of BaseValve"
-    # assert isinstance(p1, Switchable), "PneumaticNoValve should be a subclass of Switchable"
-    assert p1.name == "test_valve", "Name should be same as passed to constructor"
-    assert p1._state == ValveState.OPEN_FLOW, "Valve should be open by default"
-    assert p1.value, "Value should be True (open) by default"
-    assert repr(p1) == "1[True]", "repr() should return pin and value"
-    toggle(p1)
-    assert not p1.value, "Value should be False (Closed) after toggle"
-    p1.set(True)
-    assert p1.value, "Value should be True (open) after set(True)"
-
-
-def test_pump_init():
-    p1 = Pump(name="test_pump", gpio_pin=RPi.PIN3)
-    assert isinstance(p1, BaseSwitch), "Pump should be a subclass of BaseSwitch"
-    # assert isinstance(p1, Switchable), "Pump should be a subclass of Switchable"
-    assert p1.name == "test_pump", "Name should be same as passed to constructor"
-    assert not p1.value, "Value should be False (off) by default"
-    toggle(p1)
-    assert p1.value, "Value should be True (on) after toggle"
-    p1.set(False)
-    assert not p1.value, "Value should be False (off) after set(False)"
-    p1.on()
-    assert p1.value, "Value should be True (on) after on()"
-    p1.off()
-    assert not p1.value, "Value should be False (off) after off()"
-
-
-def test_periodic_toggle_exception_handling():
-    s1 = Mock()  # create a mock switch
-    s1.set.side_effect = SwitchingError()  # set the side effect
-    with patch("logging.error") as mock_log:  # patch logging to check if it logs the exception
-        periodic_toggle(switch=s1, interval=0.01, loop_forever=False, count=1)
-        mock_log.assert_called_once_with(ANY)
 
 
 @pytest.mark.parametrize("valve_type", [ValveType.NORMALLY_CLOSED, ValveType.NORMALLY_OPEN])
 def test_get_type(valve_type):
-    m = BaseValve(pin=1, name="test_switch", valve_type=valve_type)
+    m = Valve(pin=1, name="test_switch", valve_type=valve_type)
     assert m.get_type == valve_type, "get_type should return the valve type"

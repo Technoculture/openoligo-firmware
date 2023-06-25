@@ -16,6 +16,9 @@ rich = "^13.4.2"
 python-dotenv = "^1.0.0"
 biopython = "^1.81"
 tqdm = "^4.65.0"
+fastapi = "^0.98.0"
+pdoc3 = "^0.10.0"
+pdocs = "^1.2.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.3.2"

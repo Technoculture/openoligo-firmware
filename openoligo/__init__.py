@@ -14,10 +14,8 @@ __all__ = [
     "Board",
     "Manifold",
     "RPi",
-    "PneumaticNoValve",
-    "Pump",
-    "BaseValve",
-    "periodic_toggle",
+    "Valve",
+    "Switch",
     "ValveState",
     "ValveType",
 ]

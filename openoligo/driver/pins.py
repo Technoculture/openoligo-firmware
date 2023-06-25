@@ -3,9 +3,6 @@ Pins in the Raspberry Pi GPIO header.
 """
 from enum import Enum
 
-# import RPi.GPIO as GPIO
-# GPIO.setmode(GPIO.BOARD)
-
 
 class RPi(Enum):
     """
@@ -40,7 +37,3 @@ class RPi(Enum):
     PIN37 = 37
     PIN38 = 38
     PIN40 = 40
-
-
-# Then, to use a pin you can refer to it as follows:
-# GPIO.setup(RPiBoardPins.PIN3.value, GPIO.OUT)

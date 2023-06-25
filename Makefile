@@ -38,6 +38,7 @@ help:
 	@echo "  run             Run the application"
 	@echo "  install         Install the package"
 	@echo "  shell           Run a shell in the virtual environment"
+	@echo "  jupyter         Start a tunnel to the Jupyter notebook server"
 	@echo
 	@echo "Category: Code delivery"
 	@echo "  publish         Publish the package"
@@ -54,9 +55,6 @@ all: format lint test coverage
 
 run:
 	@poetry run python $(EXECNAME)
-
-shell:
-	@poetry shell
 
 format:
 	@poetry run black $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
@@ -88,8 +86,22 @@ install:
 		@poetry install; \
 	fi
 
+shell:
+	@poetry shell
+
 ssh:
 	ssh $(RPI_USER)@$(RPI_HOSTNAME)
+
+jupyter:
+	@echo
+	@echo "This will only open a tunnel to the Jupyter notebook server running on the Raspberry Pi"
+	@echo
+	@echo "To run the notebook server, run the following command on the Raspberry Pi:"
+	@echo "  jupyter notebook --no-browser --port=8888"
+	@echo
+	@echo "Open http://localhost:8080/notebooks/scratch/api_scratchpad.ipynb in your browser"
+	@echo
+	ssh -N -L 8880:localhost:8888 $(RPI_USER)@$(RPI_HOSTNAME)
 
 deploy:
 	rsync -avz $(LOCAL_DIR) $(RPI_USER)@$(RPI_HOSTNAME):$(REMOTE_DIR)

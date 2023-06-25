@@ -13,7 +13,7 @@ from openoligo.driver.board import (
     get_gpio,
     is_rpi,
 )
-from openoligo.driver.rpi_pins import RPi
+from openoligo.driver.pins import RPi
 
 
 def test_get_gpio():

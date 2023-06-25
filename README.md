@@ -15,18 +15,4 @@ pip install openoligo
 ### A simple Example
 
 ```py
-from openoligo import Manifold, BaseValve
-from openoligo.steps import perform_flow_sequence
-from openoligo.utils import ms
-
-m = Manifold(BaseValve, 4)
-
-perform_flow_sequence(
-    m,
-    [
-        (0, ms(100)),
-        (2, 1),
-        (1, ms(200)),
-    ],
-)
 ```
