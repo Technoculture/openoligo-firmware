@@ -76,7 +76,7 @@ test: type
 
 docs:
 	@poetry run pdocs as_html $(LIBNAME) --overwrite --output-dir=$(DOCS_DIR)
-	@cp $(DOCS_DIR)/$(LIBNAME)/index.html $(DOCS_DIR)/index.html
+	mv $(DOCSDIR)/$(LIBNAME)/* $(DOCSDIR)
 
 publish:
 	@poetry publish --build
@@ -118,4 +118,4 @@ get_from_pi:
 tree:
 	@tre -E '__pycache__|.git|.DS_Store|build|dist|.github|.flake8|__init__.py|scratch|tests'
 
-.PHONY: ghtest lint type help run test publish install ssh deploy deploy_init get_from_pi t
+.PHONY: ghtest lint type help run test publish install ssh deploy deploy_init get_from_pi t docs
