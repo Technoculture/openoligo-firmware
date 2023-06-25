@@ -5,8 +5,8 @@ import logging
 import importlib
 from abc import ABC, abstractmethod
 
-from openoligo.driver.pins import RPi
-from openoligo.driver.types import GpioMode
+from openoligo.hal.pins import RPi
+from openoligo.hal.types import GpioMode
 
 
 def get_gpio():

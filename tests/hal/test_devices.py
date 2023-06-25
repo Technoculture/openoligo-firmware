@@ -1,14 +1,13 @@
 import pytest
-
-from openoligo.driver.devices import (
+from openoligo.hal.pins import RPi
+from openoligo.hal.types import ValveState, ValveType
+from openoligo.hal.devices import (
     Switch,
     Valve,
 )
-from openoligo.driver.pins import RPi
-from openoligo.driver.types import ValveState, ValveType
 
 
-def test_nc_no_switch():
+def test_nc_no_valve():
     s1 = Valve(pin=1, name="test_switch", valve_type=ValveType.NORMALLY_CLOSED)
     s2 = Valve(pin=2, name="test_switch", valve_type=ValveType.NORMALLY_OPEN)
 

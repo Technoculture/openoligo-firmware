@@ -2,10 +2,10 @@
 Driver imports for convenience.
 """
 
-from openoligo.driver.gpio import is_rpi
-from openoligo.driver.pins import RPi
-from openoligo.driver.devices import Valve, Switch
-from openoligo.driver.types import (
+from openoligo.hal.gpio import is_rpi
+from openoligo.hal.pins import RPi
+from openoligo.hal.devices import Valve, Switch
+from openoligo.hal.types import (
     GpioMode,
     InvalidManifoldSizeError,
     Switchable,

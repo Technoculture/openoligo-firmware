@@ -1,10 +1,10 @@
+from openoligo.hal.pins import RPi
 import unittest
 
 # from unittest import TestCase
 from unittest.mock import Mock, mock_open, patch
 
-
-from openoligo.driver.gpio import (
+from openoligo.hal.gpio import (
     GPIOInterface,
     GpioMode,
     MockGPIO,
@@ -12,7 +12,6 @@ from openoligo.driver.gpio import (
     get_gpio,
     is_rpi,
 )
-from openoligo.driver.pins import RPi
 
 
 def test_get_gpio():

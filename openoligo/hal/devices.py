@@ -4,8 +4,8 @@ Switches can be used to control devices that can be turned on and off.
 import logging
 from dataclasses import dataclass, field
 
-from openoligo.driver.pins import RPi
-from openoligo.driver.types import Switchable, Valvable, ValveState, ValveType
+from openoligo.hal.pins import RPi
+from openoligo.hal.types import Switchable, Valvable, ValveState, ValveType
 
 
 @dataclass
