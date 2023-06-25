@@ -4,8 +4,7 @@ import unittest
 from unittest.mock import Mock, mock_open, patch
 
 
-from openoligo.driver.board import (
-    Board,
+from openoligo.driver.gpio import (
     GPIOInterface,
     GpioMode,
     MockGPIO,
@@ -89,45 +88,3 @@ class TestGetGpio(unittest.TestCase):
         result = get_gpio()
         # Check that the right GPIO class was returned
         self.assertIsInstance(result, MockGPIO)
-
-
-# class TestRPiGpio(unittest.TestCase):
-#    def setUp(self):
-#        self.gpio = MockGPIO()
-#        self.rpi_gpio = RPiGPIO(self.gpio)
-#
-#    def test_setup(self):
-#        self.rpi_gpio.setup(RPi.PIN3, GpioMode.OUT)
-#        self.rpi_gpio.setmode.assert_called_with(self.rpi_gpio.BOARD)
-#        self.gpio.setup.assert_called_with(RPi.PIN3.value, self.gpio.OUT)
-#
-#    def test_set(self):
-#        self.rpi_gpio.set(RPi.PIN3, True)
-#        self.gpio.output.assert_called_with(RPi.PIN3.value, self.gpio.HIGH)
-#
-#    def test_value(self):
-#        self.gpio.input.return_value = True
-#        self.assertEqual(self.rpi_gpio.value(RPi.PIN3), True)
-#
-#    def test_cleanup(self):
-#        self.rpi_gpio.cleanup()
-#        self.gpio.cleanup.assert_called()
-#
-#    def test_repr(self):
-#        self.rpi_gpio.value = MagicMock()
-#        self.rpi_gpio.value.side_effect = [True, False, True]
-#        self.assertEqual(self.rpi_gpio.__repr__(), "(1, 1), (2, 0), (3, 1)")
-
-
-def test_board():
-    with Board() as board:
-        board.set(RPi.PIN31, True)
-        assert board.value(RPi.PIN31)
-        board.set(RPi.PIN40, True)
-        board.set(RPi.PIN31, False)
-        assert not board.value(RPi.PIN31)
-
-        assert (
-            board.__repr__()
-            == "Board<<class 'openoligo.driver.board.MockGPIO'>>[(3, 0), (5, 0), (7, 0), (8, 0), (10, 0), (11, 0), (12, 0), (13, 0), (15, 0), (16, 0), (18, 0), (19, 0), (21, 0), (22, 0), (23, 0), (24, 0), (26, 0), (27, 0), (28, 0), (29, 0), (31, 0), (32, 0), (33, 0), (35, 0), (36, 0), (37, 0), (38, 0), (40, 1)]"  # noqa: E501
-        ), "board repr should return all pin states in (pin_number, 0 or 1) format"  # noqa: E501

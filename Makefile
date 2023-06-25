@@ -32,6 +32,7 @@ help:
 	@echo "  lint            Run linter"
 	@echo "  type            Run type checker"
 	@echo "  test            Run tests"
+	@echo "  docs            Generate documentation"
 	@echo
 	@echo "Category: Build and run"
 	@echo "  all             Run format, lint, type checks, tests, and generate coverage report"
@@ -47,7 +48,7 @@ help:
 	@echo "  ssh             SSH to Raspberry Pi"
 	@echo
 	@echo "Category: Miscellaneous"
-	@echo "  t               Display the project directory structure"
+	@echo "  tree            Display the project directory structure"
 	@echo "  help            Print this help message"
 	@echo 
 
@@ -71,6 +72,9 @@ type:
 
 test: type
 	@poetry run pytest 
+
+docs:
+	@poetry run pdocs as_html $(LIBNAME)
 
 publish:
 	@poetry publish --build
@@ -109,7 +113,7 @@ deploy:
 get_from_pi:
 	rsync -avz $(RPI_USER)@$(RPI_HOSTNAME):$(REMOTE_DIR) $(LOCAL_DIR)
 
-t:
+tree:
 	@tre -E '__pycache__|.git|.DS_Store|build|dist|.github|.flake8|__init__.py|scratch|tests'
 
 .PHONY: ghtest lint type help run test publish install ssh deploy deploy_init get_from_pi t

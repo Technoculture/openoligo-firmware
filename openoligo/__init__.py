@@ -11,8 +11,6 @@ from openoligo.driver import *
 from openoligo.utils import *
 
 __all__ = [
-    "Board",
-    "Manifold",
     "RPi",
     "Valve",
     "Switch",

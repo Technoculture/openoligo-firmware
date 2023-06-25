@@ -8,7 +8,6 @@ from enum import Enum
 from typing import Optional
 
 from openoligo.fixed_keys_dict import FixedKeysDict
-from openoligo.driver.manifold import Manifold
 
 
 class ReagentCategory(str, Enum):
@@ -72,7 +71,6 @@ class Slot:
 
     idn: BottleSlotID
     valve: int
-    manifold: Manifold
 
 
 valid_keys = {member.name for member in BottleSlotID}

@@ -5,8 +5,7 @@ import logging
 from dataclasses import dataclass, field
 
 from openoligo.driver.pins import RPi
-from openoligo.driver.board import Board
-from openoligo.driver.types import Switchable, SwitchingError, Valvable, ValveState, ValveType
+from openoligo.driver.types import Switchable, Valvable, ValveState, ValveType
 
 
 @dataclass
@@ -22,7 +21,6 @@ class Switch(Switchable):
 
     name: str
     gpio_pin: RPi
-    board: Board
     _switch_count: int = field(default=0, init=False)
     _state: bool = field(default=False, init=False)
 
@@ -30,7 +28,7 @@ class Switch(Switchable):
         """Set state of the switch ON or OFF."""
         self._state = state
         self._switch_count += 1
-        self.board.set(self.gpio_pin, state)
+        # self.board.set(self.gpio_pin, state)
         logging.info("Switch (%s) set to [bold]%s[/]", self.name, state, extra={"markup": True})
 
     @property
@@ -41,8 +39,8 @@ class Switch(Switchable):
         raises:
             SwitchingError: If the switch is not set.
         """
-        if self._state is not self.board.value(self.gpio_pin):
-            raise SwitchingError(f"Switch ({self.name}) is not set")
+        # if self._state is not self.board.value(self.gpio_pin):
+        #    raise SwitchingError(f"Switch ({self.name}) is not set")
         return self._state
 
 
@@ -55,7 +53,6 @@ class Valve(Valvable):
     pin: int
     name: str
     gpio_pin: RPi
-    board: Board
     valve_type: ValveType = field(default=ValveType.NORMALLY_OPEN)
     _switch_count: int = field(init=False, default=0)
     _state: ValveState = field(init=False)

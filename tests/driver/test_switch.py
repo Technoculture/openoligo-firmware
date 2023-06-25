@@ -1,5 +1,3 @@
-from unittest.mock import ANY, Mock, patch
-
 import pytest
 
 from openoligo.driver.devices import (

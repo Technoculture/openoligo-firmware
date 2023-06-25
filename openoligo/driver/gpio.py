@@ -4,8 +4,6 @@ GPIO access abstraction: RPi.GPIO on Raspberry Pi, MockGPIO otherwise.
 import logging
 import importlib
 from abc import ABC, abstractmethod
-from typing import Optional, Type
-from types import TracebackType
 
 from openoligo.driver.pins import RPi
 from openoligo.driver.types import GpioMode
@@ -36,7 +34,11 @@ class GPIOInterface(ABC):
     """GPIO interface."""
 
     @abstractmethod
-    def setup(self, pin: RPi, mode: GpioMode) -> None:
+    def setup(self) -> None:
+        """Setup GPIO."""
+
+    @abstractmethod
+    def setup_pin(self, pin: RPi, mode: GpioMode) -> None:
         """Set up a GPIO pin."""
 
     @abstractmethod
@@ -64,7 +66,12 @@ class RPiGPIO(GPIOInterface):
         """Import RPi.GPIO"""
         self.gpio = gpio
 
-    def setup(self, pin: RPi, mode: GpioMode = GpioMode.OUT) -> None:
+    def setup(self):
+        """Set up all pins."""
+        for pin in RPi:
+            self.setup_pin(pin)
+
+    def setup_pin(self, pin: RPi, mode: GpioMode = GpioMode.OUT) -> None:
         """Set up a GPIO pin."""
         self.gpio.setmode(self.gpio.BOARD)
         self.gpio.setup(pin.value, self.gpio.OUT if mode == GpioMode.OUT else self.gpio.IN)
@@ -95,10 +102,13 @@ class MockGPIO(GPIOInterface):
         and the values are their mock states
         """
         self.state: dict[int, bool] = {}
-        for pin in RPi:
-            self.setup(pin)
 
-    def setup(
+    def setup(self) -> None:
+        """Setup all pins."""
+        for pin in RPi:
+            self.setup_pin(pin)
+
+    def setup_pin(
         self, pin: RPi, mode: GpioMode = GpioMode.OUT
     ) -> None:  # pylint: disable=unused-argument
         """Set up a GPIO pin."""
@@ -121,4 +131,3 @@ class MockGPIO(GPIOInterface):
     def __repr__(self) -> str:
         """Return a string representation of the GPIO module."""
         return ", ".join(f"({pin.value}, {1 if self.value(pin) else 0})" for pin in RPi)
-
