@@ -2,6 +2,7 @@ LIBNAME:=openoligo
 EXECNAME:=server.py
 TESTDIR:=tests
 EXAMPLEDIR:=examples
+DOCSDIR:=docs
 
 RPI_HOSTNAME?=openoligo.local
 RPI_USER?=admin
@@ -74,7 +75,8 @@ test: type
 	@poetry run pytest 
 
 docs:
-	@poetry run pdocs as_html $(LIBNAME) --overwrite
+	@poetry run pdocs as_html $(LIBNAME) --overwrite --output-dir=$(DOCS_DIR)
+	@cp $(DOCS_DIR)/$(LIBNAME)/index.html $(DOCS_DIR)/index.html
 
 publish:
 	@poetry publish --build
