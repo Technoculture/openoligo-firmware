@@ -8,7 +8,7 @@ from tqdm import tqdm
 from openoligo.utils import wait_async
 from openoligo.steps.flow import solvent_wash_all, dry_all
 
-import openoligo.utils as utils
+from openoligo import utils
 
 
 async def detritylate() -> None:
@@ -116,5 +116,6 @@ async def synthesize(seq: Seq) -> None:
         pbar.update(1)
     end_time = time()  # end timer
     elapsed_time_in_minutes = ((end_time - start_time) / 60) * utils.SIMULATION_SPEEDUP_FACTOR
-    logging.info("Synthesis complete for DNA sequence: '%s' in %s minutes", 
-                 seq, elapsed_time_in_minutes)
+    logging.info(
+        "Synthesis complete for DNA sequence: '%s' in %s minutes", seq, elapsed_time_in_minutes
+    )

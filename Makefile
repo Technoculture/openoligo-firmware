@@ -74,7 +74,7 @@ test: type
 	@poetry run pytest 
 
 docs:
-	@poetry run pdocs as_html $(LIBNAME)
+	@poetry run pdocs as_html $(LIBNAME) --overwrite
 
 publish:
 	@poetry publish --build
