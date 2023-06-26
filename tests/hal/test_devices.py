@@ -1,7 +1,7 @@
 import pytest
 
+from openoligo.hal.board import Board
 from openoligo.hal.devices import Switch, Valve
-from openoligo.hal.pins import Board
 from openoligo.hal.types import ValveState, ValveType
 
 

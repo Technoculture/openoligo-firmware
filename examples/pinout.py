@@ -1,35 +1,33 @@
 #!/usr/bin/env python
-from openoligo.instrument import Pinout
-from openoligo.hal.pins import Board
+from openoligo.hal.board import Board
+from openoligo.hal.devices import Switch, Valve
+from openoligo.instrument import EssentialPinouts, Pinout
 
+e = EssentialPinouts(
+    waste_after_reaction=Valve(gpio_pin=Board.P3),
+    waste_other=Valve(gpio_pin=Board.P5),
+    solvent=Valve(gpio_pin=Board.P7),
+    inert_gas=Valve(gpio_pin=Board.P8),
+    output=Valve(gpio_pin=Board.P10),
+    pump=Switch(gpio_pin=Board.P12),
+)
 
 p = Pinout(
-    waste_after_reaction=Board.P3,
-    waste_other=Board.P5,
-    solvent=Board.P7,
-    inert_gas=Board.P8,
-
-    output=Board.P10,
-    pump=Board.P11,
-
-    phosphoramidite= 
-    { 
-     "A": Board.P12, 
-     "C": Board.P13, 
-     "G": Board.P15, 
-     "T": Board.P16
+    essentials=e,
+    phosphoramidites={
+        "A": Valve(gpio_pin=Board.P26),
+        "C": Valve(gpio_pin=Board.P13),
+        "G": Valve(gpio_pin=Board.P15),
+        "T": Valve(gpio_pin=Board.P16),
     },
-
-    reactants= 
-    { 
-     "ACT": Board.P18, 
-     "OXI": Board.P19, 
-     "CAP1": Board.P21, 
-     "CAP2": Board.P22, 
-     "DEB": Board.P23,
-     "CLDE": Board.P24,
-     "ABC": Board.P26
-    }
+    reactants={
+        "ACT": Valve(gpio_pin=Board.P18),
+        "OXI": Valve(gpio_pin=Board.P19),
+        "CAP1": Valve(gpio_pin=Board.P21),
+        "CAP2": Valve(gpio_pin=Board.P22),
+        "DEB": Valve(gpio_pin=Board.P23),
+        "CLDE": Valve(gpio_pin=Board.P24),
+    },
 )
 
 

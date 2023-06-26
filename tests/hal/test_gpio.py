@@ -3,8 +3,8 @@ import unittest
 # from unittest import TestCase
 from unittest.mock import Mock, mock_open, patch
 
+from openoligo.hal.board import Board
 from openoligo.hal.gpio import GPIOInterface, GpioMode, MockGPIO, RPiGPIO, get_gpio, is_rpi
-from openoligo.hal.pins import Board
 
 
 def test_get_gpio():

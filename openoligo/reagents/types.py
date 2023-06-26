@@ -7,8 +7,6 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
 
-from openoligo.fixed_keys_dict import FixedKeysDict
-
 
 class ReagentCategory(str, Enum):
     """The category of reagent."""
@@ -74,7 +72,6 @@ class Slot:
 
 
 valid_keys = {member.name for member in BottleSlotID}
-Slots = FixedKeysDict[Slot](valid_keys=valid_keys)
 
 
 @dataclass

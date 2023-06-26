@@ -1,13 +1,14 @@
 """
 Unified access to configuring and using the instrument.
 """
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Dict
 
-from openoligo.fixed_keys_dict import FixedKeysDict
+from openoligo.hal.board import Board
 from openoligo.hal.devices import Switch, Valve
-from openoligo.hal.gpio import get_gpio
-from openoligo.hal.pins import Board
+from openoligo.hal.types import Switchable
+
+# from openoligo.hal.gpio import get_gpio
 
 
 class Singleton(type):
@@ -24,67 +25,94 @@ class Singleton(type):
 
 
 @dataclass
+class EssentialPinouts(metaclass=Singleton):
+    """
+    Essential pinouts for the instrument.
+    """
+
+    waste_after_reaction: Valve = Valve(gpio_pin=Board.P5)
+    waste_other: Valve = Valve(gpio_pin=Board.P7)
+    solvent: Valve = Valve(gpio_pin=Board.P3)
+    inert_gas: Valve = Valve(gpio_pin=Board.P10)
+
+    output: Valve = Valve(gpio_pin=Board.P8)
+    pump: Switch = Switch(gpio_pin=Board.P11)
+
+
 class Pinout(metaclass=Singleton):
     """
     Pinout for the instrument.
     """
-    waste_after_reaction: Valve
-    waste_other: Valve
-    solvent: Valve
-    inert_gas: Valve
 
-    output: Valve
-    pump: Switch
+    def __init__(
+        self,
+        essentials: EssentialPinouts,
+        phosphoramidites: Dict[str, Valve],
+        reactants: Dict[str, Valve],
+    ):
+        """
+        Initialize the pinout.
+        """
+        self.essentials = essentials
+        self.phosphoramidite = phosphoramidites
+        self.reactants = reactants
+        self.__pinout: Dict[str, Switchable] = {}
+        self.init_pinout()
 
-    phosphoramidite: FixedKeysDict = FixedKeysDict[Valve](set(['A', 'C', 'G', 'T']))
-    reactants: FixedKeysDict = FixedKeysDict[Valve](set(['ACT', 'OXI', 'CAP1', 'CAP2', 'DEB', 'CLDE']))
+    def check_pin_duplicate(self, pin, category, sub_category):
+        """
+        Check for duplicate pin usage.
+        """
+        if pin in self.__pinout.values():
+            raise ValueError(f"Pin {pin} is used twice in {category}.{sub_category}.")
+        self.__pinout[sub_category] = pin
+        # print(sub_category, pin)
 
-    __pinout: Dict[str, Board] = field(init=False)
-
-
-    def __post_init__(self):
+    def init_pinout(self):
         """
         Make sure no pin is used twice.
         """
-        self.__pinout = {}
-        # print(self.__dict__.items())
-        for k, v in self.__dict__.items():
-            if k.startswith('_'):
+        for category, pins in self.__dict__.items():
+            if category.startswith("_"):
                 continue
-            if isinstance(v, dict):
-                for sub_k, sub_v in v.items():
-                    if sub_v in self.__pinout.values():
-                        raise ValueError(f'Pin {sub_v} is used twice in {k}.{sub_k}.')
-                    self.__pinout[sub_k] = sub_v
-            else:
-                if v in self.__pinout.values():
-                    raise ValueError(f'Pin {v} is used twice in {k}.')
-                self.__pinout[k] = v
 
+            if isinstance(pins, EssentialPinouts):
+                for sub_category, pin in pins.__dict__.items():
+                    self.check_pin_duplicate(pin, category, sub_category)
+            elif isinstance(pins, dict):
+                for sub_category, pin in pins.items():
+                    self.check_pin_duplicate(pin, category, sub_category)
+            else:
+                self.check_pin_duplicate(pins, category, "")
 
     def __repr__(self):
         """
         Return a string representation of the pinout.
         """
-        return f'Pinout({self.__pinout})'
+        return f"Pinout({self.__pinout})"
 
 
-class Instrument(metaclass=Singleton):
-    """
-    Unified access to the instrument. Hide the details of the hardware.
-    """
-
-    def __init__(self, pinout: Pinout) -> None:
-        """
-        Initialize the instrument.
-        """
-        self.pinout = pinout
-        self.__setup()
-
-
-    def __setup(self):
-        """
-        Setup the instrument.
-        """
-        self.__gpio = get_gpio()
-        self.__gpio.setup()
+# class Instrument(metaclass=Singleton):
+#    """
+#    Unified access to the instrument. Hide the details of the hardware.
+#    """
+#
+#    def __init__(self, pinout: Pinout) -> None:
+#        """
+#        Initialize the instrument.
+#        """
+#        self.pinout = pinout
+#        self.__setup()
+#
+#    def __setup(self):
+#        """
+#        Setup the instrument.
+#        """
+#        self.__gpio = get_gpio()
+#        self.__gpio.setup()
+#
+#    def __repr__(self):
+#        """
+#        Return a string representation of the instrument.
+#        """
+#        return f"Instrument({self.pinout})"

@@ -4,7 +4,7 @@ Switches can be used to control devices that can be turned on and off.
 import logging
 from dataclasses import dataclass, field
 
-from openoligo.hal.pins import Board
+from openoligo.hal.board import Board
 from openoligo.hal.types import Switchable, Valvable, ValveState, ValveType
 
 
@@ -19,7 +19,6 @@ class Switch(Switchable):
         board: Board object to access the GPIO pins.
     """
 
-    name: str
     gpio_pin: Board
     _switch_count: int = field(default=0, init=False)
     _state: bool = field(default=False, init=False)
@@ -29,7 +28,7 @@ class Switch(Switchable):
         self._state = state
         self._switch_count += 1
         # self.board.set(self.gpio_pin, state)
-        logging.info("Switch (%s) set to [bold]%s[/]", self.name, state, extra={"markup": True})
+        logging.info("Switch (%s) set to [bold]%s[/]", self.gpio_pin, state, extra={"markup": True})
 
     @property
     def value(self) -> bool:
@@ -50,8 +49,6 @@ class Valve(Valvable):
     A valve that actually controls a GPIO pin on the Raspberry Pi.
     """
 
-    pin: int
-    name: str
     gpio_pin: Board
     valve_type: ValveType = field(default=ValveType.NORMALLY_OPEN)
     _switch_count: int = field(init=False, default=0)
@@ -78,7 +75,7 @@ class Valve(Valvable):
         self._state = ValveState.OPEN_FLOW if state else ValveState.CLOSED_FLOW
         self._switch_count += 1
         logging.debug(
-            "Valve (%s) set to [bold]%s[/]", self.name, self._state, extra={"markup": True}
+            "Valve (%s) set to [bold]%s[/]", self.gpio_pin, self._state, extra={"markup": True}
         )
 
     @property
@@ -92,4 +89,4 @@ class Valve(Valvable):
         return self.valve_type
 
     def __repr__(self) -> str:
-        return f"{self.pin}[{self.value}]"
+        return f"{self.gpio_pin}[{self.value}]"
