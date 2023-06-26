@@ -6,65 +6,63 @@ import logging
 from Bio.Seq import Seq  # type: ignore
 from tqdm import tqdm
 from openoligo.utils import wait_async
-from openoligo.steps.flow import solvent_wash_all, dry_all
+from openoligo.steps.flow import solvent_wash_all, dry_all, step
 
 from openoligo import utils
 
 
+@step
 async def detritylate() -> None:
     """
-    Remove the trityl group from the 5'-end of the DNA sequence.
-    Involves the reagent to be sent to the reactor, and then the reactor to be washed and dried.
+    Add 3% trichloroacetic acid in dichloromethane to the reactor
     """
-    logging.debug("Add 3% trichloroacetic acid in dichloromethane to the reactor")
     # send_to_reactor("CAP")
     await wait_async(50)
 
 
+@step
 async def activate() -> None:
     """
-    0.1 M phosphoramidite monomer and 0.5 M tetrazole in acetonitrile
+    Add 0.1 M phosphoramidite monomer and 0.5 M tetrazole to the reactor
     """
-    logging.debug("Add 0.1 M phosphoramidite monomer and 0.5 M tetrazole to the reactor")
     # 1. Trigger transports
     #    send_to_reactor("0.1 M phosphoramidite monomer and 0.5 M tetrazole in acetonitrile")
     # 2. Wait for residence time
     await wait_async(50)
 
 
+@step
 async def cap() -> None:
     """
-    acetic anhydride/pyridine/THF 1/1/8 and 17.6% w/v N-methyl imidazole in acetonitrile
+    Add acetic anhydride/pyridine/THF and N-methyl imidazole to the reactor
     """
-    logging.debug("Add acetic anhydride/pyridine/THF and N-methyl imidazole to the reactor")
     # send_to_reactor("acetic anhydride/pyridine/THF and N-methyl imidazole")
     await wait_async(30)
 
 
+@step
 async def oxidize() -> None:
     """
-    Oxidize the DNA sequence.
-    0.015 M iodine in water/pyridine/THF 2/20/78
+    Add 0.015 M iodine in water/pyridine/THF to the reactor
     """
-    logging.debug("Add 0.015 M iodine in water/pyridine/THF to the reactor")
     # send_to_reactor("Oxidizing the DNA sequence")
     await wait_async(45)
 
 
+@step
 async def cleave() -> None:
     """
     Cleave the DNA sequence from the solid support.
     """
-    logging.debug("Cleaving the DNA sequence from the solid support")
     # send_to_reactor("Cleaving the DNA sequence from the solid support")
     await wait_async(180)
 
 
+@step
 async def deprotect() -> None:
     """
     Remove the protecting groups from the DNA sequence.
     """
-    logging.debug("Removing protecting groups from the DNA sequence")
     # send_to_reactor("Removing protecting groups from the DNA sequence")
     await wait_async(45)
 

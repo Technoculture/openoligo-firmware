@@ -4,7 +4,7 @@ Pins in the Raspberry Pi GPIO header.
 from enum import Enum
 
 
-class RPi(Enum):
+class Board(Enum):
     """
     Enumerates the GPIO pins on the Raspberry Pi 3 Model B.
     """

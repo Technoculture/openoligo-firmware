@@ -4,8 +4,8 @@ TESTDIR:=tests
 EXAMPLEDIR:=examples
 DOCSDIR:=docs
 
-RPI_HOSTNAME?=openoligo.local
-RPI_USER?=admin
+RPI_HOSTNAME?=beaglebone.local
+RPI_USER?=debian
 
 LOCAL_DIR:=$(shell pwd)
 REMOTE_DIR:=/home/$(RPI_USER)
@@ -44,9 +44,9 @@ help:
 	@echo
 	@echo "Category: Code delivery"
 	@echo "  publish         Publish the package"
-	@echo "  deploy          Deploy the code to Raspberry Pi"
-	@echo "  get_from_pi     Get the deployed code from Raspberry Pi"
-	@echo "  ssh             SSH to Raspberry Pi"
+	@echo "  deploy          Deploy the code to BeagleBone"
+	@echo "  get_from_pi     Get the deployed code from BeagleBone"
+	@echo "  ssh             SSH to BeagleBone"
 	@echo
 	@echo "Category: Miscellaneous"
 	@echo "  tree            Display the project directory structure"
@@ -108,6 +108,9 @@ jupyter:
 	@echo "Open http://localhost:8080/notebooks/scratch/api_scratchpad.ipynb in your browser"
 	@echo
 	ssh -N -L 8880:localhost:8888 $(RPI_USER)@$(RPI_HOSTNAME)
+
+#deploy-setup:
+#	@ansible-playbook -i $(RPI_HOSTNAME), deploy/setup.yml --ask-pass --ask-become-pass
 
 deploy:
 	rsync -avz $(LOCAL_DIR) $(RPI_USER)@$(RPI_HOSTNAME):$(REMOTE_DIR)

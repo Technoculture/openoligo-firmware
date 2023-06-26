@@ -2,7 +2,7 @@
 
 - Python 3.8+
 - Poetry for Python dependency management.
-- Ansible and sshpass for deploying to RPi (Should be present in local network)
+- Ansible and sshpass for deploying to Board (Should be present in local network)
 - Docker (Optional)
 
 # Getting Started

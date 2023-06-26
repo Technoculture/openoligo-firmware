@@ -15,3 +15,14 @@ class FlowBranch(Enum):
 
     REACTION = "reaction"
     REAGENTS = "reagents"
+
+
+class Output(Enum):
+    """
+    Output enumeration.
+    """
+
+    WASTE1 = "waste1"
+    WASTE2 = "waste2"
+
+    OUTPUT = "output"

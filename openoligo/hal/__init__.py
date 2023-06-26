@@ -3,7 +3,7 @@ Driver imports for convenience.
 """
 
 from openoligo.hal.gpio import is_rpi
-from openoligo.hal.pins import RPi
+from openoligo.hal.pins import Board
 from openoligo.hal.devices import Valve, Switch
 from openoligo.hal.types import (
     GpioMode,
@@ -19,7 +19,7 @@ __all__ = [
     "is_rpi",
     "Valve",
     "Switch",
-    "RPi",
+    "Board",
     "GpioMode",
     "InvalidManifoldSizeError",
     "Switchable",

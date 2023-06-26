@@ -5,7 +5,7 @@ import logging
 import importlib
 from abc import ABC, abstractmethod
 
-from openoligo.hal.pins import RPi
+from openoligo.hal.pins import Board
 from openoligo.hal.types import GpioMode
 
 
@@ -38,16 +38,16 @@ class GPIOInterface(ABC):
         """Setup GPIO."""
 
     @abstractmethod
-    def setup_pin(self, pin: RPi, mode: GpioMode) -> None:
+    def setup_pin(self, pin: Board, mode: GpioMode) -> None:
         """Set up a GPIO pin."""
 
     @abstractmethod
-    def set(self, pin: RPi, value: bool) -> None:
+    def set(self, pin: Board, value: bool) -> None:
         """Set the output value of a GPIO pin."""
         logging.debug("Setting pin %s to %s", pin, value)
 
     @abstractmethod
-    def value(self, pin: RPi) -> bool:
+    def value(self, pin: Board) -> bool:
         """Get the value of a GPIO pin."""
 
     @abstractmethod
@@ -63,25 +63,25 @@ class RPiGPIO(GPIOInterface):
     """GPIO access on Raspberry Pi."""
 
     def __init__(self, gpio):
-        """Import RPi.GPIO"""
+        """Import Board.GPIO"""
         self.gpio = gpio
 
     def setup(self):
         """Set up all pins."""
-        for pin in RPi:
+        for pin in Board:
             self.setup_pin(pin)
 
-    def setup_pin(self, pin: RPi, mode: GpioMode = GpioMode.OUT) -> None:
+    def setup_pin(self, pin: Board, mode: GpioMode = GpioMode.OUT) -> None:
         """Set up a GPIO pin."""
         self.gpio.setmode(self.gpio.BOARD)
         self.gpio.setup(pin.value, self.gpio.OUT if mode == GpioMode.OUT else self.gpio.IN)
 
-    def set(self, pin: RPi, value: bool) -> None:
+    def set(self, pin: Board, value: bool) -> None:
         """Set the output value of a GPIO pin."""
         super().set(pin, value)
         self.gpio.output(pin.value, self.gpio.HIGH if value else self.gpio.LOW)
 
-    def value(self, pin: RPi) -> bool:
+    def value(self, pin: Board) -> bool:
         return self.gpio.input(pin.value)
 
     def cleanup(self):
@@ -90,7 +90,7 @@ class RPiGPIO(GPIOInterface):
 
     def __repr__(self) -> str:
         """Return a string representation of the GPIO module."""
-        return ", ".join(f"({pin.value}, {1 if self.value(pin) else 0})" for pin in RPi)
+        return ", ".join(f"({pin.value}, {1 if self.value(pin) else 0})" for pin in Board)
 
 
 class MockGPIO(GPIOInterface):
@@ -105,29 +105,29 @@ class MockGPIO(GPIOInterface):
 
     def setup(self) -> None:
         """Setup all pins."""
-        for pin in RPi:
+        for pin in Board:
             self.setup_pin(pin)
 
     def setup_pin(
-        self, pin: RPi, mode: GpioMode = GpioMode.OUT
+        self, pin: Board, mode: GpioMode = GpioMode.OUT
     ) -> None:  # pylint: disable=unused-argument
         """Set up a GPIO pin."""
         self.state[pin.value] = False
 
-    def set(self, pin: RPi, value: bool):
+    def set(self, pin: Board, value: bool):
         """Set the output value of a GPIO pin."""
         super().set(pin, value)
         self.state[pin.value] = value
 
-    def value(self, pin: RPi) -> bool:
+    def value(self, pin: Board) -> bool:
         """Get the value of a GPIO pin."""
         return self.state[pin.value]
 
     def cleanup(self):
         """Clean up GPIO."""
-        for pin in RPi:
+        for pin in Board:
             self.set(pin, False)
 
     def __repr__(self) -> str:
         """Return a string representation of the GPIO module."""
-        return ", ".join(f"({pin.value}, {1 if self.value(pin) else 0})" for pin in RPi)
+        return ", ".join(f"({pin.value}, {1 if self.value(pin) else 0})" for pin in Board)

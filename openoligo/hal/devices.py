@@ -4,7 +4,7 @@ Switches can be used to control devices that can be turned on and off.
 import logging
 from dataclasses import dataclass, field
 
-from openoligo.hal.pins import RPi
+from openoligo.hal.pins import Board
 from openoligo.hal.types import Switchable, Valvable, ValveState, ValveType
 
 
@@ -20,7 +20,7 @@ class Switch(Switchable):
     """
 
     name: str
-    gpio_pin: RPi
+    gpio_pin: Board
     _switch_count: int = field(default=0, init=False)
     _state: bool = field(default=False, init=False)
 
@@ -52,7 +52,7 @@ class Valve(Valvable):
 
     pin: int
     name: str
-    gpio_pin: RPi
+    gpio_pin: Board
     valve_type: ValveType = field(default=ValveType.NORMALLY_OPEN)
     _switch_count: int = field(init=False, default=0)
     _state: ValveState = field(init=False)

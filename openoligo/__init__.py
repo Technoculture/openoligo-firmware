@@ -12,7 +12,7 @@ from openoligo.utils import *
 from openoligo.instrument import *
 
 __all__ = [
-    "RPi",
+    "Board",
     "Valve",
     "Switch",
     "ValveState",
