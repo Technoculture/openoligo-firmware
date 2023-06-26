@@ -3,7 +3,6 @@ Types for steps
 """
 from enum import Enum
 
-
 FlowWaitPair = tuple[int, float]
 FlowWaitPairs = list[FlowWaitPair]
 

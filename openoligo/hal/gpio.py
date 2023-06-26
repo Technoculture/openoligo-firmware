@@ -1,8 +1,8 @@
 """
 GPIO access abstraction: RPi.GPIO on Raspberry Pi, MockGPIO otherwise.
 """
-import logging
 import importlib
+import logging
 from abc import ABC, abstractmethod
 
 from openoligo.hal.pins import Board

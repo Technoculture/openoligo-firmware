@@ -8,8 +8,8 @@ classes and functions that are needed.
 
 from openoligo import log_config  # pylint: disable=unused-import
 from openoligo.hal import *
-from openoligo.utils import *
 from openoligo.instrument import *
+from openoligo.utils import *
 
 __all__ = [
     "Board",

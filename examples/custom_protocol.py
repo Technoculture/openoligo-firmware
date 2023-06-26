@@ -4,8 +4,9 @@ A custom example synthesis protocol
 """
 from Bio.Seq import Seq  # type: ignore
 from tqdm import tqdm
+
+from openoligo.steps.flow import dry_all, solvent_wash_all
 from openoligo.utils import wait
-from openoligo.steps.flow import solvent_wash_all, dry_all
 
 
 def detritylate() -> None:

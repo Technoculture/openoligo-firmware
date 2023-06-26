@@ -2,23 +2,26 @@
 Functions to create various flows from reagents to columns,
 and to clean columns.
 """
-import logging
-from openoligo.container.types import Slot
-from openoligo.steps.types import FlowBranch, Output
-
 import functools
 import logging
-from typing import Optional
+
+from openoligo.reagents.types import Slot
+from openoligo.steps.types import FlowBranch, Output
 
 
 def step(coroutine):
+    """
+    Decorator for a step function (which carries out a reaction step).
+    """
+
     @functools.wraps(coroutine)
     async def wrapper(*args, **kwargs):
         doc = coroutine.__doc__.strip()
-        name= coroutine.__name__
+        name = coroutine.__name__
         if doc:
             logging.info("%s: %s", name, doc)
         return await coroutine(*args, **kwargs)
+
     return wrapper
 
 
@@ -31,12 +34,9 @@ def which_branch(dst: Output) -> FlowBranch:
 
     return: FlowBranch
     """
-    if dst is Output.OUTPUT:
-        return FlowBranch.REACTION
-    elif dst is Output.WASTE1:
-        return FlowBranch.REACTION
-    elif dst is Output.WASTE2:
-        return FlowBranch.REAGENTS
+    return (
+        FlowBranch.REACTION if dst is Output.OUTPUT or dst is Output.WASTE1 else FlowBranch.REAGENTS
+    )
 
 
 def send(src: Slot, dest: Slot) -> None:

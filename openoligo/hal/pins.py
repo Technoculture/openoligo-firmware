@@ -4,36 +4,36 @@ Pins in the Raspberry Pi GPIO header.
 from enum import Enum
 
 
-class Board(Enum):
+class Board(str, Enum):
     """
     Enumerates the GPIO pins on the Raspberry Pi 3 Model B.
     """
 
-    PIN3 = 3
-    PIN5 = 5
-    PIN7 = 7
-    PIN8 = 8
-    PIN10 = 10
-    PIN11 = 11
-    PIN12 = 12
-    PIN13 = 13
-    PIN15 = 15
-    PIN16 = 16
-    PIN18 = 18
-    PIN19 = 19
-    PIN21 = 21
-    PIN22 = 22
-    PIN23 = 23
-    PIN24 = 24
-    PIN26 = 26
-    PIN27 = 27
-    PIN28 = 28
-    PIN29 = 29
-    PIN31 = 31
-    PIN32 = 32
-    PIN33 = 33
-    PIN35 = 35
-    PIN36 = 36
-    PIN37 = 37
-    PIN38 = 38
-    PIN40 = 40
+    P3 = 3
+    P5 = 5
+    P7 = 7
+    P8 = 8
+    P10 = 10
+    P11 = 11
+    P12 = 12
+    P13 = 13
+    P15 = 15
+    P16 = 16
+    P18 = 18
+    P19 = 19
+    P21 = 21
+    P22 = 22
+    P23 = 23
+    P24 = 24
+    P26 = 26
+    P27 = 27
+    P28 = 28
+    P29 = 29
+    P31 = 31
+    P32 = 32
+    P33 = 33
+    P35 = 35
+    P36 = 36
+    P37 = 37
+    P38 = 38
+    P40 = 40

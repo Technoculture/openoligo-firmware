@@ -59,6 +59,7 @@ run:
 	@poetry run python $(EXECNAME)
 
 format:
+	@poetry run isort $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR) $(EXECNAME)
 	@poetry run black $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
 
 format_check:

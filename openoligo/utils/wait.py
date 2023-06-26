@@ -1,10 +1,11 @@
 """
 Utilities for waiting.
 """
+import asyncio
 import logging
 import time
-import asyncio
 from typing import Callable
+
 from openoligo.utils.sim import SIMULATION_SPEEDUP_FACTOR
 
 

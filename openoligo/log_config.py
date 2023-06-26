@@ -1,8 +1,9 @@
 """
 Logging configuration for OpenOligo
 """
-import os
 import logging
+import os
+
 from dotenv import load_dotenv
 from rich.logging import RichHandler
 

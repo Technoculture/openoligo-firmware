@@ -1,10 +1,8 @@
 import pytest
+
+from openoligo.hal.devices import Switch, Valve
 from openoligo.hal.pins import Board
 from openoligo.hal.types import ValveState, ValveType
-from openoligo.hal.devices import (
-    Switch,
-    Valve,
-)
 
 
 def test_nc_no_valve():
@@ -32,7 +30,7 @@ def test_nc_no_valve():
 
 
 def test_simulated_switch():
-    s1 = Switch(name="test_switch", gpio_pin=Board.PIN3)
+    s1 = Switch(name="test_switch", gpio_pin=Board.P3)
     assert s1.name == "test_switch"
     assert not s1.value  # = False
 

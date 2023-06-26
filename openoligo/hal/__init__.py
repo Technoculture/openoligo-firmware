@@ -2,9 +2,9 @@
 Driver imports for convenience.
 """
 
+from openoligo.hal.devices import Switch, Valve
 from openoligo.hal.gpio import is_rpi
 from openoligo.hal.pins import Board
-from openoligo.hal.devices import Valve, Switch
 from openoligo.hal.types import (
     GpioMode,
     InvalidManifoldSizeError,

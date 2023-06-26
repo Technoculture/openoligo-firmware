@@ -1,14 +1,15 @@
 """
 DNA Snthesis Protocol
 """
-from time import time
 import logging
+from time import time
+
 from Bio.Seq import Seq  # type: ignore
 from tqdm import tqdm
-from openoligo.utils import wait_async
-from openoligo.steps.flow import solvent_wash_all, dry_all, step
 
 from openoligo import utils
+from openoligo.steps.flow import dry_all, solvent_wash_all, step
+from openoligo.utils import wait_async
 
 
 @step

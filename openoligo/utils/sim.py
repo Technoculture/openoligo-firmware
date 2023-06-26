@@ -1,10 +1,10 @@
 """
 Sets some parameters for the simulation.
 """
-import os
 import logging
-from openoligo.hal.gpio import is_rpi
+import os
 
+from openoligo.hal.gpio import is_rpi
 
 # Simulation parameters
 # Can be set using env variable OO_SIM_SPEED=1000

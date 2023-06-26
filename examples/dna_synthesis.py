@@ -3,7 +3,9 @@
 A minimal example of using the DNA synthesis API.
 """
 import asyncio
+
 from Bio.Seq import Seq
+
 from openoligo.protocols.dna_synthesis import synthesize
 
 

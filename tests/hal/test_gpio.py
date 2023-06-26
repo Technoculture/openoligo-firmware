@@ -1,17 +1,10 @@
-from openoligo.hal.pins import Board
 import unittest
 
 # from unittest import TestCase
 from unittest.mock import Mock, mock_open, patch
 
-from openoligo.hal.gpio import (
-    GPIOInterface,
-    GpioMode,
-    MockGPIO,
-    RPiGPIO,
-    get_gpio,
-    is_rpi,
-)
+from openoligo.hal.gpio import GPIOInterface, GpioMode, MockGPIO, RPiGPIO, get_gpio, is_rpi
+from openoligo.hal.pins import Board
 
 
 def test_get_gpio():
@@ -34,14 +27,14 @@ def test_mock_gpio():
     assert isinstance(gpio, MockGPIO)
     assert gpio.state == {(pin.value): False for pin in Board}
 
-    gpio.set(Board.PIN21, True)
+    gpio.set(Board.P21, True)
 
-    _d = {(pin.value): False for pin in Board if pin != Board.PIN21}
-    _d[Board.PIN21.value] = True
+    _d = {(pin.value): False for pin in Board if pin != Board.P21}
+    _d[Board.P21.value] = True
     assert gpio.state == _d
 
-    gpio.set(Board.PIN22, True)
-    gpio.setup(Board.PIN21, GpioMode.OUT)
+    gpio.set(Board.P22, True)
+    gpio.setup(Board.P21, GpioMode.OUT)
 
     assert (
         gpio.__repr__()
@@ -59,19 +52,19 @@ def test_RPiGPIO():
     rpi_gpio = RPiGPIO(gpio_mock)
 
     # Test setup method
-    rpi_gpio.setup(Board.PIN5, GpioMode.OUT)
+    rpi_gpio.setup(Board.P5, GpioMode.OUT)
     gpio_mock.setmode.assert_called_once_with(gpio_mock.BOARD)
     gpio_mock.setup.assert_called_once_with(5, gpio_mock.OUT)
 
     gpio_mock.reset_mock()  # Reset mock call history
 
     # Test output method
-    rpi_gpio.set(Board.PIN5, True)
+    rpi_gpio.set(Board.P5, True)
     gpio_mock.output.assert_called_once_with(5, gpio_mock.HIGH)
 
     gpio_mock.reset_mock()  # Reset mock call history
 
-    rpi_gpio.set(Board.PIN5, False)
+    rpi_gpio.set(Board.P5, False)
     gpio_mock.output.assert_called_once_with(5, gpio_mock.LOW)
 
     # Test cleanup method

@@ -1,7 +1,8 @@
 """
 A dict with fixed set of keys.
 """
-from typing import TypeVar, Set, Generic, Optional
+from typing import Generic, Optional, Set, TypeVar
+import uuid
 
 V = TypeVar("V")  # generic type for values
 
@@ -19,6 +20,7 @@ class FixedKeysDict(Generic[V]):
         Args:
             valid_keys (Set[str]): The valid keys for this dictionary.
         """
+        self.id = uuid.uuid4()  # add a unique identifier
         self._valid_keys = valid_keys
         self._dict: dict[str, V] = {}
 

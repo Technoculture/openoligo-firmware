@@ -1,4 +1,4 @@
-from openoligo.container.cartridge import reagents
+from openoligo.reagents.named_reagents import reagents
 
 
 def test_reagent():
