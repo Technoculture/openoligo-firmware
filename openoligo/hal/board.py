@@ -11,7 +11,7 @@ from openoligo.utils.singleton import Singleton
 # Initialize fixed pinout
 class FixedPinoutDict(TypedDict):
     """
-    A dictionary of pinout tht can not be configured by the library users.
+    A dictionary of pinout that can not be configured by the library users.
     """
 
     waste: Valve
@@ -25,7 +25,7 @@ class FixedPinoutDict(TypedDict):
     gas_pressure: Switch
 
 
-fixed: FixedPinoutDict = {
+fixed_pinout: FixedPinoutDict = {
     "waste": Valve(gpio_pin=Board.P7, role=ValveRole.OUTLET),
     "waste_rxn": Valve(gpio_pin=Board.P5, role=ValveRole.OUTLET),
     "prod": Valve(gpio_pin=Board.P8, role=ValveRole.OUTLET),
@@ -43,7 +43,7 @@ def list_configurable_pins() -> dict[str, Board]:
     Returns a list of all configurable pins.
     These ar all pins in the board that are not part of the fiixed pinout.
     """
-    fixed_pins = [sw.gpio_pin for sw in fixed.values()]  # type: ignore
+    fixed_pins = [sw.gpio_pin for sw in fixed_pinout.values()]  # type: ignore
     return [pin for pin in Board if pin not in fixed_pins]  # type: ignore
 
 
@@ -60,7 +60,7 @@ class Pinout(metaclass=Singleton):
         """
         Initialize the pinout.
         """
-        self.fixed = fixed
+        self.fixed = fixed_pinout
         self.phosphoramidites = phosphoramidites
         self.reactants = reactants
 

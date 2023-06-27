@@ -6,7 +6,7 @@ import logging
 from openoligo.hal.board import Pinout
 from openoligo.hal.devices import Valve
 from openoligo.hal.gpio import get_gpio
-from openoligo.hal.types import Board, OneDestinationException, OneSourceException
+from openoligo.hal.types import Board, OneDestinationException, OneSourceException, ValveRole
 from openoligo.utils.singleton import Singleton
 
 default_pinout = Pinout(
@@ -60,10 +60,10 @@ class Instrument(metaclass=Singleton):
         Validate that the list of valves conform to a set of rules.
 
         1. Each valve must be a valve.
-        1. The list must contain one and only one reagent (inlet) valve.
-        2. The list must contain one and only one product (outlet) valve.
-        3. The list may contain zero or more transit valves
-        4. The list may contain a branch valve, but only one.
+        2. The list must contain one and only one reagent (inlet) valve.
+        3. The list must contain one and only one product (outlet) valve.
+        4. The list may contain zero or more transit valves
+        5. The list may contain a branch valve, but only one.
 
         args:
             name: list of valve names
@@ -74,6 +74,8 @@ class Instrument(metaclass=Singleton):
         """
         source_valves = []
         destination_valves = []
+        branch_valves = []
+        transit_valves = []
 
         for _name in name:
             if not isinstance(self.pinout.get(_name), Valve):
@@ -81,15 +83,26 @@ class Instrument(metaclass=Singleton):
 
         for _name in name:
             valve: Valve = self.__get_valve(_name)
-            if valve.role == "source":
+            if valve.role == ValveRole.INLET:
                 source_valves.append(valve)
-            elif valve.role == "destination":
+            elif valve.role == ValveRole.OUTLET:
                 destination_valves.append(valve)
+            elif valve.role == ValveRole.BRANCH:
+                branch_valves.append(valve)
+            elif valve.role == ValveRole.TRANSIT:
+                transit_valves.append(valve)
+            else:
+                raise ValueError(f"Unknown valve role: {valve.role}")
 
         if len(source_valves) != 1:
             raise OneSourceException("There must be exactly one source valve")
         if len(destination_valves) != 1:
             raise OneDestinationException("There must be exactly one destination valve")
+
+        if len(transit_valves) > 0:
+            logging.warning(
+                "Make sure that the transit valve(s) are in the route you expect"
+            )
 
     def all_except(self, name: list[str]) -> None:
         """

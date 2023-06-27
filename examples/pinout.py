@@ -34,4 +34,6 @@ from openoligo.instrument import Instrument
 # pump.toggle()
 
 ins = Instrument()
-ins.all_except(["a", "waste", "act"])
+ins.all_except(["a", "waste_rxn", "rxn_out"])
+#ins.all_except(["a", "waste_rxn", "rxn_out"])
+#ins.all_except(["a", "waste_rxn", "rxn_out"])

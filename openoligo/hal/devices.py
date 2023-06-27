@@ -103,7 +103,8 @@ class Valve(Valvable):
         __new_state: ValveState = ValveState.OPEN_FLOW if state else ValveState.CLOSED_FLOW
 
         if __old_state == __new_state:
-            logging.warning("Valve (%s) is already %s", self.gpio_pin, __old_state)
+            if __old_state == ValveState.OPEN_FLOW:
+                logging.debug("Valve (%s) is already %s", self.gpio_pin, __old_state)
             return
 
         self.controller.set(self.gpio_pin, state)
