@@ -70,7 +70,7 @@ lint:
 	@poetry run flake8 $(LIBNAME) $(TESTDIR)
 
 type:
-	@poetry run mypy $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
+	@poetry run mypy $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR) --check-untyped-defs
 
 test: type
 	@poetry run pytest 

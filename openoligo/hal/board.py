@@ -4,7 +4,7 @@ Pins in the Raspberry Pi GPIO header.
 from typing import Dict, TypedDict
 
 from openoligo.hal.devices import Switch, Valve
-from openoligo.hal.types import Board, NoSuchPinInPinout, Switchable
+from openoligo.hal.types import Board, NoSuchPinInPinout, Switchable, ValveRole
 from openoligo.utils.singleton import Singleton
 
 
@@ -21,18 +21,20 @@ class FixedPinoutDict(TypedDict):
     rxn_out: Valve
     sol: Valve
     gas: Valve
-    pump: Switch
+    valve_pressure: Switch
+    gas_pressure: Switch
 
 
 fixed: FixedPinoutDict = {
-    "waste": Valve(gpio_pin=Board.P7),
-    "waste_rxn": Valve(gpio_pin=Board.P5),
-    "prod": Valve(gpio_pin=Board.P8),
-    "branch": Valve(gpio_pin=Board.P12),
-    "rxn_out": Valve(gpio_pin=Board.P13),
+    "waste": Valve(gpio_pin=Board.P7, role=ValveRole.OUTLET),
+    "waste_rxn": Valve(gpio_pin=Board.P5, role=ValveRole.OUTLET),
+    "prod": Valve(gpio_pin=Board.P8, role=ValveRole.OUTLET),
+    "branch": Valve(gpio_pin=Board.P12, role=ValveRole.BRANCH),
+    "rxn_out": Valve(gpio_pin=Board.P13, role=ValveRole.TRANSIT),
     "sol": Valve(gpio_pin=Board.P3),
     "gas": Valve(gpio_pin=Board.P10),
-    "pump": Switch(gpio_pin=Board.P11),
+    "valve_pressure": Switch(gpio_pin=Board.P11),
+    "gas_pressure": Switch(gpio_pin=Board.P29),
 }
 
 

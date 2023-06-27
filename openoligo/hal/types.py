@@ -61,6 +61,15 @@ class ValveType(Enum):
     NORMALLY_OPEN = 1
 
 
+class ValveRole(Enum):
+    """Valve Role: Inlet/Outlet/Transit/Branch"""
+
+    INLET = 0
+    OUTLET = 1
+    TRANSIT = 2
+    BRANCH = 3
+
+
 class Switchable(Protocol):
     """
     This protocol represents a switchable device. Any class implementing this protocol should
@@ -124,4 +133,16 @@ class InvalidManifoldSizeError(Exception):
 class NoSuchPinInPinout(Exception):
     """
     Thrown when a pin for a given name is not found in the pinout.
+    """
+
+
+class OneSourceException(SwitchingError):
+    """
+    When more than one source valve is being attempted to be used.
+    """
+
+
+class OneDestinationException(SwitchingError):
+    """
+    When more than one destination valve is being attempted to be used.
     """

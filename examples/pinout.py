@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-from openoligo.hal.board import Pinout, list_configurable_pins
 from openoligo.instrument import Instrument
 
+# from openoligo.hal.board import Pinout, list_configurable_pins
 # from openoligo.hal.devices import Valve
 # from openoligo.hal.types import Board
 
@@ -25,8 +25,6 @@ from openoligo.instrument import Instrument
 #    },
 # )
 
-pinout = Pinout()
-
 # print(pinout)
 
 # a = pinout.get("a")
@@ -35,5 +33,5 @@ pinout = Pinout()
 # pump = pinout.get("pump")
 # pump.toggle()
 
-ins = Instrument(pinout=pinout)
-ins.all_except(["a", "waste"])
+ins = Instrument()
+ins.all_except(["a", "waste", "act"])

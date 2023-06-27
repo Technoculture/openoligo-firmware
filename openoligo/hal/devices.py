@@ -5,7 +5,7 @@ import logging
 from dataclasses import dataclass, field
 
 from openoligo.hal.gpio import get_gpio
-from openoligo.hal.types import Board, Switchable, Valvable, ValveState, ValveType
+from openoligo.hal.types import Board, Switchable, Valvable, ValveRole, ValveState, ValveType
 
 
 @dataclass
@@ -34,7 +34,7 @@ class Switch(Switchable):
         __new_state = state
 
         if __old_state == __new_state:
-            logging.warning(f"Switch {self.gpio_pin} is already {__old_state}")
+            logging.warning("Switch %s is already %s", self.gpio_pin, __old_state)
             return
 
         self._state = __new_state
@@ -62,12 +62,7 @@ class Switch(Switchable):
     def value(self) -> bool:
         """
         Get the current value of the switch.
-
-        raises:
-            SwitchingError: If the switch is not set.
         """
-        # if self._state is not self.board.value(self.gpio_pin):
-        #    raise SwitchingError(f"Switch ({self.name}) is not set")
         return self._state
 
 
@@ -78,6 +73,7 @@ class Valve(Valvable):
     """
 
     gpio_pin: Board
+    role: ValveRole = field(default=ValveRole.INLET)
     valve_type: ValveType = field(default=ValveType.NORMALLY_OPEN)
     _switch_count: int = field(init=False, default=0)
     _state: ValveState = field(init=False)
