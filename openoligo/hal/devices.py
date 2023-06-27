@@ -4,6 +4,7 @@ Switches can be used to control devices that can be turned on and off.
 import logging
 from dataclasses import dataclass, field
 
+from openoligo.hal.gpio import get_gpio
 from openoligo.hal.types import Board, Switchable, Valvable, ValveState, ValveType
 
 
@@ -20,21 +21,38 @@ class Switch(Switchable):
 
     gpio_pin: Board
     _state: bool = field(default=False, init=False)
-    __switch_count: int = field(default=0, init=False, repr=False)
+    _switch_count: int = field(default=0, init=False, repr=False)
+
+    def __post_init__(self):
+        """Initialize the switch."""
+        self.controller = get_gpio()
+        self.controller.setup_pin(self.gpio_pin)
 
     def set(self, state: bool):
         """Set state of the switch ON or OFF."""
         __old_state = self._state
-        self._state = state
-        self.__switch_count += 1
-        # self.board.set(self.gpio_pin, state)
-        logging.info(
+        __new_state = state
+
+        if __old_state == __new_state:
+            logging.warning(f"Switch {self.gpio_pin} is already {__old_state}")
+            return
+
+        self._state = __new_state
+        self.controller.set(self.gpio_pin, state)
+        self._switch_count += 1
+
+        logging.debug(
             "Switch (%s) set from %s to [bold]%s[/]",
             self.gpio_pin,
             __old_state,
-            self._state,
+            __new_state,
             extra={"markup": True},
         )
+
+    @property
+    def gpio(self) -> Board:
+        """Get the GPIO pin number."""
+        return self.gpio_pin
 
     def toggle(self):
         """Toggle the state of the switch."""
@@ -61,11 +79,14 @@ class Valve(Valvable):
 
     gpio_pin: Board
     valve_type: ValveType = field(default=ValveType.NORMALLY_OPEN)
-    __switch_count: int = field(init=False, default=0)
+    _switch_count: int = field(init=False, default=0)
     _state: ValveState = field(init=False)
 
     def __post_init__(self):
         """Initialize the valve."""
+        self.controller = get_gpio()
+        self.controller.setup_pin(self.gpio_pin)
+
         self._state = (
             ValveState.CLOSED_FLOW
             if self.valve_type == ValveType.NORMALLY_CLOSED
@@ -86,19 +107,25 @@ class Valve(Valvable):
         __new_state: ValveState = ValveState.OPEN_FLOW if state else ValveState.CLOSED_FLOW
 
         if __old_state == __new_state:
-            logging.warn("Valve (%s) is already %s", self.gpio_pin, __old_state)
+            logging.warning("Valve (%s) is already %s", self.gpio_pin, __old_state)
             return
 
+        self.controller.set(self.gpio_pin, state)
         self._state = __new_state
 
-        self.__switch_count += 1
-        logging.info(
+        self._switch_count += 1
+        logging.debug(
             "Valve (%s) set from %s to [bold]%s[/]",
             self.gpio_pin,
             __old_state,
             self._state,
             extra={"markup": True},
         )
+
+    @property
+    def gpio(self) -> Board:
+        """Get the GPIO pin number."""
+        return self.gpio_pin
 
     @property
     def value(self) -> bool:

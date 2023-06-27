@@ -76,6 +76,11 @@ class Switchable(Protocol):
         raise NotImplementedError
 
     @property
+    def gpio(self) -> Board:
+        """Get the GPIO pin number."""
+        raise NotImplementedError
+
+    @property
     def value(self) -> bool:
         """Get the current value of the switch."""
         raise NotImplementedError

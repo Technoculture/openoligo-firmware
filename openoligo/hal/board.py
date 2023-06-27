@@ -10,6 +10,10 @@ from openoligo.utils.singleton import Singleton
 
 # Initialize fixed pinout
 class FixedPinoutDict(TypedDict):
+    """
+    A dictionary of pinout tht can not be configured by the library users.
+    """
+
     waste: Valve
     waste_rxn: Valve
     prod: Valve
@@ -32,6 +36,15 @@ fixed: FixedPinoutDict = {
 }
 
 
+def list_configurable_pins() -> dict[str, Board]:
+    """
+    Returns a list of all configurable pins.
+    These ar all pins in the board that are not part of the fiixed pinout.
+    """
+    fixed_pins = [sw.gpio_pin for sw in fixed.values()]  # type: ignore
+    return [pin for pin in Board if pin not in fixed_pins]  # type: ignore
+
+
 class Pinout(metaclass=Singleton):
     """
     Pinout for the instrument.
@@ -52,7 +65,7 @@ class Pinout(metaclass=Singleton):
         self.__pinout: Dict[str, Switchable] = {}
         self.init_pinout()
 
-    def add_pinout_safe(self, pin: Switchable, category: str, sub_category: str):
+    def __add_pinout_safe(self, pin: Switchable, category: str, sub_category: str):
         """
         Check for duplicate pin usage.
 
@@ -75,9 +88,21 @@ class Pinout(metaclass=Singleton):
 
             if isinstance(switchables, dict):
                 for category, pin in switchables.items():
-                    self.add_pinout_safe(pin, key, category)
+                    self.__add_pinout_safe(pin, key, category)
             else:
-                self.add_pinout_safe(switchables, self.__class__.__name__, key)
+                self.__add_pinout_safe(switchables, self.__class__.__name__, key)
+
+    def pins(self) -> dict[str, Switchable]:
+        """
+        Return a list of all pins in the pinout.
+        """
+        return self.__pinout
+
+    def valves(self) -> dict[str, Valve]:
+        """
+        Return a list of all valves in the pinout.
+        """
+        return {k: v for k, v in self.__pinout.items() if isinstance(v, Valve)}
 
     def get(self, name: str) -> Switchable:
         """
@@ -96,7 +121,7 @@ class Pinout(metaclass=Singleton):
             return self.__pinout[name.lower()]
         except KeyError as exc:
             raise NoSuchPinInPinout(
-                f"Pin {name} not found in pinout. \n\nAvailable pins are: {[name for name in self.__pinout]}"
+                f"Pin {name} not found in pinout. \n\nAvailable pins are: {list(self.__pinout)}"
             ) from exc
 
     def __repr__(self):
