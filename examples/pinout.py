@@ -1,22 +1,13 @@
 #!/usr/bin/env python
-from openoligo.hal.board import Board
-from openoligo.hal.devices import Switch, Valve
-from openoligo.instrument import EssentialPinouts, Pinout
+from openoligo.hal.board import Pinout
+from openoligo.hal.devices import Valve
+from openoligo.hal.types import Board
+from openoligo.instrument import Instrument
 
-e = EssentialPinouts(
-    waste_after_reaction=Valve(gpio_pin=Board.P3),
-    waste_other=Valve(gpio_pin=Board.P5),
-    solvent=Valve(gpio_pin=Board.P7),
-    inert_gas=Valve(gpio_pin=Board.P8),
-    output=Valve(gpio_pin=Board.P10),
-    pump=Switch(gpio_pin=Board.P12),
-)
-
-p = Pinout(
-    essentials=e,
+pinout = Pinout(
     phosphoramidites={
         "A": Valve(gpio_pin=Board.P26),
-        "C": Valve(gpio_pin=Board.P13),
+        "C": Valve(gpio_pin=Board.P28),
         "G": Valve(gpio_pin=Board.P15),
         "T": Valve(gpio_pin=Board.P16),
     },
@@ -30,5 +21,10 @@ p = Pinout(
     },
 )
 
+a = pinout.get("a")
+a.close()
 
-print(p)
+pump = pinout.get("pump")
+pump.toggle()
+
+ins = Instrument(pinout=pinout)

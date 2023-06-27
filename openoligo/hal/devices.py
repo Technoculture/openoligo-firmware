@@ -4,8 +4,7 @@ Switches can be used to control devices that can be turned on and off.
 import logging
 from dataclasses import dataclass, field
 
-from openoligo.hal.board import Board
-from openoligo.hal.types import Switchable, Valvable, ValveState, ValveType
+from openoligo.hal.types import Board, Switchable, Valvable, ValveState, ValveType
 
 
 @dataclass
@@ -20,15 +19,26 @@ class Switch(Switchable):
     """
 
     gpio_pin: Board
-    _switch_count: int = field(default=0, init=False)
     _state: bool = field(default=False, init=False)
+    __switch_count: int = field(default=0, init=False, repr=False)
 
     def set(self, state: bool):
         """Set state of the switch ON or OFF."""
+        __old_state = self._state
         self._state = state
-        self._switch_count += 1
+        self.__switch_count += 1
         # self.board.set(self.gpio_pin, state)
-        logging.info("Switch (%s) set to [bold]%s[/]", self.gpio_pin, state, extra={"markup": True})
+        logging.info(
+            "Switch (%s) set from %s to [bold]%s[/]",
+            self.gpio_pin,
+            __old_state,
+            self._state,
+            extra={"markup": True},
+        )
+
+    def toggle(self):
+        """Toggle the state of the switch."""
+        self.set(not self._state)
 
     @property
     def value(self) -> bool:
@@ -51,7 +61,7 @@ class Valve(Valvable):
 
     gpio_pin: Board
     valve_type: ValveType = field(default=ValveType.NORMALLY_OPEN)
-    _switch_count: int = field(init=False, default=0)
+    __switch_count: int = field(init=False, default=0)
     _state: ValveState = field(init=False)
 
     def __post_init__(self):
@@ -72,10 +82,22 @@ class Valve(Valvable):
 
     def set(self, state: bool):
         """Set the state of the valve."""
-        self._state = ValveState.OPEN_FLOW if state else ValveState.CLOSED_FLOW
-        self._switch_count += 1
-        logging.debug(
-            "Valve (%s) set to [bold]%s[/]", self.gpio_pin, self._state, extra={"markup": True}
+        __old_state: ValveState = self._state
+        __new_state: ValveState = ValveState.OPEN_FLOW if state else ValveState.CLOSED_FLOW
+
+        if __old_state == __new_state:
+            logging.warn("Valve (%s) is already %s", self.gpio_pin, __old_state)
+            return
+
+        self._state = __new_state
+
+        self.__switch_count += 1
+        logging.info(
+            "Valve (%s) set from %s to [bold]%s[/]",
+            self.gpio_pin,
+            __old_state,
+            self._state,
+            extra={"markup": True},
         )
 
     @property

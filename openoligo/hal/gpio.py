@@ -5,8 +5,7 @@ import importlib
 import logging
 from abc import ABC, abstractmethod
 
-from openoligo.hal.board import Board
-from openoligo.hal.types import GpioMode
+from openoligo.hal.types import Board, GpioMode
 
 
 def get_gpio():

@@ -1,8 +1,7 @@
 import pytest
 
-from openoligo.hal.board import Board
 from openoligo.hal.devices import Switch, Valve
-from openoligo.hal.types import ValveState, ValveType
+from openoligo.hal.types import Board, ValveState, ValveType
 
 
 def test_nc_no_valve():

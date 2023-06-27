@@ -85,6 +85,9 @@ publish:
 coverage:
 	@poetry run coverage-badge -o .github/coverage.svg -f
 
+req:
+	poetry export -f requirements.txt --output requirements.txt --without-hashes
+
 install:
 	@poetry lock
 	@if [ -f /proc/cpuinfo ] && grep -q Raspberry /proc/cpuinfo; then \
