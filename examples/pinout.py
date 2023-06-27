@@ -35,5 +35,4 @@ from openoligo.instrument import Instrument
 
 ins = Instrument()
 ins.all_except(["a", "waste_rxn", "rxn_out"])
-#ins.all_except(["a", "waste_rxn", "rxn_out"])
-#ins.all_except(["a", "waste_rxn", "rxn_out"])
+# ins.all_except(["a", "waste_rxn", "rxn_out"])

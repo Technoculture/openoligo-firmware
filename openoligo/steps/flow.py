@@ -5,8 +5,8 @@ and to clean columns.
 import functools
 import logging
 
-from openoligo.reagents.types import Slot
-from openoligo.steps.types import FlowBranch, Output
+from openoligo import Instrument
+from openoligo.steps.types import FlowBranch
 
 
 def step(coroutine):
@@ -25,82 +25,71 @@ def step(coroutine):
     return wrapper
 
 
-def which_branch(dst: Output) -> FlowBranch:
+def send_to_prod(instrument: Instrument, src: str) -> None:
     """
-    Determine which flow branch to use.
-
-    args:
-        dst: Output to flow reagents to.
-
-    return: FlowBranch
-    """
-    return (
-        FlowBranch.REACTION if dst is Output.OUTPUT or dst is Output.WASTE1 else FlowBranch.REAGENTS
-    )
-
-
-def send(src: Slot, dest: Slot) -> None:
-    """
-    Flow reagents to column.
+    Flow a reagent to the final product outlet.
 
     args:
         src: Slot to flow reagents from.
-        dest: Slot to flow reagents to.
-
-    return: None
     """
-    logging.debug("Flowing reagents from %s to %s", src, dest)
+    instrument.all_except([src, "prod", "branch", "rxn_out"])
+    logging.debug("Flowing %s to prod", src)
 
 
-def send_to_reactor(src: Slot) -> None:
+def send_to_waste_rxn(instrument: Instrument, src: str) -> None:
     """
-    Flow a reagent to the reactor.
+    Flow a reagent to the final product outlet.
 
     args:
         src: Slot to flow reagents from.
-
-    return: None
     """
-    logging.debug("Flowing reagents from %s to reactor", src)
+    instrument.all_except([src, "branch", "rxn_out", "waste_rxn"])
+    logging.debug("Flowing %s to reaction waste", src)
 
 
-def solvent_wash(branch: FlowBranch) -> None:
+def solvent_wash(instrument: Instrument, branch: FlowBranch) -> None:
     """
     Wash column with solvent.
 
     args:
         branch: FlowBranch to wash.
-
-    return: None
     """
-    logging.debug("Washing flow branch %s with solvent", branch)
+    logging.debug("Initiating washing flow branch %s with solvent", branch)
+    if branch == FlowBranch.REACTION:
+        instrument.all_except(["sol", "rxn_out", "branch", "waste_rxn"])
+    elif branch == FlowBranch.REAGENTS:
+        instrument.all_except(["sol", "reagents", "waste"])
+    logging.debug("Washing of branch %s complete", branch)
 
 
-def solvent_wash_all() -> None:
+def solvent_wash_all(instrument: Instrument) -> None:
     """
     Wash all flow branches with solvent.
     """
 
     for branch in FlowBranch:
-        solvent_wash(branch)
+        solvent_wash(instrument, branch)
 
 
-def dry(branch: FlowBranch) -> None:
+def dry(instrument: Instrument, branch: FlowBranch) -> None:
     """
     Dry column.
 
     args:
         branch: FlowBranch to dry.
-
-    return: None
     """
-    logging.debug("Drying flow branch %s", branch)
+    logging.debug("Initiating drying of branch %s", branch)
+    if branch == FlowBranch.REACTION:
+        instrument.all_except(["gas", "rxn_out", "branch", "waste_rxn"])
+    elif branch == FlowBranch.REAGENTS:
+        instrument.all_except(["gas", "reagents", "waste"])
+    logging.debug("Drying of branch %s complete", branch)
 
 
-def dry_all() -> None:
+def dry_all(instrument: Instrument) -> None:
     """
     Dry all flow branches.
     """
 
     for branch in FlowBranch:
-        dry(branch)
+        dry(instrument, branch)

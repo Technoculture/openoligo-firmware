@@ -6,11 +6,13 @@ import asyncio
 
 from Bio.Seq import Seq
 
+from openoligo.instrument import Instrument
 from openoligo.protocols.dna_synthesis import synthesize
 
 
 async def main():
-    await synthesize(Seq("ATCGAAATTTTT"))
+    inst = Instrument()
+    await synthesize(inst, Seq("ATCGAAATTTTT"))
 
 
 if __name__ == "__main__":

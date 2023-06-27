@@ -72,37 +72,31 @@ class Instrument(metaclass=Singleton):
             OneSourceException: If there is not exactly one source valve.
             OneDestinationException: If there is not exactly one destination valve.
         """
-        source_valves = []
-        destination_valves = []
-        branch_valves = []
-        transit_valves = []
+        valve_types: dict[ValveRole, list[Valve]] = {
+            ValveRole.INLET: [],
+            ValveRole.OUTLET: [],
+            ValveRole.BRANCH: [],
+            ValveRole.TRANSIT: [],
+        }
 
         for _name in name:
             if not isinstance(self.pinout.get(_name), Valve):
                 raise ValueError(f"{_name} is not a valve")
-
-        for _name in name:
             valve: Valve = self.__get_valve(_name)
-            if valve.role == ValveRole.INLET:
-                source_valves.append(valve)
-            elif valve.role == ValveRole.OUTLET:
-                destination_valves.append(valve)
-            elif valve.role == ValveRole.BRANCH:
-                branch_valves.append(valve)
-            elif valve.role == ValveRole.TRANSIT:
-                transit_valves.append(valve)
-            else:
+
+            if valve.role not in valve_types:
                 raise ValueError(f"Unknown valve role: {valve.role}")
 
-        if len(source_valves) != 1:
+            valve_types[valve.role].append(valve)
+
+        if len(valve_types[ValveRole.INLET]) != 1:
             raise OneSourceException("There must be exactly one source valve")
-        if len(destination_valves) != 1:
+
+        if len(valve_types[ValveRole.OUTLET]) != 1:
             raise OneDestinationException("There must be exactly one destination valve")
 
-        if len(transit_valves) > 0:
-            logging.warning(
-                "Make sure that the transit valve(s) are in the route you expect"
-            )
+        if len(valve_types[ValveRole.TRANSIT]) > 0:
+            logging.warning("Make sure that the transit valve(s) are in the route you expect")
 
     def all_except(self, name: list[str]) -> None:
         """
