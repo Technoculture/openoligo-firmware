@@ -36,7 +36,8 @@ async def cap(instrument: Instrument) -> None:
     """
     Add acetic anhydride/pyridine/THF and N-methyl imidazole to the reactor
     """
-    send_to_waste_rxn(instrument, "cap")
+    send_to_waste_rxn(instrument, "cap1")
+    send_to_waste_rxn(instrument, "cap2")
     await wait_async(30)
 
 
@@ -54,7 +55,7 @@ async def cleave(instrument: Instrument) -> None:
     """
     Cleave the DNA sequence from the solid support.
     """
-    send_to_waste_rxn(instrument, "cleave")
+    send_to_waste_rxn(instrument, "clde")
     await wait_async(180)
 
 
@@ -63,7 +64,7 @@ async def deprotect(instrument: Instrument) -> None:
     """
     Remove the protecting groups from the DNA sequence.
     """
-    send_to_waste_rxn(instrument, "deprotect")
+    send_to_waste_rxn(instrument, "deb")
     await wait_async(45)
 
 

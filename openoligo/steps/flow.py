@@ -58,7 +58,7 @@ def solvent_wash(instrument: Instrument, branch: FlowBranch) -> None:
     if branch == FlowBranch.REACTION:
         instrument.all_except(["sol", "rxn_out", "branch", "waste_rxn"])
     elif branch == FlowBranch.REAGENTS:
-        instrument.all_except(["sol", "reagents", "waste"])
+        instrument.all_except(["sol", "waste"])
     logging.debug("Washing of branch %s complete", branch)
 
 
@@ -82,7 +82,7 @@ def dry(instrument: Instrument, branch: FlowBranch) -> None:
     if branch == FlowBranch.REACTION:
         instrument.all_except(["gas", "rxn_out", "branch", "waste_rxn"])
     elif branch == FlowBranch.REAGENTS:
-        instrument.all_except(["gas", "reagents", "waste"])
+        instrument.all_except(["gas", "waste"])
     logging.debug("Drying of branch %s complete", branch)
 
 
