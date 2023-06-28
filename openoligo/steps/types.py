@@ -5,8 +5,6 @@ import logging
 from enum import Enum
 from functools import wraps
 
-from openoligo import Instrument
-
 FlowWaitPair = tuple[int, float]
 FlowWaitPairs = list[FlowWaitPair]
 
@@ -27,7 +25,7 @@ def _step_decorator(coroutine, is_substep: bool = False):
 
     @wraps(coroutine)
     async def wrapper_coroutine(*args, **kwargs):
-        #instrument = Instrument()
+        # instrument = Instrument()
 
         name, doc = coroutine.__name__, coroutine.__doc__.strip().split("\n")[0]
         level = logging.DEBUG if is_substep else logging.INFO

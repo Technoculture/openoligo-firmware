@@ -3,6 +3,7 @@
 A minimal example of using the DNA synthesis API.
 """
 import asyncio
+import logging
 
 from Bio.Seq import Seq
 
@@ -16,4 +17,10 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+        logging.info("Synthesis Complete! Exiting...")
+    except KeyboardInterrupt:
+        logging.warning("Keyboard interrupt received, exiting...")
+    except Exception as e:
+        logging.error(e)
