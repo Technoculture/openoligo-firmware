@@ -2,30 +2,15 @@
 Functions to create various flows from reagents to columns,
 and to clean columns.
 """
-import functools
 import logging
 
 from openoligo import Instrument
-from openoligo.steps.types import FlowBranch
+from openoligo.steps.types import FlowBranch, substep
+from openoligo.utils.wait import wait_async
 
 
-def step(coroutine):
-    """
-    Decorator for a step function (which carries out a reaction step).
-    """
-
-    @functools.wraps(coroutine)
-    async def wrapper(*args, **kwargs):
-        doc = coroutine.__doc__.strip()
-        name = coroutine.__name__
-        if doc:
-            logging.info("%s: %s", name, doc)
-        return await coroutine(*args, **kwargs)
-
-    return wrapper
-
-
-def send_to_prod(instrument: Instrument, src: str) -> None:
+@substep
+async def send_to_prod(instrument: Instrument, src: str) -> None:
     """
     Flow a reagent to the final product outlet.
 
@@ -36,7 +21,8 @@ def send_to_prod(instrument: Instrument, src: str) -> None:
     logging.debug("Flowing %s to prod", src)
 
 
-def send_to_waste_rxn(instrument: Instrument, src: str) -> None:
+@substep
+async def send_to_waste_rxn(instrument: Instrument, src: str) -> None:
     """
     Flow a reagent to the final product outlet.
 
@@ -47,7 +33,8 @@ def send_to_waste_rxn(instrument: Instrument, src: str) -> None:
     logging.debug("Flowing %s to reaction waste", src)
 
 
-def solvent_wash(instrument: Instrument, branch: FlowBranch) -> None:
+@substep
+async def solvent_wash(instrument: Instrument, branch: FlowBranch, duration: float = 10) -> None:
     """
     Wash column with solvent.
 
@@ -55,23 +42,29 @@ def solvent_wash(instrument: Instrument, branch: FlowBranch) -> None:
         branch: FlowBranch to wash.
     """
     logging.debug("Initiating washing flow branch %s with solvent", branch)
+
     if branch == FlowBranch.REACTION:
         instrument.all_except(["sol", "rxn_out", "branch", "waste_rxn"])
     elif branch == FlowBranch.REAGENTS:
         instrument.all_except(["sol", "waste"])
+
+    await wait_async(duration)
+
     logging.debug("Washing of branch %s complete", branch)
 
 
-def solvent_wash_all(instrument: Instrument) -> None:
+@substep
+async def solvent_wash_all(instrument: Instrument) -> None:
     """
     Wash all flow branches with solvent.
     """
 
-    for branch in FlowBranch:
-        solvent_wash(instrument, branch)
+    await solvent_wash(instrument, FlowBranch.REACTION)
+    await solvent_wash(instrument, FlowBranch.REAGENTS)
 
 
-def dry(instrument: Instrument, branch: FlowBranch) -> None:
+@substep
+async def dry(instrument: Instrument, branch: FlowBranch) -> None:
     """
     Dry column.
 
@@ -86,10 +79,11 @@ def dry(instrument: Instrument, branch: FlowBranch) -> None:
     logging.debug("Drying of branch %s complete", branch)
 
 
-def dry_all(instrument: Instrument) -> None:
+@substep
+async def dry_all(instrument: Instrument) -> None:
     """
     Dry all flow branches.
     """
 
-    for branch in FlowBranch:
-        dry(instrument, branch)
+    await dry(instrument, FlowBranch.REACTION)
+    await dry(instrument, FlowBranch.REAGENTS)

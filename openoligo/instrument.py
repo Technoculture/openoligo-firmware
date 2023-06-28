@@ -96,7 +96,7 @@ class Instrument(metaclass=Singleton):
             raise OneDestinationException("There must be exactly one destination valve")
 
         if len(valve_types[ValveRole.TRANSIT]) > 0:
-            logging.warning("Make sure that the transit valve(s) are in the route you expect")
+            logging.debug("Make sure that the transit valve(s) are in the route you expect")
 
     def all_except(self, name: list[str]) -> None:
         """
@@ -118,7 +118,7 @@ class Instrument(metaclass=Singleton):
                 all_valves_in_pinout[_name].open()
             else:
                 all_valves_in_pinout[_name].close()
-        logging.info(
+        logging.debug(
             "Set %s to [bold]open[/] and all others to close.", name, extra={"markup": True}
         )
 
