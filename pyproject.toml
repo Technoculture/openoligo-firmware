@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "OpenOligo"
-version = "0.1.2"
+version = "0.1.3"
 description = "An open-source platform for programmatically interacting with and managing Nucleic acid sequences synthesis processes."
 license = "Apache-2.0"
 authors = ["Satyam Tiwary <satyam@technoculture.io>"]
