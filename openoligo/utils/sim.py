@@ -4,7 +4,7 @@ Sets some parameters for the simulation.
 import logging
 import os
 
-from openoligo.hal.types import __platform__, Platform
+from openoligo.hal.types import Platform, __platform__
 
 # Simulation parameters
 # Can be set using env variable OO_SIM_SPEED=1000
