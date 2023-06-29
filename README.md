@@ -15,4 +15,17 @@ pip install openoligo
 ### A simple Example
 
 ```py
+import asyncio
+
+from openoligo.instrument import Instrument
+from openoligo.protocols.dna_synthesis import synthesize
+from openoligo.seq import Seq
+
+
+inst = Instrument()
+
+try:
+    asyncio.run(synthesize(inst, Seq("ATCGAAATTTTT")))
+except KeyboardInterrupt:
+    print("Keyboard interrupt received, exiting...")
 ```

@@ -41,6 +41,7 @@ help:
 	@echo "  install         Install the package"
 	@echo "  shell           Run a shell in the virtual environment"
 	@echo "  jupyter         Start a tunnel to the Jupyter notebook server"
+	@echo "  clean           Clean up the directory"
 	@echo
 	@echo "Category: Code delivery"
 	@echo "  publish         Publish the package"
@@ -81,6 +82,9 @@ docs:
 
 publish:
 	@poetry publish --build
+
+clean:
+	rm *.log *.log.*
 
 coverage:
 	@poetry run coverage-badge -o .github/coverage.svg -f
