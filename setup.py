@@ -36,9 +36,7 @@ setup(
         "bb": ["Adafruit_BBIO"]
     },
     python_requires=">=3.9",
-    classifiers=[
-        # Your classifiers here
-    ],
+    classifiers=[ "DNA", "synthesis", "genetics", "open-source" ],
     entry_points={
         "console_scripts": [
             "oligo-server=app.server:main",
