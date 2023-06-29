@@ -50,7 +50,7 @@ class RPiGPIO(GPIOInterface):
     def __init__(self, gpio):
         """Import Board.GPIO"""
         self.gpio = gpio
-        self.gpio.setmode(self.gpio.BOARD)
+        self.gpio.setmode(self.gpio.BCM)
         self.gpio.setwarnings(False)
 
     def setup_pin(self, pin: Board, mode: GpioMode = GpioMode.OUT) -> None:
