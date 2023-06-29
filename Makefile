@@ -1,5 +1,6 @@
 LIBNAME:=openoligo
-EXECNAME:=server.py
+EXECNAME:=./examples/dna_synthesis.py
+SERVER_EXECNAME:=server.py
 TESTDIR:=tests
 EXAMPLEDIR:=examples
 DOCSDIR:=docs
@@ -96,6 +97,7 @@ install:
 	else \
 		poetry install; \
 	fi
+	poetry run mypy --install-types
 
 shell:
 	@poetry shell

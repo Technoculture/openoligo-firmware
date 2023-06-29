@@ -4,40 +4,7 @@ This module contains definitions of protocols and exceptions related to switchab
 from enum import Enum
 from typing import Protocol
 
-
-def is_rpi() -> bool:
-    """Returns True if running on a Raspberry Pi, False otherwise."""
-    try:
-        with open("/proc/cpuinfo", "r", encoding="utf-8") as file:
-            return "Raspberry" in file.read()
-    except FileNotFoundError:
-        return False
-
-
-def is_bb() -> bool:
-    """Returns True if running on a Raspberry Pi, False otherwise."""
-    try:
-        with open("/proc/cpuinfo", "r", encoding="utf-8") as file:
-            return "AM33XX" in file.read()
-    except FileNotFoundError:
-        return False
-
-
-class Platform(Enum):
-    """Platform type."""
-
-    RPI = "RPI"
-    BB = "BB"
-    SIM = "SIM"
-
-
-def get_platform() -> Platform:
-    """Get the platform type."""
-    if is_rpi():
-        return Platform.RPI
-    if is_bb():
-        return Platform.BB
-    return Platform.SIM
+from openoligo.hal.platform import Platform, __platform__
 
 
 class RPiBoard(Enum):
@@ -108,9 +75,6 @@ class BbBoard(Enum):
     P37 = 37
     P38 = 38
     P40 = 40
-
-
-__platform__ = get_platform()
 
 
 if __platform__ == Platform.BB:

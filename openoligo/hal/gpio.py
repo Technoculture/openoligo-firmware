@@ -5,27 +5,22 @@ import importlib
 import logging
 from abc import ABC, abstractmethod
 
-from openoligo.hal.types import Board, GpioMode, is_rpi
+from openoligo.hal.types import Board, GpioMode, Platform, __platform__
 
 
 def get_gpio():
     """Get the GPIO module."""
-    try:
-        with open("/proc/cpuinfo", "r", encoding="utf-8") as file:
-            if "Raspberry" in file.read():
-                gpio = importlib.import_module("RPi.GPIO")
-                return RPiGPIO(gpio)
-            return MockGPIO()
-    except (FileNotFoundError, ModuleNotFoundError):
+    if __platform__ == Platform.BB:
         return MockGPIO()
+    elif __platform__ == Platform.RPI:
+        gpio = importlib.import_module("RPi.GPIO")
+        return RPiGPIO(gpio)
+    # elif __platform__ == Platform.SIM:
+    return MockGPIO()
 
 
 class GPIOInterface(ABC):
     """GPIO interface."""
-
-    @abstractmethod
-    def setup(self) -> None:
-        """Setup GPIO."""
 
     @abstractmethod
     def setup_pin(self, pin: Board, mode: GpioMode) -> None:
@@ -58,11 +53,6 @@ class RPiGPIO(GPIOInterface):
         self.gpio.setmode(self.gpio.BOARD)
         self.gpio.setwarnings(False)
 
-    def setup(self):
-        """Set up all pins."""
-        for pin in Board:
-            self.setup_pin(pin)
-
     def setup_pin(self, pin: Board, mode: GpioMode = GpioMode.OUT) -> None:
         """Set up a GPIO pin."""
         self.gpio.setup(pin.value, self.gpio.OUT if mode == GpioMode.OUT else self.gpio.IN)
@@ -93,11 +83,6 @@ class MockGPIO(GPIOInterface):
         and the values are their mock states
         """
         self.state: dict[int, bool] = {}
-
-    def setup(self) -> None:
-        """Setup all pins."""
-        for pin in Board:
-            self.setup_pin(pin)
 
     def setup_pin(
         self, pin: Board, mode: GpioMode = GpioMode.OUT

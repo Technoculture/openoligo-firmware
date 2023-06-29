@@ -37,17 +37,8 @@ class Instrument(metaclass=Singleton):
         Initialize the instrument.
         """
         self.pinout = pinout
-
         logging.info("Initializing instrument with pinout: %s", self.pinout)
-
-        self.__setup()
-
-    def __setup(self):
-        """
-        Setup the instrument.
-        """
         self.controller = get_gpio()
-        self.controller.setup()
 
     def __get_valve(self, name: str) -> Valve:
         """

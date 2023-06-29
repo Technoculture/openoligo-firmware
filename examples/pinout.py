@@ -24,14 +24,6 @@ pinout = Pinout(
     },
 )
 
-# print(pinout)
-
-a = pinout.get("a")
-a.close()
-
-gas = pinout.get("gas")
-gas.open()
-
 ins = Instrument(pinout=pinout)
 
 ins.all_except(["a", "waste_rxn", "rxn_out"])

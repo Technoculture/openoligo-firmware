@@ -3,7 +3,8 @@ import unittest
 # from unittest import TestCase
 from unittest.mock import Mock, mock_open, patch
 
-from openoligo.hal.gpio import GPIOInterface, GpioMode, MockGPIO, RPiGPIO, get_gpio, is_rpi
+from openoligo.hal.gpio import GPIOInterface, GpioMode, MockGPIO, RPiGPIO, get_gpio
+from openoligo.hal.platform import is_rpi
 from openoligo.hal.types import Board
 
 
@@ -34,7 +35,6 @@ def test_mock_gpio():
     assert gpio.state == _d
 
     gpio.set(Board.P22, True)
-    gpio.setup(Board.P21, GpioMode.OUT)
 
     assert (
         gpio.__repr__()
@@ -52,7 +52,6 @@ def test_RPiGPIO():
     rpi_gpio = RPiGPIO(gpio_mock)
 
     # Test setup method
-    rpi_gpio.setup(Board.P5, GpioMode.OUT)
     gpio_mock.setmode.assert_called_once_with(gpio_mock.BOARD)
     gpio_mock.setup.assert_called_once_with(5, gpio_mock.OUT)
 
