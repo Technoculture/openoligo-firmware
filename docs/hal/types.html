@@ -1065,6 +1065,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
+        <span class="class_name"><a href="#openoligo.hal.types.BbBoard">BbBoard</a></span>
+        
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#openoligo.hal.types.RPiBoard">RPiBoard</a></span>
+        
+        </li>
+        <li class="mono">
         <span class="class_name"><a href="#openoligo.hal.types.GpioMode">GpioMode</a></span>
         
         </li>
@@ -1076,6 +1084,37 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <li class="mono"><a href="#openoligo.hal.types.InvalidManifoldSizeError.with_traceback">with_traceback</a></li>
   </ul>
 
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#openoligo.hal.types.NoSuchPinInPinout">NoSuchPinInPinout</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#openoligo.hal.types.NoSuchPinInPinout.with_traceback">with_traceback</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#openoligo.hal.types.OneDestinationException">OneDestinationException</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#openoligo.hal.types.OneDestinationException.with_traceback">with_traceback</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#openoligo.hal.types.OneSourceException">OneSourceException</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#openoligo.hal.types.OneSourceException.with_traceback">with_traceback</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#openoligo.hal.types.RPiBoard">RPiBoard</a></span>
+        
         </li>
         <li class="mono">
         <span class="class_name"><a href="#openoligo.hal.types.Switchable">Switchable</a></span>
@@ -1105,6 +1144,10 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <li class="mono"><a href="#openoligo.hal.types.Valvable.set">set</a></li>
   </ul>
 
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#openoligo.hal.types.ValveRole">ValveRole</a></span>
+        
         </li>
         <li class="mono">
         <span class="class_name"><a href="#openoligo.hal.types.ValveState">ValveState</a></span>
@@ -1138,6 +1181,84 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Protocol</span>
 
+<span class="kn">from</span> <span class="nn">openoligo.hal.platform</span> <span class="kn">import</span> <span class="n">Platform</span><span class="p">,</span> <span class="n">__platform__</span>
+
+
+<span class="k">class</span> <span class="nc">RPiBoard</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">P3</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">P5</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">P7</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="n">P8</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">P10</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">P11</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="n">P12</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">P13</span> <span class="o">=</span> <span class="mi">13</span>
+    <span class="n">P15</span> <span class="o">=</span> <span class="mi">15</span>
+    <span class="n">P16</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">P18</span> <span class="o">=</span> <span class="mi">18</span>
+    <span class="n">P19</span> <span class="o">=</span> <span class="mi">19</span>
+    <span class="n">P21</span> <span class="o">=</span> <span class="mi">21</span>
+    <span class="n">P22</span> <span class="o">=</span> <span class="mi">22</span>
+    <span class="n">P23</span> <span class="o">=</span> <span class="mi">23</span>
+    <span class="n">P24</span> <span class="o">=</span> <span class="mi">24</span>
+    <span class="n">P26</span> <span class="o">=</span> <span class="mi">26</span>
+    <span class="n">P27</span> <span class="o">=</span> <span class="mi">27</span>
+    <span class="n">P28</span> <span class="o">=</span> <span class="mi">28</span>
+    <span class="n">P29</span> <span class="o">=</span> <span class="mi">29</span>
+    <span class="n">P31</span> <span class="o">=</span> <span class="mi">31</span>
+    <span class="n">P32</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">P33</span> <span class="o">=</span> <span class="mi">33</span>
+    <span class="n">P35</span> <span class="o">=</span> <span class="mi">35</span>
+    <span class="n">P36</span> <span class="o">=</span> <span class="mi">36</span>
+    <span class="n">P37</span> <span class="o">=</span> <span class="mi">37</span>
+    <span class="n">P38</span> <span class="o">=</span> <span class="mi">38</span>
+    <span class="n">P40</span> <span class="o">=</span> <span class="mi">40</span>
+
+
+<span class="k">class</span> <span class="nc">BbBoard</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumerates the GPIO pins on the Beaglebone Black.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">P3</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">P5</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">P7</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="n">P8</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">P10</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">P11</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="n">P12</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">P13</span> <span class="o">=</span> <span class="mi">13</span>
+    <span class="n">P15</span> <span class="o">=</span> <span class="mi">15</span>
+    <span class="n">P16</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">P18</span> <span class="o">=</span> <span class="mi">18</span>
+    <span class="n">P19</span> <span class="o">=</span> <span class="mi">19</span>
+    <span class="n">P21</span> <span class="o">=</span> <span class="mi">21</span>
+    <span class="n">P22</span> <span class="o">=</span> <span class="mi">22</span>
+    <span class="n">P23</span> <span class="o">=</span> <span class="mi">23</span>
+    <span class="n">P24</span> <span class="o">=</span> <span class="mi">24</span>
+    <span class="n">P26</span> <span class="o">=</span> <span class="mi">26</span>
+    <span class="n">P27</span> <span class="o">=</span> <span class="mi">27</span>
+    <span class="n">P28</span> <span class="o">=</span> <span class="mi">28</span>
+    <span class="n">P29</span> <span class="o">=</span> <span class="mi">29</span>
+    <span class="n">P31</span> <span class="o">=</span> <span class="mi">31</span>
+    <span class="n">P32</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">P33</span> <span class="o">=</span> <span class="mi">33</span>
+    <span class="n">P35</span> <span class="o">=</span> <span class="mi">35</span>
+    <span class="n">P36</span> <span class="o">=</span> <span class="mi">36</span>
+    <span class="n">P37</span> <span class="o">=</span> <span class="mi">37</span>
+    <span class="n">P38</span> <span class="o">=</span> <span class="mi">38</span>
+    <span class="n">P40</span> <span class="o">=</span> <span class="mi">40</span>
+
+
+<span class="k">if</span> <span class="n">__platform__</span> <span class="o">==</span> <span class="n">Platform</span><span class="o">.</span><span class="n">BB</span><span class="p">:</span>
+    <span class="n">Board</span> <span class="o">=</span> <span class="n">BbBoard</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">Board</span> <span class="o">=</span> <span class="n">RPiBoard</span>  <span class="c1"># Also acts as a mock board</span>
+
 
 <span class="k">class</span> <span class="nc">GpioMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;GPIO mode.&quot;&quot;&quot;</span>
@@ -1160,6 +1281,15 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">NORMALLY_OPEN</span> <span class="o">=</span> <span class="mi">1</span>
 
 
+<span class="k">class</span> <span class="nc">ValveRole</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Valve Role: Inlet/Outlet/Transit/Branch&quot;&quot;&quot;</span>
+
+    <span class="n">INLET</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">OUTLET</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">TRANSIT</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">BRANCH</span> <span class="o">=</span> <span class="mi">3</span>
+
+
 <span class="k">class</span> <span class="nc">Switchable</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This protocol represents a switchable device. Any class implementing this protocol should</span>
@@ -1172,6 +1302,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
     <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the state of the switch.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Board</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
     <span class="nd">@property</span>
@@ -1213,6 +1348,24 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An exception that represents an invalid manifold size.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">NoSuchPinInPinout</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Thrown when a pin for a given name is not found in the pinout.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">OneSourceException</span><span class="p">(</span><span class="n">SwitchingError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    When more than one source valve is being attempted to be used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">OneDestinationException</span><span class="p">(</span><span class="n">SwitchingError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    When more than one destination valve is being attempted to be used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 </pre></div>
 
   </div>
@@ -1223,6 +1376,718 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
     <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="openoligo.hal.types.BbBoard" class="name">class <span class="ident">BbBoard</span></p>
+      
+  
+    <div class="desc"><p>Enumerates the GPIO pins on the Beaglebone Black.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.types.BbBoard', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.types.BbBoard" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">BbBoard</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumerates the GPIO pins on the Beaglebone Black.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">P3</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">P5</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">P7</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="n">P8</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">P10</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">P11</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="n">P12</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">P13</span> <span class="o">=</span> <span class="mi">13</span>
+    <span class="n">P15</span> <span class="o">=</span> <span class="mi">15</span>
+    <span class="n">P16</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">P18</span> <span class="o">=</span> <span class="mi">18</span>
+    <span class="n">P19</span> <span class="o">=</span> <span class="mi">19</span>
+    <span class="n">P21</span> <span class="o">=</span> <span class="mi">21</span>
+    <span class="n">P22</span> <span class="o">=</span> <span class="mi">22</span>
+    <span class="n">P23</span> <span class="o">=</span> <span class="mi">23</span>
+    <span class="n">P24</span> <span class="o">=</span> <span class="mi">24</span>
+    <span class="n">P26</span> <span class="o">=</span> <span class="mi">26</span>
+    <span class="n">P27</span> <span class="o">=</span> <span class="mi">27</span>
+    <span class="n">P28</span> <span class="o">=</span> <span class="mi">28</span>
+    <span class="n">P29</span> <span class="o">=</span> <span class="mi">29</span>
+    <span class="n">P31</span> <span class="o">=</span> <span class="mi">31</span>
+    <span class="n">P32</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">P33</span> <span class="o">=</span> <span class="mi">33</span>
+    <span class="n">P35</span> <span class="o">=</span> <span class="mi">35</span>
+    <span class="n">P36</span> <span class="o">=</span> <span class="mi">36</span>
+    <span class="n">P37</span> <span class="o">=</span> <span class="mi">37</span>
+    <span class="n">P38</span> <span class="o">=</span> <span class="mi">38</span>
+    <span class="n">P40</span> <span class="o">=</span> <span class="mi">40</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P10" class="name">var <span class="ident">P10</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P11" class="name">var <span class="ident">P11</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P12" class="name">var <span class="ident">P12</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P13" class="name">var <span class="ident">P13</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P15" class="name">var <span class="ident">P15</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P16" class="name">var <span class="ident">P16</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P18" class="name">var <span class="ident">P18</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P19" class="name">var <span class="ident">P19</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P21" class="name">var <span class="ident">P21</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P22" class="name">var <span class="ident">P22</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P23" class="name">var <span class="ident">P23</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P24" class="name">var <span class="ident">P24</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P26" class="name">var <span class="ident">P26</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P27" class="name">var <span class="ident">P27</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P28" class="name">var <span class="ident">P28</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P29" class="name">var <span class="ident">P29</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P3" class="name">var <span class="ident">P3</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P31" class="name">var <span class="ident">P31</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P32" class="name">var <span class="ident">P32</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P33" class="name">var <span class="ident">P33</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P35" class="name">var <span class="ident">P35</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P36" class="name">var <span class="ident">P36</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P37" class="name">var <span class="ident">P37</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P38" class="name">var <span class="ident">P38</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P40" class="name">var <span class="ident">P40</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P5" class="name">var <span class="ident">P5</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P7" class="name">var <span class="ident">P7</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.P8" class="name">var <span class="ident">P8</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.name" class="name">var <span class="ident">name</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.BbBoard.value" class="name">var <span class="ident">value</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="openoligo.hal.types.RPiBoard" class="name">class <span class="ident">Board</span></p>
+      
+  
+    <div class="desc"><p>Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.types.RPiBoard', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.types.RPiBoard" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">RPiBoard</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">P3</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">P5</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">P7</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="n">P8</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">P10</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">P11</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="n">P12</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">P13</span> <span class="o">=</span> <span class="mi">13</span>
+    <span class="n">P15</span> <span class="o">=</span> <span class="mi">15</span>
+    <span class="n">P16</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">P18</span> <span class="o">=</span> <span class="mi">18</span>
+    <span class="n">P19</span> <span class="o">=</span> <span class="mi">19</span>
+    <span class="n">P21</span> <span class="o">=</span> <span class="mi">21</span>
+    <span class="n">P22</span> <span class="o">=</span> <span class="mi">22</span>
+    <span class="n">P23</span> <span class="o">=</span> <span class="mi">23</span>
+    <span class="n">P24</span> <span class="o">=</span> <span class="mi">24</span>
+    <span class="n">P26</span> <span class="o">=</span> <span class="mi">26</span>
+    <span class="n">P27</span> <span class="o">=</span> <span class="mi">27</span>
+    <span class="n">P28</span> <span class="o">=</span> <span class="mi">28</span>
+    <span class="n">P29</span> <span class="o">=</span> <span class="mi">29</span>
+    <span class="n">P31</span> <span class="o">=</span> <span class="mi">31</span>
+    <span class="n">P32</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">P33</span> <span class="o">=</span> <span class="mi">33</span>
+    <span class="n">P35</span> <span class="o">=</span> <span class="mi">35</span>
+    <span class="n">P36</span> <span class="o">=</span> <span class="mi">36</span>
+    <span class="n">P37</span> <span class="o">=</span> <span class="mi">37</span>
+    <span class="n">P38</span> <span class="o">=</span> <span class="mi">38</span>
+    <span class="n">P40</span> <span class="o">=</span> <span class="mi">40</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P10" class="name">var <span class="ident">P10</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P11" class="name">var <span class="ident">P11</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P12" class="name">var <span class="ident">P12</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P13" class="name">var <span class="ident">P13</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P15" class="name">var <span class="ident">P15</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P16" class="name">var <span class="ident">P16</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P18" class="name">var <span class="ident">P18</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P19" class="name">var <span class="ident">P19</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P21" class="name">var <span class="ident">P21</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P22" class="name">var <span class="ident">P22</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P23" class="name">var <span class="ident">P23</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P24" class="name">var <span class="ident">P24</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P26" class="name">var <span class="ident">P26</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P27" class="name">var <span class="ident">P27</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P28" class="name">var <span class="ident">P28</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P29" class="name">var <span class="ident">P29</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P3" class="name">var <span class="ident">P3</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P31" class="name">var <span class="ident">P31</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P32" class="name">var <span class="ident">P32</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P33" class="name">var <span class="ident">P33</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P35" class="name">var <span class="ident">P35</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P36" class="name">var <span class="ident">P36</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P37" class="name">var <span class="ident">P37</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P38" class="name">var <span class="ident">P38</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P40" class="name">var <span class="ident">P40</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P5" class="name">var <span class="ident">P5</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P7" class="name">var <span class="ident">P7</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P8" class="name">var <span class="ident">P8</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.name" class="name">var <span class="ident">name</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.value" class="name">var <span class="ident">value</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
       
       <div class="item">
       <p id="openoligo.hal.types.GpioMode" class="name">class <span class="ident">GpioMode</span></p>
@@ -1348,6 +2213,545 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
       </div>
       
       <div class="item">
+      <p id="openoligo.hal.types.NoSuchPinInPinout" class="name">class <span class="ident">NoSuchPinInPinout</span></p>
+      
+  
+    <div class="desc"><p>Thrown when a pin for a given name is not found in the pinout.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.types.NoSuchPinInPinout', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.types.NoSuchPinInPinout" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">NoSuchPinInPinout</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Thrown when a pin for a given name is not found in the pinout.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="/builtins.Exception.ext">builtins.Exception</a></li>
+          <li><a href="/builtins.BaseException.ext">builtins.BaseException</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="openoligo.hal.types.NoSuchPinInPinout.args" class="name">var <span class="ident">args</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.types.NoSuchPinInPinout.with_traceback">
+    <p>def <span class="ident">with_traceback</span>(</p><p>...)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Exception.with_traceback(tb) &ndash;
+set self.<strong>traceback</strong> to tb and return self.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="openoligo.hal.types.OneDestinationException" class="name">class <span class="ident">OneDestinationException</span></p>
+      
+  
+    <div class="desc"><p>When more than one destination valve is being attempted to be used.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.types.OneDestinationException', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.types.OneDestinationException" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">OneDestinationException</span><span class="p">(</span><span class="n">SwitchingError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    When more than one destination valve is being attempted to be used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#openoligo.hal.types.SwitchingError">SwitchingError</a></li>
+          <li><a href="/builtins.Exception.ext">builtins.Exception</a></li>
+          <li><a href="/builtins.BaseException.ext">builtins.BaseException</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="openoligo.hal.types.OneDestinationException.args" class="name">var <span class="ident">args</span></p>
+            
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#openoligo.hal.types.SwitchingError">SwitchingError</a></code>.<code><a href="#openoligo.hal.types.SwitchingError.args">args</a></code>
+    </p>
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.types.OneDestinationException.with_traceback">
+    <p>def <span class="ident">with_traceback</span>(</p><p>...)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#openoligo.hal.types.SwitchingError">SwitchingError</a></code>.<code><a href="#openoligo.hal.types.SwitchingError.with_traceback">with_traceback</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Exception.with_traceback(tb) &ndash;
+set self.<strong>traceback</strong> to tb and return self.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="openoligo.hal.types.OneSourceException" class="name">class <span class="ident">OneSourceException</span></p>
+      
+  
+    <div class="desc"><p>When more than one source valve is being attempted to be used.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.types.OneSourceException', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.types.OneSourceException" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">OneSourceException</span><span class="p">(</span><span class="n">SwitchingError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    When more than one source valve is being attempted to be used.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#openoligo.hal.types.SwitchingError">SwitchingError</a></li>
+          <li><a href="/builtins.Exception.ext">builtins.Exception</a></li>
+          <li><a href="/builtins.BaseException.ext">builtins.BaseException</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="openoligo.hal.types.OneSourceException.args" class="name">var <span class="ident">args</span></p>
+            
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#openoligo.hal.types.SwitchingError">SwitchingError</a></code>.<code><a href="#openoligo.hal.types.SwitchingError.args">args</a></code>
+    </p>
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.types.OneSourceException.with_traceback">
+    <p>def <span class="ident">with_traceback</span>(</p><p>...)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#openoligo.hal.types.SwitchingError">SwitchingError</a></code>.<code><a href="#openoligo.hal.types.SwitchingError.with_traceback">with_traceback</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Exception.with_traceback(tb) &ndash;
+set self.<strong>traceback</strong> to tb and return self.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="openoligo.hal.types.RPiBoard" class="name">class <span class="ident">RPiBoard</span></p>
+      
+  
+    <div class="desc"><p>Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.types.RPiBoard', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.types.RPiBoard" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">RPiBoard</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">P3</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">P5</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">P7</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="n">P8</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">P10</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">P11</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="n">P12</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">P13</span> <span class="o">=</span> <span class="mi">13</span>
+    <span class="n">P15</span> <span class="o">=</span> <span class="mi">15</span>
+    <span class="n">P16</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">P18</span> <span class="o">=</span> <span class="mi">18</span>
+    <span class="n">P19</span> <span class="o">=</span> <span class="mi">19</span>
+    <span class="n">P21</span> <span class="o">=</span> <span class="mi">21</span>
+    <span class="n">P22</span> <span class="o">=</span> <span class="mi">22</span>
+    <span class="n">P23</span> <span class="o">=</span> <span class="mi">23</span>
+    <span class="n">P24</span> <span class="o">=</span> <span class="mi">24</span>
+    <span class="n">P26</span> <span class="o">=</span> <span class="mi">26</span>
+    <span class="n">P27</span> <span class="o">=</span> <span class="mi">27</span>
+    <span class="n">P28</span> <span class="o">=</span> <span class="mi">28</span>
+    <span class="n">P29</span> <span class="o">=</span> <span class="mi">29</span>
+    <span class="n">P31</span> <span class="o">=</span> <span class="mi">31</span>
+    <span class="n">P32</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">P33</span> <span class="o">=</span> <span class="mi">33</span>
+    <span class="n">P35</span> <span class="o">=</span> <span class="mi">35</span>
+    <span class="n">P36</span> <span class="o">=</span> <span class="mi">36</span>
+    <span class="n">P37</span> <span class="o">=</span> <span class="mi">37</span>
+    <span class="n">P38</span> <span class="o">=</span> <span class="mi">38</span>
+    <span class="n">P40</span> <span class="o">=</span> <span class="mi">40</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P10" class="name">var <span class="ident">P10</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P11" class="name">var <span class="ident">P11</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P12" class="name">var <span class="ident">P12</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P13" class="name">var <span class="ident">P13</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P15" class="name">var <span class="ident">P15</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P16" class="name">var <span class="ident">P16</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P18" class="name">var <span class="ident">P18</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P19" class="name">var <span class="ident">P19</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P21" class="name">var <span class="ident">P21</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P22" class="name">var <span class="ident">P22</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P23" class="name">var <span class="ident">P23</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P24" class="name">var <span class="ident">P24</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P26" class="name">var <span class="ident">P26</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P27" class="name">var <span class="ident">P27</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P28" class="name">var <span class="ident">P28</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P29" class="name">var <span class="ident">P29</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P3" class="name">var <span class="ident">P3</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P31" class="name">var <span class="ident">P31</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P32" class="name">var <span class="ident">P32</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P33" class="name">var <span class="ident">P33</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P35" class="name">var <span class="ident">P35</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P36" class="name">var <span class="ident">P36</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P37" class="name">var <span class="ident">P37</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P38" class="name">var <span class="ident">P38</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P40" class="name">var <span class="ident">P40</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P5" class="name">var <span class="ident">P5</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P7" class="name">var <span class="ident">P7</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.P8" class="name">var <span class="ident">P8</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.name" class="name">var <span class="ident">name</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.RPiBoard.value" class="name">var <span class="ident">value</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+      
+      <div class="item">
       <p id="openoligo.hal.types.Switchable" class="name">class <span class="ident">Switchable</span></p>
       
   
@@ -1371,6 +2775,11 @@ be able to set, get the current value and toggle the state of the switch.</p></d
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Board</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the current value of the switch.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
@@ -1387,6 +2796,17 @@ be able to set, get the current value and toggle the state of the switch.</p></d
           <li><a href="/typing.Generic.ext">typing.Generic</a></li>
           </ul>
           <h3>Instance variables</h3>
+            <div class="item">
+            <p id="openoligo.hal.types.Switchable.gpio" class="name">var <span class="ident">gpio</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get the GPIO pin number.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
             <div class="item">
             <p id="openoligo.hal.types.Switchable.value" class="name">var <span class="ident">value</span></p>
             
@@ -1535,6 +2955,21 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
 
             </div>
             <div class="item">
+            <p id="openoligo.hal.types.Valvable.gpio" class="name">var <span class="ident">gpio</span></p>
+            
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#openoligo.hal.types.Switchable">Switchable</a></code>.<code><a href="#openoligo.hal.types.Switchable.gpio">gpio</a></code>
+    </p>
+
+            
+  
+    <div class="desc inherited"><p>Get the GPIO pin number.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
             <p id="openoligo.hal.types.Valvable.value" class="name">var <span class="ident">value</span></p>
             
     <p class="inheritance">
@@ -1623,6 +3058,96 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
 
   </div>
   
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="openoligo.hal.types.ValveRole" class="name">class <span class="ident">ValveRole</span></p>
+      
+  
+    <div class="desc"><p>Valve Role: Inlet/Outlet/Transit/Branch</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.types.ValveRole', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.types.ValveRole" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ValveRole</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Valve Role: Inlet/Outlet/Transit/Branch&quot;&quot;&quot;</span>
+
+    <span class="n">INLET</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">OUTLET</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">TRANSIT</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">BRANCH</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="openoligo.hal.types.ValveRole.BRANCH" class="name">var <span class="ident">BRANCH</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.ValveRole.INLET" class="name">var <span class="ident">INLET</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.ValveRole.OUTLET" class="name">var <span class="ident">OUTLET</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.ValveRole.TRANSIT" class="name">var <span class="ident">TRANSIT</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.ValveRole.name" class="name">var <span class="ident">name</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.types.ValveRole.value" class="name">var <span class="ident">value</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
       </div>
       </div>
       

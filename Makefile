@@ -77,8 +77,8 @@ test: type
 	@poetry run pytest 
 
 docs:
-	@poetry run pdocs as_html $(LIBNAME) --overwrite --output-dir=$(DOCS_DIR)
-	mv $(DOCSDIR)/$(LIBNAME)/* $(DOCSDIR)
+	@poetry run pdocs as_html $(LIBNAME) --overwrite
+	mv site/* $(DOCSDIR)
 
 publish:
 	@poetry publish --build

@@ -4,8 +4,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
   
-  <title>openoligo.fixed_keys_dict API documentation</title>
-  <meta name="description" content="A dict with fixed set of keys." />
+  <title>openoligo.utils.singleton API documentation</title>
+  <meta name="description" content="Provides a Metaclass for creating Singleton classes." />
 
 
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -1057,23 +1057,21 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <ul id="index">
     <li class="set"><h3>Super-module</h3>
       <ul>
-        <li class="mono"><a href="index.html">openoligo</a></li>
+        <li class="mono"><a href="index.html">openoligo.utils</a></li>
       </ul>
-    </li>
-    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
-      
-  <ul>
-    <li class="mono"><a href="#openoligo.fixed_keys_dict.V">V</a></li>
-  </ul>
-
     </li>
 
 
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#openoligo.fixed_keys_dict.FixedKeysDict">FixedKeysDict</a></span>
+        <span class="class_name"><a href="#openoligo.utils.singleton.Singleton">Singleton</a></span>
         
+          
+  <ul>
+    <li class="mono"><a href="#openoligo.utils.singleton.Singleton.mro">mro</a></li>
+  </ul>
+
         </li>
       </ul>
     </li>
@@ -1088,84 +1086,28 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">openoligo.fixed_keys_dict</span> module</h1>
-  <p>A dict with fixed set of keys.</p>
+  <h1 class="title"><span class="name">openoligo.utils.singleton</span> module</h1>
+  <p>Provides a Metaclass for creating Singleton classes.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.fixed_keys_dict', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.fixed_keys_dict" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.utils.singleton', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.utils.singleton" class="source">
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A dict with fixed set of keys.</span>
+<span class="sd">Provides a Metaclass for creating Singleton classes.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Set</span><span class="p">,</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">Optional</span>
-
-<span class="n">V</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;V&quot;</span><span class="p">)</span>  <span class="c1"># generic type for values</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
 
 
-<span class="k">class</span> <span class="nc">FixedKeysDict</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">V</span><span class="p">]):</span>
+<span class="k">class</span> <span class="nc">Singleton</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A dictionary-like class that allows attribute-based and dictionary-like</span>
-<span class="sd">    access with a fixed set of keys and mutable values.</span>
+<span class="sd">    Metaclass for singleton classes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">valid_keys</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize an instance of the class.</span>
+    <span class="n">_instances</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            valid_keys (Set[str]): The valid keys for this dictionary.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_valid_keys</span> <span class="o">=</span> <span class="n">valid_keys</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">V</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-
-    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">V</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set a key-value pair in the internal dictionary.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            key (str): The key.</span>
-<span class="sd">            value (V): The value.</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            KeyError: If `key` is not a valid key.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valid_keys</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid key: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">V</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get a value from the internal dictionary by its key.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            key (str): The key.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            The value associated with `key`.</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            KeyError: If `key` is not a valid key.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valid_keys</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid key: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return a string representation of the internal dictionary.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            A string representation of the internal dictionary.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return a string representation of this instance.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            A string representation of this instance.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Singleton</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span>
 </pre></div>
 
   </div>
@@ -1173,93 +1115,29 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   </header>
 
   <section id="section-items">
-    <h2 class="section-title" id="header-variables">Module variables</h2>
-      <div class="item">
-      <p id="openoligo.fixed_keys_dict.V" class="name">var <span class="ident">V</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
 
 
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="openoligo.fixed_keys_dict.FixedKeysDict" class="name">class <span class="ident">FixedKeysDict</span></p>
+      <p id="openoligo.utils.singleton.Singleton" class="name">class <span class="ident">Singleton</span></p>
       
   
-    <div class="desc"><p>A dictionary-like class that allows attribute-based and dictionary-like
-access with a fixed set of keys and mutable values.</p></div>
+    <div class="desc"><p>Metaclass for singleton classes.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.fixed_keys_dict.FixedKeysDict', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.fixed_keys_dict.FixedKeysDict" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">FixedKeysDict</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">V</span><span class="p">]):</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.utils.singleton.Singleton', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.utils.singleton.Singleton" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Singleton</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A dictionary-like class that allows attribute-based and dictionary-like</span>
-<span class="sd">    access with a fixed set of keys and mutable values.</span>
+<span class="sd">    Metaclass for singleton classes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">valid_keys</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize an instance of the class.</span>
+    <span class="n">_instances</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            valid_keys (Set[str]): The valid keys for this dictionary.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_valid_keys</span> <span class="o">=</span> <span class="n">valid_keys</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">V</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-
-    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">V</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Set a key-value pair in the internal dictionary.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            key (str): The key.</span>
-<span class="sd">            value (V): The value.</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            KeyError: If `key` is not a valid key.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valid_keys</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid key: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">V</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get a value from the internal dictionary by its key.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            key (str): The key.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            The value associated with `key`.</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            KeyError: If `key` is not a valid key.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valid_keys</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid key: </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return a string representation of the internal dictionary.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            A string representation of the internal dictionary.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return a string representation of this instance.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            A string representation of this instance.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_dict</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Singleton</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instances</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span>
 </pre></div>
 
   </div>
@@ -1269,8 +1147,24 @@ access with a fixed set of keys and mutable values.</p></div>
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="/typing.Generic.ext">typing.Generic</a></li>
+          <li><a href="/builtins.type.ext">builtins.type</a></li>
           </ul>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.utils.singleton.Singleton.mro">
+    <p>def <span class="ident">mro</span>(</p><p>self, /)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Return a type's method resolution order.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
       </div>
       </div>
 

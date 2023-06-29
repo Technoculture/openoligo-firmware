@@ -4,8 +4,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
   
-  <title>openoligo.container.cartridge API documentation</title>
-  <meta name="description" content="Reagents and cartridges for the OpenOligo project." />
+  <title>openoligo.hal.platform API documentation</title>
+  <meta name="description" content="Provides the platform on which the program is running." />
 
 
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -1057,18 +1057,28 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <ul id="index">
     <li class="set"><h3>Super-module</h3>
       <ul>
-        <li class="mono"><a href="index.html">openoligo.container</a></li>
+        <li class="mono"><a href="index.html">openoligo.hal</a></li>
       </ul>
     </li>
-    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+
+    <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
-    <li class="mono"><a href="#openoligo.container.cartridge.reagents">reagents</a></li>
+    <li class="mono"><a href="#openoligo.hal.platform.get_platform">get_platform</a></li>
+    <li class="mono"><a href="#openoligo.hal.platform.is_bb">is_bb</a></li>
+    <li class="mono"><a href="#openoligo.hal.platform.is_rpi">is_rpi</a></li>
   </ul>
 
     </li>
 
-
+    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
+      <ul>
+        <li class="mono">
+        <span class="class_name"><a href="#openoligo.hal.platform.Platform">Platform</a></span>
+        
+        </li>
+      </ul>
+    </li>
 
     </ul>
   </div>
@@ -1080,23 +1090,53 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">openoligo.container.cartridge</span> module</h1>
-  <p>Reagents and cartridges for the OpenOligo project.</p>
+  <h1 class="title"><span class="name">openoligo.hal.platform</span> module</h1>
+  <p>Provides the platform on which the program is running.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.container.cartridge', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.container.cartridge" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.platform', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.platform" class="source">
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Reagents and cartridges for the OpenOligo project.</span>
+<span class="sd">Provides the platform on which the program is running.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">SimpleNamespace</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 
-<span class="c1"># from openoligo.fixed_keys_dict import FixedKeysDict</span>
-<span class="kn">from</span> <span class="nn">openoligo.container.types</span> <span class="kn">import</span> <span class="n">Reagent</span><span class="p">,</span> <span class="n">ReagentCategory</span>
 
-<span class="n">reagents</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span>
-    <span class="n">acetonitrile</span><span class="o">=</span><span class="n">Reagent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;acetonitrile&quot;</span><span class="p">,</span> <span class="n">accronym</span><span class="o">=</span><span class="s2">&quot;ACN&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">ReagentCategory</span><span class="o">.</span><span class="n">SOLVENT</span><span class="p">),</span>
-    <span class="n">acetone</span><span class="o">=</span><span class="n">Reagent</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;acetone&quot;</span><span class="p">,</span> <span class="n">accronym</span><span class="o">=</span><span class="s2">&quot;ACET&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">ReagentCategory</span><span class="o">.</span><span class="n">SOLVENT</span><span class="p">),</span>
-<span class="p">)</span>
+<span class="k">def</span> <span class="nf">is_rpi</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True if running on a Raspberry Pi, False otherwise.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/proc/cpuinfo&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Raspberry&quot;</span> <span class="ow">in</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span> <span class="nf">is_bb</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True if running on a Raspberry Pi, False otherwise.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/proc/cpuinfo&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;AM33XX&quot;</span> <span class="ow">in</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">class</span> <span class="nc">Platform</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Platform type.&quot;&quot;&quot;</span>
+
+    <span class="n">RPI</span> <span class="o">=</span> <span class="s2">&quot;RPI&quot;</span>
+    <span class="n">BB</span> <span class="o">=</span> <span class="s2">&quot;BB&quot;</span>
+    <span class="n">SIM</span> <span class="o">=</span> <span class="s2">&quot;SIM&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">get_platform</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Platform</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the platform type.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">is_rpi</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">Platform</span><span class="o">.</span><span class="n">RPI</span>
+    <span class="k">if</span> <span class="n">is_bb</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">Platform</span><span class="o">.</span><span class="n">BB</span>
+    <span class="k">return</span> <span class="n">Platform</span><span class="o">.</span><span class="n">SIM</span>
+
+
+<span class="n">__platform__</span> <span class="o">=</span> <span class="n">get_platform</span><span class="p">()</span>
 </pre></div>
 
   </div>
@@ -1104,17 +1144,170 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   </header>
 
   <section id="section-items">
-    <h2 class="section-title" id="header-variables">Module variables</h2>
-      <div class="item">
-      <p id="openoligo.container.cartridge.reagents" class="name">var <span class="ident">reagents</span></p>
+
+    <h2 class="section-title" id="header-functions">Functions</h2>
       
+  <div class="item">
+    <div class="name def" id="openoligo.hal.platform.get_platform">
+    <p>def <span class="ident">get_platform</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Get the platform type.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.platform.get_platform', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.platform.get_platform" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_platform</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Platform</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the platform type.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">is_rpi</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">Platform</span><span class="o">.</span><span class="n">RPI</span>
+    <span class="k">if</span> <span class="n">is_bb</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">Platform</span><span class="o">.</span><span class="n">BB</span>
+    <span class="k">return</span> <span class="n">Platform</span><span class="o">.</span><span class="n">SIM</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.hal.platform.is_bb">
+    <p>def <span class="ident">is_bb</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Returns True if running on a Raspberry Pi, False otherwise.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.platform.is_bb', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.platform.is_bb" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">is_bb</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True if running on a Raspberry Pi, False otherwise.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/proc/cpuinfo&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;AM33XX&quot;</span> <span class="ow">in</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.hal.platform.is_rpi">
+    <p>def <span class="ident">is_rpi</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Returns True if running on a Raspberry Pi, False otherwise.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.platform.is_rpi', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.platform.is_rpi" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">is_rpi</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True if running on a Raspberry Pi, False otherwise.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/proc/cpuinfo&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;Raspberry&quot;</span> <span class="ow">in</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+
+    <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="openoligo.hal.platform.Platform" class="name">class <span class="ident">Platform</span></p>
+      
+  
+    <div class="desc"><p>Platform type.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.platform.Platform', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.platform.Platform" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Platform</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Platform type.&quot;&quot;&quot;</span>
+
+    <span class="n">RPI</span> <span class="o">=</span> <span class="s2">&quot;RPI&quot;</span>
+    <span class="n">BB</span> <span class="o">=</span> <span class="s2">&quot;BB&quot;</span>
+    <span class="n">SIM</span> <span class="o">=</span> <span class="s2">&quot;SIM&quot;</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="openoligo.hal.platform.Platform.BB" class="name">var <span class="ident">BB</span></p>
+            
+
+            
   
   <div class="source_cont">
 </div>
 
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.platform.Platform.RPI" class="name">var <span class="ident">RPI</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.platform.Platform.SIM" class="name">var <span class="ident">SIM</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.platform.Platform.name" class="name">var <span class="ident">name</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.hal.platform.Platform.value" class="name">var <span class="ident">value</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
       </div>
-
-
+      </div>
 
   </section>
 </article>

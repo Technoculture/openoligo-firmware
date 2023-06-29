@@ -4,8 +4,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
   
-  <title>openoligo.hal.pins API documentation</title>
-  <meta name="description" content="Pins in the Raspberry Pi GPIO header." />
+  <title>openoligo.seq API documentation</title>
+  <meta name="description" content="Sequence class for DNA, RNA and modified Nucleic Acid sequences." />
 
 
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -1057,15 +1057,22 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <ul id="index">
     <li class="set"><h3>Super-module</h3>
       <ul>
-        <li class="mono"><a href="index.html">openoligo.hal</a></li>
+        <li class="mono"><a href="index.html">openoligo</a></li>
       </ul>
     </li>
 
+    <li class="set"><h3><a href="#header-functions">Functions</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#openoligo.seq.is_valid_dna">is_valid_dna</a></li>
+  </ul>
+
+    </li>
 
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#openoligo.hal.pins.RPi">RPi</a></span>
+        <span class="class_name"><a href="#openoligo.seq.Seq">Seq</a></span>
         
         </li>
       </ul>
@@ -1081,50 +1088,77 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">openoligo.hal.pins</span> module</h1>
-  <p>Pins in the Raspberry Pi GPIO header.</p>
+  <h1 class="title"><span class="name">openoligo.seq</span> module</h1>
+  <p>Sequence class for DNA, RNA and modified Nucleic Acid sequences.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.pins', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.hal.pins" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.seq', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.seq" class="source">
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Pins in the Raspberry Pi GPIO header.</span>
+<span class="sd">Sequence class for DNA, RNA and modified Nucleic Acid sequences.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">import</span> <span class="nn">re</span>
 
 
-<span class="k">class</span> <span class="nc">RPi</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">is_valid_dna</span><span class="p">(</span><span class="n">sequence</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</span>
+<span class="sd">    Check if a sequence is a valid DNA sequence.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^[ATCGatcg]*$&quot;</span>
+    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">sequence</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">class</span> <span class="nc">Seq</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Representation of the sequence as a string.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">PIN3</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">PIN5</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">PIN7</span> <span class="o">=</span> <span class="mi">7</span>
-    <span class="n">PIN8</span> <span class="o">=</span> <span class="mi">8</span>
-    <span class="n">PIN10</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">PIN11</span> <span class="o">=</span> <span class="mi">11</span>
-    <span class="n">PIN12</span> <span class="o">=</span> <span class="mi">12</span>
-    <span class="n">PIN13</span> <span class="o">=</span> <span class="mi">13</span>
-    <span class="n">PIN15</span> <span class="o">=</span> <span class="mi">15</span>
-    <span class="n">PIN16</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="n">PIN18</span> <span class="o">=</span> <span class="mi">18</span>
-    <span class="n">PIN19</span> <span class="o">=</span> <span class="mi">19</span>
-    <span class="n">PIN21</span> <span class="o">=</span> <span class="mi">21</span>
-    <span class="n">PIN22</span> <span class="o">=</span> <span class="mi">22</span>
-    <span class="n">PIN23</span> <span class="o">=</span> <span class="mi">23</span>
-    <span class="n">PIN24</span> <span class="o">=</span> <span class="mi">24</span>
-    <span class="n">PIN26</span> <span class="o">=</span> <span class="mi">26</span>
-    <span class="n">PIN27</span> <span class="o">=</span> <span class="mi">27</span>
-    <span class="n">PIN28</span> <span class="o">=</span> <span class="mi">28</span>
-    <span class="n">PIN29</span> <span class="o">=</span> <span class="mi">29</span>
-    <span class="n">PIN31</span> <span class="o">=</span> <span class="mi">31</span>
-    <span class="n">PIN32</span> <span class="o">=</span> <span class="mi">32</span>
-    <span class="n">PIN33</span> <span class="o">=</span> <span class="mi">33</span>
-    <span class="n">PIN35</span> <span class="o">=</span> <span class="mi">35</span>
-    <span class="n">PIN36</span> <span class="o">=</span> <span class="mi">36</span>
-    <span class="n">PIN37</span> <span class="o">=</span> <span class="mi">37</span>
-    <span class="n">PIN38</span> <span class="o">=</span> <span class="mi">38</span>
-    <span class="n">PIN40</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_dna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid DNA sequence&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Allows iteration over the sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the next base in the sequence.</span>
+
+<span class="sd">        raises:</span>
+<span class="sd">            StopIteration: if the end of the sequence is reached.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">raise</span> <span class="ne">StopIteration</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns string representation of the sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get the length of the sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Allows indexing of the sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 </pre></div>
 
   </div>
@@ -1133,50 +1167,96 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
   <section id="section-items">
 
+    <h2 class="section-title" id="header-functions">Functions</h2>
+      
+  <div class="item">
+    <div class="name def" id="openoligo.seq.is_valid_dna">
+    <p>def <span class="ident">is_valid_dna</span>(</p><p>sequence)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Check if a sequence is a valid DNA sequence.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.seq.is_valid_dna', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.seq.is_valid_dna" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">is_valid_dna</span><span class="p">(</span><span class="n">sequence</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if a sequence is a valid DNA sequence.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^[ATCGatcg]*$&quot;</span>
+    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">sequence</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
 
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="openoligo.hal.pins.RPi" class="name">class <span class="ident">RPi</span></p>
+      <p id="openoligo.seq.Seq" class="name">class <span class="ident">Seq</span></p>
       
   
-    <div class="desc"><p>Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</p></div>
+    <div class="desc"><p>Representation of the sequence as a string.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.pins.RPi', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.hal.pins.RPi" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">RPi</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.seq.Seq', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.seq.Seq" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Seq</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</span>
+<span class="sd">    Representation of the sequence as a string.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">PIN3</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">PIN5</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">PIN7</span> <span class="o">=</span> <span class="mi">7</span>
-    <span class="n">PIN8</span> <span class="o">=</span> <span class="mi">8</span>
-    <span class="n">PIN10</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">PIN11</span> <span class="o">=</span> <span class="mi">11</span>
-    <span class="n">PIN12</span> <span class="o">=</span> <span class="mi">12</span>
-    <span class="n">PIN13</span> <span class="o">=</span> <span class="mi">13</span>
-    <span class="n">PIN15</span> <span class="o">=</span> <span class="mi">15</span>
-    <span class="n">PIN16</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="n">PIN18</span> <span class="o">=</span> <span class="mi">18</span>
-    <span class="n">PIN19</span> <span class="o">=</span> <span class="mi">19</span>
-    <span class="n">PIN21</span> <span class="o">=</span> <span class="mi">21</span>
-    <span class="n">PIN22</span> <span class="o">=</span> <span class="mi">22</span>
-    <span class="n">PIN23</span> <span class="o">=</span> <span class="mi">23</span>
-    <span class="n">PIN24</span> <span class="o">=</span> <span class="mi">24</span>
-    <span class="n">PIN26</span> <span class="o">=</span> <span class="mi">26</span>
-    <span class="n">PIN27</span> <span class="o">=</span> <span class="mi">27</span>
-    <span class="n">PIN28</span> <span class="o">=</span> <span class="mi">28</span>
-    <span class="n">PIN29</span> <span class="o">=</span> <span class="mi">29</span>
-    <span class="n">PIN31</span> <span class="o">=</span> <span class="mi">31</span>
-    <span class="n">PIN32</span> <span class="o">=</span> <span class="mi">32</span>
-    <span class="n">PIN33</span> <span class="o">=</span> <span class="mi">33</span>
-    <span class="n">PIN35</span> <span class="o">=</span> <span class="mi">35</span>
-    <span class="n">PIN36</span> <span class="o">=</span> <span class="mi">36</span>
-    <span class="n">PIN37</span> <span class="o">=</span> <span class="mi">37</span>
-    <span class="n">PIN38</span> <span class="o">=</span> <span class="mi">38</span>
-    <span class="n">PIN40</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_dna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid DNA sequence&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Allows iteration over the sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the next base in the sequence.</span>
+
+<span class="sd">        raises:</span>
+<span class="sd">            StopIteration: if the end of the sequence is reached.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">raise</span> <span class="ne">StopIteration</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns string representation of the sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get the length of the sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Allows indexing of the sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 </pre></div>
 
   </div>
@@ -1184,311 +1264,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
       <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
-          </ul>
-          <h3>Class variables</h3>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN10" class="name">var <span class="ident">PIN10</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN11" class="name">var <span class="ident">PIN11</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN12" class="name">var <span class="ident">PIN12</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN13" class="name">var <span class="ident">PIN13</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN15" class="name">var <span class="ident">PIN15</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN16" class="name">var <span class="ident">PIN16</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN18" class="name">var <span class="ident">PIN18</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN19" class="name">var <span class="ident">PIN19</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN21" class="name">var <span class="ident">PIN21</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN22" class="name">var <span class="ident">PIN22</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN23" class="name">var <span class="ident">PIN23</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN24" class="name">var <span class="ident">PIN24</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN26" class="name">var <span class="ident">PIN26</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN27" class="name">var <span class="ident">PIN27</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN28" class="name">var <span class="ident">PIN28</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN29" class="name">var <span class="ident">PIN29</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN3" class="name">var <span class="ident">PIN3</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN31" class="name">var <span class="ident">PIN31</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN32" class="name">var <span class="ident">PIN32</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN33" class="name">var <span class="ident">PIN33</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN35" class="name">var <span class="ident">PIN35</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN36" class="name">var <span class="ident">PIN36</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN37" class="name">var <span class="ident">PIN37</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN38" class="name">var <span class="ident">PIN38</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN40" class="name">var <span class="ident">PIN40</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN5" class="name">var <span class="ident">PIN5</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN7" class="name">var <span class="ident">PIN7</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.PIN8" class="name">var <span class="ident">PIN8</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.name" class="name">var <span class="ident">name</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.pins.RPi.value" class="name">var <span class="ident">value</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
       </div>
       </div>
 

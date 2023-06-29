@@ -1060,8 +1060,29 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <li class="mono"><a href="index.html">openoligo</a></li>
       </ul>
     </li>
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#openoligo.instrument.default_pinout">default_pinout</a></li>
+  </ul>
+
+    </li>
 
 
+    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
+      <ul>
+        <li class="mono">
+        <span class="class_name"><a href="#openoligo.instrument.Instrument">Instrument</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#openoligo.instrument.Instrument.all_except">all_except</a></li>
+    <li class="mono"><a href="#openoligo.instrument.Instrument.validate_valve_set">validate_valve_set</a></li>
+  </ul>
+
+        </li>
+      </ul>
+    </li>
 
     </ul>
   </div>
@@ -1081,6 +1102,126 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Unified access to configuring and using the instrument.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">openoligo.hal.board</span> <span class="kn">import</span> <span class="n">Pinout</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.devices</span> <span class="kn">import</span> <span class="n">Valve</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.gpio</span> <span class="kn">import</span> <span class="n">get_gpio</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.types</span> <span class="kn">import</span> <span class="n">Board</span><span class="p">,</span> <span class="n">OneDestinationException</span><span class="p">,</span> <span class="n">OneSourceException</span><span class="p">,</span> <span class="n">ValveRole</span>
+<span class="kn">from</span> <span class="nn">openoligo.utils.singleton</span> <span class="kn">import</span> <span class="n">Singleton</span>
+
+<span class="n">default_pinout</span> <span class="o">=</span> <span class="n">Pinout</span><span class="p">(</span>
+    <span class="n">phosphoramidites</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P26</span><span class="p">),</span>
+        <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P28</span><span class="p">),</span>
+        <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P15</span><span class="p">),</span>
+        <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P16</span><span class="p">),</span>
+    <span class="p">},</span>
+    <span class="n">reactants</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;ACT&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P18</span><span class="p">),</span>
+        <span class="s2">&quot;OXI&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P19</span><span class="p">),</span>
+        <span class="s2">&quot;CAP1&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P21</span><span class="p">),</span>
+        <span class="s2">&quot;CAP2&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P22</span><span class="p">),</span>
+        <span class="s2">&quot;DEB&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P23</span><span class="p">),</span>
+        <span class="s2">&quot;CLDE&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P24</span><span class="p">),</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">Instrument</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Singleton</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Unified access to the instrument. Hide the details of the hardware.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pinout</span><span class="p">:</span> <span class="n">Pinout</span> <span class="o">=</span> <span class="n">default_pinout</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the instrument.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span> <span class="o">=</span> <span class="n">pinout</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initializing instrument with pinout: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span> <span class="o">=</span> <span class="n">get_gpio</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__get_valve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Valve</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a valve by name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">valve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valve</span><span class="p">,</span> <span class="n">Valve</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> is not a valve&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">valve</span>
+
+    <span class="k">def</span> <span class="nf">validate_valve_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validate that the list of valves conform to a set of rules.</span>
+
+<span class="sd">        1. Each valve must be a valve.</span>
+<span class="sd">        2. The list must contain one and only one reagent (inlet) valve.</span>
+<span class="sd">        3. The list must contain one and only one product (outlet) valve.</span>
+<span class="sd">        4. The list may contain zero or more transit valves</span>
+<span class="sd">        5. The list may contain a branch valve, but only one.</span>
+
+<span class="sd">        args:</span>
+<span class="sd">            name: list of valve names</span>
+
+<span class="sd">        raises:</span>
+<span class="sd">            OneSourceException: If there is not exactly one source valve.</span>
+<span class="sd">            OneDestinationException: If there is not exactly one destination valve.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">valve_types</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">ValveRole</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Valve</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">ValveRole</span><span class="o">.</span><span class="n">INLET</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="n">ValveRole</span><span class="o">.</span><span class="n">OUTLET</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="n">ValveRole</span><span class="o">.</span><span class="n">BRANCH</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_name</span><span class="p">),</span> <span class="n">Valve</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s2"> is not a valve&quot;</span><span class="p">)</span>
+            <span class="n">valve</span><span class="p">:</span> <span class="n">Valve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_valve</span><span class="p">(</span><span class="n">_name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">valve</span><span class="o">.</span><span class="n">role</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valve_types</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown valve role: </span><span class="si">{</span><span class="n">valve</span><span class="o">.</span><span class="n">role</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="n">valve_types</span><span class="p">[</span><span class="n">valve</span><span class="o">.</span><span class="n">role</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">valve</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">INLET</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">OneSourceException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one source valve&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">OUTLET</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">OneDestinationException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one destination valve&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Make sure that the transit valve(s) are in the route you expect&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">all_except</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the state of a pin on the instrument.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: A list of valve names</span>
+<span class="sd">            state: The state of the pin.</span>
+
+<span class="sd">        raises:</span>
+<span class="sd">            OneSourceException: If there is not exactly one source valve.</span>
+<span class="sd">            OneDestinationException: If there is not exactly one destination valve.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_valve_set</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">all_valves_in_pinout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">valves</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">all_valves_in_pinout</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+                <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s2">&quot;Set </span><span class="si">%s</span><span class="s2"> to [bold]open[/] and all others to close.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a string representation of the instrument.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Instrument(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="si">}</span><span class="s2">)&quot;</span>
 </pre></div>
 
   </div>
@@ -1088,8 +1229,242 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   </header>
 
   <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="openoligo.instrument.default_pinout" class="name">var <span class="ident">default_pinout</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
 
 
+    <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="openoligo.instrument.Instrument" class="name">class <span class="ident">Instrument</span></p>
+      
+  
+    <div class="desc"><p>Unified access to the instrument. Hide the details of the hardware.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.instrument.Instrument', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.instrument.Instrument" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Instrument</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Singleton</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Unified access to the instrument. Hide the details of the hardware.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pinout</span><span class="p">:</span> <span class="n">Pinout</span> <span class="o">=</span> <span class="n">default_pinout</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the instrument.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span> <span class="o">=</span> <span class="n">pinout</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initializing instrument with pinout: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span> <span class="o">=</span> <span class="n">get_gpio</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__get_valve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Valve</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a valve by name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">valve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valve</span><span class="p">,</span> <span class="n">Valve</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> is not a valve&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">valve</span>
+
+    <span class="k">def</span> <span class="nf">validate_valve_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validate that the list of valves conform to a set of rules.</span>
+
+<span class="sd">        1. Each valve must be a valve.</span>
+<span class="sd">        2. The list must contain one and only one reagent (inlet) valve.</span>
+<span class="sd">        3. The list must contain one and only one product (outlet) valve.</span>
+<span class="sd">        4. The list may contain zero or more transit valves</span>
+<span class="sd">        5. The list may contain a branch valve, but only one.</span>
+
+<span class="sd">        args:</span>
+<span class="sd">            name: list of valve names</span>
+
+<span class="sd">        raises:</span>
+<span class="sd">            OneSourceException: If there is not exactly one source valve.</span>
+<span class="sd">            OneDestinationException: If there is not exactly one destination valve.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">valve_types</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">ValveRole</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Valve</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">ValveRole</span><span class="o">.</span><span class="n">INLET</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="n">ValveRole</span><span class="o">.</span><span class="n">OUTLET</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="n">ValveRole</span><span class="o">.</span><span class="n">BRANCH</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_name</span><span class="p">),</span> <span class="n">Valve</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s2"> is not a valve&quot;</span><span class="p">)</span>
+            <span class="n">valve</span><span class="p">:</span> <span class="n">Valve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_valve</span><span class="p">(</span><span class="n">_name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">valve</span><span class="o">.</span><span class="n">role</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valve_types</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown valve role: </span><span class="si">{</span><span class="n">valve</span><span class="o">.</span><span class="n">role</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="n">valve_types</span><span class="p">[</span><span class="n">valve</span><span class="o">.</span><span class="n">role</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">valve</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">INLET</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">OneSourceException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one source valve&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">OUTLET</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">OneDestinationException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one destination valve&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Make sure that the transit valve(s) are in the route you expect&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">all_except</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the state of a pin on the instrument.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: A list of valve names</span>
+<span class="sd">            state: The state of the pin.</span>
+
+<span class="sd">        raises:</span>
+<span class="sd">            OneSourceException: If there is not exactly one source valve.</span>
+<span class="sd">            OneDestinationException: If there is not exactly one destination valve.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_valve_set</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">all_valves_in_pinout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">valves</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">all_valves_in_pinout</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+                <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s2">&quot;Set </span><span class="si">%s</span><span class="s2"> to [bold]open[/] and all others to close.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a string representation of the instrument.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Instrument(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="si">}</span><span class="s2">)&quot;</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.instrument.Instrument.all_except">
+    <p>def <span class="ident">all_except</span>(</p><p>self, name: list[str])</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Set the state of a pin on the instrument.</p>
+<p>Args:
+    name: A list of valve names
+    state: The state of the pin.</p>
+<p>raises:
+    OneSourceException: If there is not exactly one source valve.
+    OneDestinationException: If there is not exactly one destination valve.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.instrument.Instrument.all_except', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.instrument.Instrument.all_except" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">all_except</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the state of a pin on the instrument.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        name: A list of valve names</span>
+<span class="sd">        state: The state of the pin.</span>
+<span class="sd">    raises:</span>
+<span class="sd">        OneSourceException: If there is not exactly one source valve.</span>
+<span class="sd">        OneDestinationException: If there is not exactly one destination valve.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">validate_valve_set</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">all_valves_in_pinout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">valves</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">all_valves_in_pinout</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+        <span class="s2">&quot;Set </span><span class="si">%s</span><span class="s2"> to [bold]open[/] and all others to close.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+    <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.instrument.Instrument.validate_valve_set">
+    <p>def <span class="ident">validate_valve_set</span>(</p><p>self, name: list[str])</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Validate that the list of valves conform to a set of rules.</p>
+<ol>
+<li>Each valve must be a valve.</li>
+<li>The list must contain one and only one reagent (inlet) valve.</li>
+<li>The list must contain one and only one product (outlet) valve.</li>
+<li>The list may contain zero or more transit valves</li>
+<li>The list may contain a branch valve, but only one.</li>
+</ol>
+<p>args:
+    name: list of valve names</p>
+<p>raises:
+    OneSourceException: If there is not exactly one source valve.
+    OneDestinationException: If there is not exactly one destination valve.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.instrument.Instrument.validate_valve_set', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.instrument.Instrument.validate_valve_set" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">validate_valve_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validate that the list of valves conform to a set of rules.</span>
+<span class="sd">    1. Each valve must be a valve.</span>
+<span class="sd">    2. The list must contain one and only one reagent (inlet) valve.</span>
+<span class="sd">    3. The list must contain one and only one product (outlet) valve.</span>
+<span class="sd">    4. The list may contain zero or more transit valves</span>
+<span class="sd">    5. The list may contain a branch valve, but only one.</span>
+<span class="sd">    args:</span>
+<span class="sd">        name: list of valve names</span>
+<span class="sd">    raises:</span>
+<span class="sd">        OneSourceException: If there is not exactly one source valve.</span>
+<span class="sd">        OneDestinationException: If there is not exactly one destination valve.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">valve_types</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">ValveRole</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Valve</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">ValveRole</span><span class="o">.</span><span class="n">INLET</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="n">ValveRole</span><span class="o">.</span><span class="n">OUTLET</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="n">ValveRole</span><span class="o">.</span><span class="n">BRANCH</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_name</span><span class="p">),</span> <span class="n">Valve</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s2"> is not a valve&quot;</span><span class="p">)</span>
+        <span class="n">valve</span><span class="p">:</span> <span class="n">Valve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_valve</span><span class="p">(</span><span class="n">_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">valve</span><span class="o">.</span><span class="n">role</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valve_types</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown valve role: </span><span class="si">{</span><span class="n">valve</span><span class="o">.</span><span class="n">role</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">valve_types</span><span class="p">[</span><span class="n">valve</span><span class="o">.</span><span class="n">role</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">valve</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">INLET</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">OneSourceException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one source valve&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">OUTLET</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">OneDestinationException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one destination valve&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Make sure that the transit valve(s) are in the route you expect&quot;</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
 
   </section>
 </article>

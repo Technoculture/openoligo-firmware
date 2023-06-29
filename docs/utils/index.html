@@ -1083,6 +1083,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
       <ul>
         <li class="mono"><a href="sim.html">openoligo.utils.sim</a></li>
+        <li class="mono"><a href="singleton.html">openoligo.utils.singleton</a></li>
         <li class="mono"><a href="#openoligo.utils.wait">wait</a></li>
       </ul>
     </li>
@@ -1104,8 +1105,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Imports all the modules in the utils directory.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">openoligo.utils.wait</span> <span class="kn">import</span> <span class="n">ms</span><span class="p">,</span> <span class="n">wait</span><span class="p">,</span> <span class="n">with_wait</span><span class="p">,</span> <span class="n">wait_async</span>
 <span class="kn">from</span> <span class="nn">openoligo.utils.sim</span> <span class="kn">import</span> <span class="n">SIMULATION_SPEEDUP_FACTOR</span>
+<span class="kn">from</span> <span class="nn">openoligo.utils.wait</span> <span class="kn">import</span> <span class="n">ms</span><span class="p">,</span> <span class="n">wait</span><span class="p">,</span> <span class="n">wait_async</span><span class="p">,</span> <span class="n">with_wait</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ms&quot;</span><span class="p">,</span> <span class="s2">&quot;wait&quot;</span><span class="p">,</span> <span class="s2">&quot;wait_async&quot;</span><span class="p">,</span> <span class="s2">&quot;with_wait&quot;</span><span class="p">,</span> <span class="s2">&quot;SIMULATION_SPEEDUP_FACTOR&quot;</span><span class="p">]</span>
 </pre></div>
@@ -1233,6 +1234,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   
     <div class="desc"><p>Sets some parameters for the simulation.</p></div>
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="singleton.html">openoligo.utils.singleton</a></p>
+      
+  
+    <div class="desc"><p>Provides a Metaclass for creating Singleton classes.</p></div>
 
       </div>
       <div class="item">

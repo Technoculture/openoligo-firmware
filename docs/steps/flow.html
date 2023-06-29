@@ -1067,8 +1067,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <ul>
     <li class="mono"><a href="#openoligo.steps.flow.dry">dry</a></li>
     <li class="mono"><a href="#openoligo.steps.flow.dry_all">dry_all</a></li>
-    <li class="mono"><a href="#openoligo.steps.flow.send">send</a></li>
-    <li class="mono"><a href="#openoligo.steps.flow.send_to_reactor">send_to_reactor</a></li>
+    <li class="mono"><a href="#openoligo.steps.flow.send_to_prod">send_to_prod</a></li>
+    <li class="mono"><a href="#openoligo.steps.flow.send_to_waste_rxn">send_to_waste_rxn</a></li>
     <li class="mono"><a href="#openoligo.steps.flow.solvent_wash">solvent_wash</a></li>
     <li class="mono"><a href="#openoligo.steps.flow.solvent_wash_all">solvent_wash_all</a></li>
   </ul>
@@ -1097,75 +1097,90 @@ and to clean columns.</p>
 <span class="sd">and to clean columns.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">openoligo.container.types</span> <span class="kn">import</span> <span class="n">Slot</span>
-<span class="kn">from</span> <span class="nn">openoligo.steps.types</span> <span class="kn">import</span> <span class="n">FlowBranch</span>
+
+<span class="kn">from</span> <span class="nn">openoligo</span> <span class="kn">import</span> <span class="n">Instrument</span>
+<span class="kn">from</span> <span class="nn">openoligo.steps.types</span> <span class="kn">import</span> <span class="n">FlowBranch</span><span class="p">,</span> <span class="n">substep</span>
+<span class="kn">from</span> <span class="nn">openoligo.utils.wait</span> <span class="kn">import</span> <span class="n">wait_async</span>
 
 
-<span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="n">src</span><span class="p">:</span> <span class="n">Slot</span><span class="p">,</span> <span class="n">dest</span><span class="p">:</span> <span class="n">Slot</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="nd">@substep</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">send_to_prod</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Flow reagents to column.</span>
+<span class="sd">    Flow a reagent to the final product outlet.</span>
 
 <span class="sd">    args:</span>
 <span class="sd">        src: Slot to flow reagents from.</span>
-<span class="sd">        dest: Slot to flow reagents to.</span>
-
-<span class="sd">    return: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Flowing reagents from </span><span class="si">%s</span><span class="s2"> to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
+    <span class="n">instrument</span><span class="o">.</span><span class="n">all_except</span><span class="p">([</span><span class="n">src</span><span class="p">,</span> <span class="s2">&quot;prod&quot;</span><span class="p">,</span> <span class="s2">&quot;branch&quot;</span><span class="p">,</span> <span class="s2">&quot;rxn_out&quot;</span><span class="p">])</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Flowing </span><span class="si">%s</span><span class="s2"> to prod&quot;</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">send_to_reactor</span><span class="p">(</span><span class="n">src</span><span class="p">:</span> <span class="n">Slot</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="nd">@substep</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Flow a reagent to the reactor.</span>
+<span class="sd">    Flow a reagent to the final product outlet.</span>
 
 <span class="sd">    args:</span>
 <span class="sd">        src: Slot to flow reagents from.</span>
-
-<span class="sd">    return: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Flowing reagents from </span><span class="si">%s</span><span class="s2"> to reactor&quot;</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
+    <span class="n">instrument</span><span class="o">.</span><span class="n">all_except</span><span class="p">([</span><span class="n">src</span><span class="p">,</span> <span class="s2">&quot;branch&quot;</span><span class="p">,</span> <span class="s2">&quot;rxn_out&quot;</span><span class="p">,</span> <span class="s2">&quot;waste_rxn&quot;</span><span class="p">])</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Flowing </span><span class="si">%s</span><span class="s2"> to reaction waste&quot;</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">solvent_wash</span><span class="p">(</span><span class="n">branch</span><span class="p">:</span> <span class="n">FlowBranch</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="nd">@substep</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">solvent_wash</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">branch</span><span class="p">:</span> <span class="n">FlowBranch</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wash column with solvent.</span>
 
 <span class="sd">    args:</span>
 <span class="sd">        branch: FlowBranch to wash.</span>
-
-<span class="sd">    return: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Washing flow branch </span><span class="si">%s</span><span class="s2"> with solvent&quot;</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Initiating washing flow branch </span><span class="si">%s</span><span class="s2"> with solvent&quot;</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">branch</span> <span class="o">==</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REACTION</span><span class="p">:</span>
+        <span class="n">instrument</span><span class="o">.</span><span class="n">all_except</span><span class="p">([</span><span class="s2">&quot;sol&quot;</span><span class="p">,</span> <span class="s2">&quot;rxn_out&quot;</span><span class="p">,</span> <span class="s2">&quot;branch&quot;</span><span class="p">,</span> <span class="s2">&quot;waste_rxn&quot;</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">branch</span> <span class="o">==</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REAGENTS</span><span class="p">:</span>
+        <span class="n">instrument</span><span class="o">.</span><span class="n">all_except</span><span class="p">([</span><span class="s2">&quot;sol&quot;</span><span class="p">,</span> <span class="s2">&quot;waste&quot;</span><span class="p">])</span>
+
+    <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Washing of branch </span><span class="si">%s</span><span class="s2"> complete&quot;</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">solvent_wash_all</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="nd">@substep</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wash all flow branches with solvent.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">for</span> <span class="n">branch</span> <span class="ow">in</span> <span class="n">FlowBranch</span><span class="p">:</span>
-        <span class="n">solvent_wash</span><span class="p">(</span><span class="n">branch</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">solvent_wash</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REACTION</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">solvent_wash</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REAGENTS</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">dry</span><span class="p">(</span><span class="n">branch</span><span class="p">:</span> <span class="n">FlowBranch</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="nd">@substep</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">dry</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">branch</span><span class="p">:</span> <span class="n">FlowBranch</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dry column.</span>
 
 <span class="sd">    args:</span>
 <span class="sd">        branch: FlowBranch to dry.</span>
-
-<span class="sd">    return: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Drying flow branch </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Initiating drying of branch </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">branch</span> <span class="o">==</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REACTION</span><span class="p">:</span>
+        <span class="n">instrument</span><span class="o">.</span><span class="n">all_except</span><span class="p">([</span><span class="s2">&quot;gas&quot;</span><span class="p">,</span> <span class="s2">&quot;rxn_out&quot;</span><span class="p">,</span> <span class="s2">&quot;branch&quot;</span><span class="p">,</span> <span class="s2">&quot;waste_rxn&quot;</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">branch</span> <span class="o">==</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REAGENTS</span><span class="p">:</span>
+        <span class="n">instrument</span><span class="o">.</span><span class="n">all_except</span><span class="p">([</span><span class="s2">&quot;gas&quot;</span><span class="p">,</span> <span class="s2">&quot;waste&quot;</span><span class="p">])</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Drying of branch </span><span class="si">%s</span><span class="s2"> complete&quot;</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">dry_all</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="nd">@substep</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dry all flow branches.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">for</span> <span class="n">branch</span> <span class="ow">in</span> <span class="n">FlowBranch</span><span class="p">:</span>
-        <span class="n">dry</span><span class="p">(</span><span class="n">branch</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">dry</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REACTION</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">dry</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REAGENTS</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1178,7 +1193,7 @@ and to clean columns.</p>
       
   <div class="item">
     <div class="name def" id="openoligo.steps.flow.dry">
-    <p>def <span class="ident">dry</span>(</p><p>branch: openoligo.steps.types.FlowBranch)</p>
+    <p>async def <span class="ident">dry</span>(</p><p>instrument: openoligo.instrument.Instrument, branch: openoligo.steps.types.FlowBranch)</p>
     </div>
     
 
@@ -1186,21 +1201,24 @@ and to clean columns.</p>
   
     <div class="desc"><p>Dry column.</p>
 <p>args:
-    branch: FlowBranch to dry.</p>
-<p>return: None</p></div>
+    branch: FlowBranch to dry.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.steps.flow.dry', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.steps.flow.dry" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">dry</span><span class="p">(</span><span class="n">branch</span><span class="p">:</span> <span class="n">FlowBranch</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@substep</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">dry</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">branch</span><span class="p">:</span> <span class="n">FlowBranch</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dry column.</span>
 
 <span class="sd">    args:</span>
 <span class="sd">        branch: FlowBranch to dry.</span>
-
-<span class="sd">    return: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Drying flow branch </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Initiating drying of branch </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">branch</span> <span class="o">==</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REACTION</span><span class="p">:</span>
+        <span class="n">instrument</span><span class="o">.</span><span class="n">all_except</span><span class="p">([</span><span class="s2">&quot;gas&quot;</span><span class="p">,</span> <span class="s2">&quot;rxn_out&quot;</span><span class="p">,</span> <span class="s2">&quot;branch&quot;</span><span class="p">,</span> <span class="s2">&quot;waste_rxn&quot;</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">branch</span> <span class="o">==</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REAGENTS</span><span class="p">:</span>
+        <span class="n">instrument</span><span class="o">.</span><span class="n">all_except</span><span class="p">([</span><span class="s2">&quot;gas&quot;</span><span class="p">,</span> <span class="s2">&quot;waste&quot;</span><span class="p">])</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Drying of branch </span><span class="si">%s</span><span class="s2"> complete&quot;</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1211,7 +1229,7 @@ and to clean columns.</p>
       
   <div class="item">
     <div class="name def" id="openoligo.steps.flow.dry_all">
-    <p>def <span class="ident">dry_all</span>(</p><p>)</p>
+    <p>async def <span class="ident">dry_all</span>(</p><p>instrument: openoligo.instrument.Instrument)</p>
     </div>
     
 
@@ -1221,13 +1239,14 @@ and to clean columns.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.steps.flow.dry_all', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.steps.flow.dry_all" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">dry_all</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@substep</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dry all flow branches.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">for</span> <span class="n">branch</span> <span class="ow">in</span> <span class="n">FlowBranch</span><span class="p">:</span>
-        <span class="n">dry</span><span class="p">(</span><span class="n">branch</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">dry</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REACTION</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">dry</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REAGENTS</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1237,32 +1256,29 @@ and to clean columns.</p>
   
       
   <div class="item">
-    <div class="name def" id="openoligo.steps.flow.send">
-    <p>def <span class="ident">send</span>(</p><p>src: openoligo.container.types.Slot, dest: openoligo.container.types.Slot)</p>
+    <div class="name def" id="openoligo.steps.flow.send_to_prod">
+    <p>async def <span class="ident">send_to_prod</span>(</p><p>instrument: openoligo.instrument.Instrument, src: str)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Flow reagents to column.</p>
+    <div class="desc"><p>Flow a reagent to the final product outlet.</p>
 <p>args:
-    src: Slot to flow reagents from.
-    dest: Slot to flow reagents to.</p>
-<p>return: None</p></div>
+    src: Slot to flow reagents from.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.steps.flow.send', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.steps.flow.send" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="n">src</span><span class="p">:</span> <span class="n">Slot</span><span class="p">,</span> <span class="n">dest</span><span class="p">:</span> <span class="n">Slot</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.steps.flow.send_to_prod', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.steps.flow.send_to_prod" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@substep</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">send_to_prod</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Flow reagents to column.</span>
+<span class="sd">    Flow a reagent to the final product outlet.</span>
 
 <span class="sd">    args:</span>
 <span class="sd">        src: Slot to flow reagents from.</span>
-<span class="sd">        dest: Slot to flow reagents to.</span>
-
-<span class="sd">    return: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Flowing reagents from </span><span class="si">%s</span><span class="s2"> to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
+    <span class="n">instrument</span><span class="o">.</span><span class="n">all_except</span><span class="p">([</span><span class="n">src</span><span class="p">,</span> <span class="s2">&quot;prod&quot;</span><span class="p">,</span> <span class="s2">&quot;branch&quot;</span><span class="p">,</span> <span class="s2">&quot;rxn_out&quot;</span><span class="p">])</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Flowing </span><span class="si">%s</span><span class="s2"> to prod&quot;</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1272,30 +1288,29 @@ and to clean columns.</p>
   
       
   <div class="item">
-    <div class="name def" id="openoligo.steps.flow.send_to_reactor">
-    <p>def <span class="ident">send_to_reactor</span>(</p><p>src: openoligo.container.types.Slot)</p>
+    <div class="name def" id="openoligo.steps.flow.send_to_waste_rxn">
+    <p>async def <span class="ident">send_to_waste_rxn</span>(</p><p>instrument: openoligo.instrument.Instrument, src: str)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Flow a reagent to the reactor.</p>
+    <div class="desc"><p>Flow a reagent to the final product outlet.</p>
 <p>args:
-    src: Slot to flow reagents from.</p>
-<p>return: None</p></div>
+    src: Slot to flow reagents from.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.steps.flow.send_to_reactor', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.steps.flow.send_to_reactor" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">send_to_reactor</span><span class="p">(</span><span class="n">src</span><span class="p">:</span> <span class="n">Slot</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.steps.flow.send_to_waste_rxn', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.steps.flow.send_to_waste_rxn" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@substep</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Flow a reagent to the reactor.</span>
+<span class="sd">    Flow a reagent to the final product outlet.</span>
 
 <span class="sd">    args:</span>
 <span class="sd">        src: Slot to flow reagents from.</span>
-
-<span class="sd">    return: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Flowing reagents from </span><span class="si">%s</span><span class="s2"> to reactor&quot;</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
+    <span class="n">instrument</span><span class="o">.</span><span class="n">all_except</span><span class="p">([</span><span class="n">src</span><span class="p">,</span> <span class="s2">&quot;branch&quot;</span><span class="p">,</span> <span class="s2">&quot;rxn_out&quot;</span><span class="p">,</span> <span class="s2">&quot;waste_rxn&quot;</span><span class="p">])</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Flowing </span><span class="si">%s</span><span class="s2"> to reaction waste&quot;</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1306,7 +1321,7 @@ and to clean columns.</p>
       
   <div class="item">
     <div class="name def" id="openoligo.steps.flow.solvent_wash">
-    <p>def <span class="ident">solvent_wash</span>(</p><p>branch: openoligo.steps.types.FlowBranch)</p>
+    <p>async def <span class="ident">solvent_wash</span>(</p><p>instrument: openoligo.instrument.Instrument, branch: openoligo.steps.types.FlowBranch, duration: float = 10)</p>
     </div>
     
 
@@ -1314,21 +1329,28 @@ and to clean columns.</p>
   
     <div class="desc"><p>Wash column with solvent.</p>
 <p>args:
-    branch: FlowBranch to wash.</p>
-<p>return: None</p></div>
+    branch: FlowBranch to wash.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.steps.flow.solvent_wash', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.steps.flow.solvent_wash" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">solvent_wash</span><span class="p">(</span><span class="n">branch</span><span class="p">:</span> <span class="n">FlowBranch</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@substep</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">solvent_wash</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">branch</span><span class="p">:</span> <span class="n">FlowBranch</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wash column with solvent.</span>
 
 <span class="sd">    args:</span>
 <span class="sd">        branch: FlowBranch to wash.</span>
-
-<span class="sd">    return: None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Washing flow branch </span><span class="si">%s</span><span class="s2"> with solvent&quot;</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Initiating washing flow branch </span><span class="si">%s</span><span class="s2"> with solvent&quot;</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">branch</span> <span class="o">==</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REACTION</span><span class="p">:</span>
+        <span class="n">instrument</span><span class="o">.</span><span class="n">all_except</span><span class="p">([</span><span class="s2">&quot;sol&quot;</span><span class="p">,</span> <span class="s2">&quot;rxn_out&quot;</span><span class="p">,</span> <span class="s2">&quot;branch&quot;</span><span class="p">,</span> <span class="s2">&quot;waste_rxn&quot;</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">branch</span> <span class="o">==</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REAGENTS</span><span class="p">:</span>
+        <span class="n">instrument</span><span class="o">.</span><span class="n">all_except</span><span class="p">([</span><span class="s2">&quot;sol&quot;</span><span class="p">,</span> <span class="s2">&quot;waste&quot;</span><span class="p">])</span>
+
+    <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Washing of branch </span><span class="si">%s</span><span class="s2"> complete&quot;</span><span class="p">,</span> <span class="n">branch</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1339,7 +1361,7 @@ and to clean columns.</p>
       
   <div class="item">
     <div class="name def" id="openoligo.steps.flow.solvent_wash_all">
-    <p>def <span class="ident">solvent_wash_all</span>(</p><p>)</p>
+    <p>async def <span class="ident">solvent_wash_all</span>(</p><p>instrument: openoligo.instrument.Instrument)</p>
     </div>
     
 
@@ -1349,13 +1371,14 @@ and to clean columns.</p>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.steps.flow.solvent_wash_all', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.steps.flow.solvent_wash_all" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">solvent_wash_all</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@substep</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Wash all flow branches with solvent.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">for</span> <span class="n">branch</span> <span class="ow">in</span> <span class="n">FlowBranch</span><span class="p">:</span>
-        <span class="n">solvent_wash</span><span class="p">(</span><span class="n">branch</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">solvent_wash</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REACTION</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">solvent_wash</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">FlowBranch</span><span class="o">.</span><span class="n">REAGENTS</span><span class="p">)</span>
 </pre></div>
 
   </div>

@@ -1061,7 +1061,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#openoligo.RPi">RPi</a></span>
+        <span class="class_name"><a href="#openoligo.RPiBoard">Board</a></span>
         
         </li>
         <li class="mono">
@@ -1070,6 +1070,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
           
   <ul>
     <li class="mono"><a href="#openoligo.Switch.set">set</a></li>
+    <li class="mono"><a href="#openoligo.Switch.toggle">toggle</a></li>
   </ul>
 
         </li>
@@ -1097,12 +1098,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
     <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
       <ul>
-        <li class="mono"><a href="container/index.html">openoligo.container</a></li>
-        <li class="mono"><a href="fixed_keys_dict.html">openoligo.fixed_keys_dict</a></li>
         <li class="mono"><a href="hal/index.html">openoligo.hal</a></li>
         <li class="mono"><a href="instrument.html">openoligo.instrument</a></li>
         <li class="mono"><a href="log_config.html">openoligo.log_config</a></li>
         <li class="mono"><a href="protocols/index.html">openoligo.protocols</a></li>
+        <li class="mono"><a href="seq.html">openoligo.seq</a></li>
         <li class="mono"><a href="steps/index.html">openoligo.steps</a></li>
         <li class="mono"><a href="utils/index.html">openoligo.utils</a></li>
       </ul>
@@ -1134,11 +1134,11 @@ classes and functions that are needed.</p>
 
 <span class="kn">from</span> <span class="nn">openoligo</span> <span class="kn">import</span> <span class="n">log_config</span>  <span class="c1"># pylint: disable=unused-import</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">openoligo.utils</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">openoligo.instrument</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">openoligo.utils</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;RPi&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Board&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Valve&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Switch&quot;</span><span class="p">,</span>
     <span class="s2">&quot;ValveState&quot;</span><span class="p">,</span>
@@ -1156,46 +1156,46 @@ classes and functions that are needed.</p>
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="openoligo.RPi" class="name">class <span class="ident">RPi</span></p>
+      <p id="openoligo.RPiBoard" class="name">class <span class="ident">Board</span></p>
       
   
     <div class="desc"><p>Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.RPi', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.RPi" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">RPi</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.RPiBoard', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.RPiBoard" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">RPiBoard</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">PIN3</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">PIN5</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">PIN7</span> <span class="o">=</span> <span class="mi">7</span>
-    <span class="n">PIN8</span> <span class="o">=</span> <span class="mi">8</span>
-    <span class="n">PIN10</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">PIN11</span> <span class="o">=</span> <span class="mi">11</span>
-    <span class="n">PIN12</span> <span class="o">=</span> <span class="mi">12</span>
-    <span class="n">PIN13</span> <span class="o">=</span> <span class="mi">13</span>
-    <span class="n">PIN15</span> <span class="o">=</span> <span class="mi">15</span>
-    <span class="n">PIN16</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="n">PIN18</span> <span class="o">=</span> <span class="mi">18</span>
-    <span class="n">PIN19</span> <span class="o">=</span> <span class="mi">19</span>
-    <span class="n">PIN21</span> <span class="o">=</span> <span class="mi">21</span>
-    <span class="n">PIN22</span> <span class="o">=</span> <span class="mi">22</span>
-    <span class="n">PIN23</span> <span class="o">=</span> <span class="mi">23</span>
-    <span class="n">PIN24</span> <span class="o">=</span> <span class="mi">24</span>
-    <span class="n">PIN26</span> <span class="o">=</span> <span class="mi">26</span>
-    <span class="n">PIN27</span> <span class="o">=</span> <span class="mi">27</span>
-    <span class="n">PIN28</span> <span class="o">=</span> <span class="mi">28</span>
-    <span class="n">PIN29</span> <span class="o">=</span> <span class="mi">29</span>
-    <span class="n">PIN31</span> <span class="o">=</span> <span class="mi">31</span>
-    <span class="n">PIN32</span> <span class="o">=</span> <span class="mi">32</span>
-    <span class="n">PIN33</span> <span class="o">=</span> <span class="mi">33</span>
-    <span class="n">PIN35</span> <span class="o">=</span> <span class="mi">35</span>
-    <span class="n">PIN36</span> <span class="o">=</span> <span class="mi">36</span>
-    <span class="n">PIN37</span> <span class="o">=</span> <span class="mi">37</span>
-    <span class="n">PIN38</span> <span class="o">=</span> <span class="mi">38</span>
-    <span class="n">PIN40</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="n">P3</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">P5</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">P7</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="n">P8</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">P10</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">P11</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="n">P12</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="n">P13</span> <span class="o">=</span> <span class="mi">13</span>
+    <span class="n">P15</span> <span class="o">=</span> <span class="mi">15</span>
+    <span class="n">P16</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">P18</span> <span class="o">=</span> <span class="mi">18</span>
+    <span class="n">P19</span> <span class="o">=</span> <span class="mi">19</span>
+    <span class="n">P21</span> <span class="o">=</span> <span class="mi">21</span>
+    <span class="n">P22</span> <span class="o">=</span> <span class="mi">22</span>
+    <span class="n">P23</span> <span class="o">=</span> <span class="mi">23</span>
+    <span class="n">P24</span> <span class="o">=</span> <span class="mi">24</span>
+    <span class="n">P26</span> <span class="o">=</span> <span class="mi">26</span>
+    <span class="n">P27</span> <span class="o">=</span> <span class="mi">27</span>
+    <span class="n">P28</span> <span class="o">=</span> <span class="mi">28</span>
+    <span class="n">P29</span> <span class="o">=</span> <span class="mi">29</span>
+    <span class="n">P31</span> <span class="o">=</span> <span class="mi">31</span>
+    <span class="n">P32</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="n">P33</span> <span class="o">=</span> <span class="mi">33</span>
+    <span class="n">P35</span> <span class="o">=</span> <span class="mi">35</span>
+    <span class="n">P36</span> <span class="o">=</span> <span class="mi">36</span>
+    <span class="n">P37</span> <span class="o">=</span> <span class="mi">37</span>
+    <span class="n">P38</span> <span class="o">=</span> <span class="mi">38</span>
+    <span class="n">P40</span> <span class="o">=</span> <span class="mi">40</span>
 </pre></div>
 
   </div>
@@ -1209,7 +1209,7 @@ classes and functions that are needed.</p>
           </ul>
           <h3>Class variables</h3>
             <div class="item">
-            <p id="openoligo.RPi.PIN10" class="name">var <span class="ident">PIN10</span></p>
+            <p id="openoligo.RPiBoard.P10" class="name">var <span class="ident">P10</span></p>
             
 
             
@@ -1219,7 +1219,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN11" class="name">var <span class="ident">PIN11</span></p>
+            <p id="openoligo.RPiBoard.P11" class="name">var <span class="ident">P11</span></p>
             
 
             
@@ -1229,7 +1229,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN12" class="name">var <span class="ident">PIN12</span></p>
+            <p id="openoligo.RPiBoard.P12" class="name">var <span class="ident">P12</span></p>
             
 
             
@@ -1239,7 +1239,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN13" class="name">var <span class="ident">PIN13</span></p>
+            <p id="openoligo.RPiBoard.P13" class="name">var <span class="ident">P13</span></p>
             
 
             
@@ -1249,7 +1249,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN15" class="name">var <span class="ident">PIN15</span></p>
+            <p id="openoligo.RPiBoard.P15" class="name">var <span class="ident">P15</span></p>
             
 
             
@@ -1259,7 +1259,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN16" class="name">var <span class="ident">PIN16</span></p>
+            <p id="openoligo.RPiBoard.P16" class="name">var <span class="ident">P16</span></p>
             
 
             
@@ -1269,7 +1269,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN18" class="name">var <span class="ident">PIN18</span></p>
+            <p id="openoligo.RPiBoard.P18" class="name">var <span class="ident">P18</span></p>
             
 
             
@@ -1279,7 +1279,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN19" class="name">var <span class="ident">PIN19</span></p>
+            <p id="openoligo.RPiBoard.P19" class="name">var <span class="ident">P19</span></p>
             
 
             
@@ -1289,7 +1289,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN21" class="name">var <span class="ident">PIN21</span></p>
+            <p id="openoligo.RPiBoard.P21" class="name">var <span class="ident">P21</span></p>
             
 
             
@@ -1299,7 +1299,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN22" class="name">var <span class="ident">PIN22</span></p>
+            <p id="openoligo.RPiBoard.P22" class="name">var <span class="ident">P22</span></p>
             
 
             
@@ -1309,7 +1309,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN23" class="name">var <span class="ident">PIN23</span></p>
+            <p id="openoligo.RPiBoard.P23" class="name">var <span class="ident">P23</span></p>
             
 
             
@@ -1319,7 +1319,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN24" class="name">var <span class="ident">PIN24</span></p>
+            <p id="openoligo.RPiBoard.P24" class="name">var <span class="ident">P24</span></p>
             
 
             
@@ -1329,7 +1329,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN26" class="name">var <span class="ident">PIN26</span></p>
+            <p id="openoligo.RPiBoard.P26" class="name">var <span class="ident">P26</span></p>
             
 
             
@@ -1339,7 +1339,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN27" class="name">var <span class="ident">PIN27</span></p>
+            <p id="openoligo.RPiBoard.P27" class="name">var <span class="ident">P27</span></p>
             
 
             
@@ -1349,7 +1349,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN28" class="name">var <span class="ident">PIN28</span></p>
+            <p id="openoligo.RPiBoard.P28" class="name">var <span class="ident">P28</span></p>
             
 
             
@@ -1359,7 +1359,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN29" class="name">var <span class="ident">PIN29</span></p>
+            <p id="openoligo.RPiBoard.P29" class="name">var <span class="ident">P29</span></p>
             
 
             
@@ -1369,7 +1369,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN3" class="name">var <span class="ident">PIN3</span></p>
+            <p id="openoligo.RPiBoard.P3" class="name">var <span class="ident">P3</span></p>
             
 
             
@@ -1379,7 +1379,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN31" class="name">var <span class="ident">PIN31</span></p>
+            <p id="openoligo.RPiBoard.P31" class="name">var <span class="ident">P31</span></p>
             
 
             
@@ -1389,7 +1389,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN32" class="name">var <span class="ident">PIN32</span></p>
+            <p id="openoligo.RPiBoard.P32" class="name">var <span class="ident">P32</span></p>
             
 
             
@@ -1399,7 +1399,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN33" class="name">var <span class="ident">PIN33</span></p>
+            <p id="openoligo.RPiBoard.P33" class="name">var <span class="ident">P33</span></p>
             
 
             
@@ -1409,7 +1409,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN35" class="name">var <span class="ident">PIN35</span></p>
+            <p id="openoligo.RPiBoard.P35" class="name">var <span class="ident">P35</span></p>
             
 
             
@@ -1419,7 +1419,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN36" class="name">var <span class="ident">PIN36</span></p>
+            <p id="openoligo.RPiBoard.P36" class="name">var <span class="ident">P36</span></p>
             
 
             
@@ -1429,7 +1429,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN37" class="name">var <span class="ident">PIN37</span></p>
+            <p id="openoligo.RPiBoard.P37" class="name">var <span class="ident">P37</span></p>
             
 
             
@@ -1439,7 +1439,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN38" class="name">var <span class="ident">PIN38</span></p>
+            <p id="openoligo.RPiBoard.P38" class="name">var <span class="ident">P38</span></p>
             
 
             
@@ -1449,7 +1449,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN40" class="name">var <span class="ident">PIN40</span></p>
+            <p id="openoligo.RPiBoard.P40" class="name">var <span class="ident">P40</span></p>
             
 
             
@@ -1459,7 +1459,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN5" class="name">var <span class="ident">PIN5</span></p>
+            <p id="openoligo.RPiBoard.P5" class="name">var <span class="ident">P5</span></p>
             
 
             
@@ -1469,7 +1469,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN7" class="name">var <span class="ident">PIN7</span></p>
+            <p id="openoligo.RPiBoard.P7" class="name">var <span class="ident">P7</span></p>
             
 
             
@@ -1479,7 +1479,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.PIN8" class="name">var <span class="ident">PIN8</span></p>
+            <p id="openoligo.RPiBoard.P8" class="name">var <span class="ident">P8</span></p>
             
 
             
@@ -1489,7 +1489,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.name" class="name">var <span class="ident">name</span></p>
+            <p id="openoligo.RPiBoard.name" class="name">var <span class="ident">name</span></p>
             
 
             
@@ -1499,7 +1499,7 @@ classes and functions that are needed.</p>
 
             </div>
             <div class="item">
-            <p id="openoligo.RPi.value" class="name">var <span class="ident">value</span></p>
+            <p id="openoligo.RPiBoard.value" class="name">var <span class="ident">value</span></p>
             
 
             
@@ -1534,28 +1534,50 @@ classes and functions that are needed.</p>
 <span class="sd">        board: Board object to access the GPIO pins.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">gpio_pin</span><span class="p">:</span> <span class="n">RPi</span>
-    <span class="n">_switch_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">gpio_pin</span><span class="p">:</span> <span class="n">Board</span>
     <span class="n">_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">_switch_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the switch.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span> <span class="o">=</span> <span class="n">get_gpio</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set state of the switch ON or OFF.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="n">__old_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
+        <span class="n">__new_state</span> <span class="o">=</span> <span class="n">state</span>
+
+        <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Switch </span><span class="si">%s</span><span class="s2"> is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="c1"># self.board.set(self.gpio_pin, state)</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Switch (</span><span class="si">%s</span><span class="s2">) set to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s2">&quot;Switch (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
+            <span class="n">__old_state</span><span class="p">,</span>
+            <span class="n">__new_state</span><span class="p">,</span>
+            <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Board</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span>
+
+    <span class="k">def</span> <span class="nf">toggle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Toggle the state of the switch.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the current value of the switch.</span>
-
-<span class="sd">        raises:</span>
-<span class="sd">            SwitchingError: If the switch is not set.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># if self._state is not self.board.value(self.gpio_pin):</span>
-        <span class="c1">#    raise SwitchingError(f&quot;Switch ({self.name}) is not set&quot;)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
 </pre></div>
 
@@ -1572,14 +1594,23 @@ classes and functions that are needed.</p>
           </ul>
           <h3>Instance variables</h3>
             <div class="item">
+            <p id="openoligo.Switch.gpio" class="name">var <span class="ident">gpio</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get the GPIO pin number.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
             <p id="openoligo.Switch.value" class="name">var <span class="ident">value</span></p>
             
 
             
   
-    <div class="desc"><p>Get the current value of the switch.</p>
-<p>raises:
-    SwitchingError: If the switch is not set.</p></div>
+    <div class="desc"><p>Get the current value of the switch.</p></div>
   <div class="source_cont">
 </div>
 
@@ -1600,10 +1631,44 @@ classes and functions that are needed.</p>
   <div id="source-openoligo.Switch.set" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set state of the switch ON or OFF.&quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">state</span>
+    <span class="n">__old_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
+    <span class="n">__new_state</span> <span class="o">=</span> <span class="n">state</span>
+    <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Switch </span><span class="si">%s</span><span class="s2"> is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="c1"># self.board.set(self.gpio_pin, state)</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Switch (</span><span class="si">%s</span><span class="s2">) set to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+        <span class="s2">&quot;Switch (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
+        <span class="n">__old_state</span><span class="p">,</span>
+        <span class="n">__new_state</span><span class="p">,</span>
+        <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+    <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.Switch.toggle">
+    <p>def <span class="ident">toggle</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Toggle the state of the switch.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.Switch.toggle', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.Switch.toggle" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">toggle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Toggle the state of the switch.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1628,15 +1693,17 @@ classes and functions that are needed.</p>
 <span class="sd">    A valve that actually controls a GPIO pin on the Raspberry Pi.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">pin</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">gpio_pin</span><span class="p">:</span> <span class="n">RPi</span>
+    <span class="n">gpio_pin</span><span class="p">:</span> <span class="n">Board</span>
+    <span class="n">role</span><span class="p">:</span> <span class="n">ValveRole</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">INLET</span><span class="p">)</span>
     <span class="n">valve_type</span><span class="p">:</span> <span class="n">ValveType</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">ValveType</span><span class="o">.</span><span class="n">NORMALLY_OPEN</span><span class="p">)</span>
     <span class="n">_switch_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">_state</span><span class="p">:</span> <span class="n">ValveState</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the valve.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span> <span class="o">=</span> <span class="n">get_gpio</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">ValveState</span><span class="o">.</span><span class="n">CLOSED_FLOW</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">valve_type</span> <span class="o">==</span> <span class="n">ValveType</span><span class="o">.</span><span class="n">NORMALLY_CLOSED</span>
@@ -1653,11 +1720,30 @@ classes and functions that are needed.</p>
 
     <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the state of the valve.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span> <span class="k">if</span> <span class="n">state</span> <span class="k">else</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">CLOSED_FLOW</span>
+        <span class="n">__old_state</span><span class="p">:</span> <span class="n">ValveState</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
+        <span class="n">__new_state</span><span class="p">:</span> <span class="n">ValveState</span> <span class="o">=</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span> <span class="k">if</span> <span class="n">state</span> <span class="k">else</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">CLOSED_FLOW</span>
+
+        <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-            <span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) set to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+            <span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
+            <span class="n">__old_state</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">,</span>
+            <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
         <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Board</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -1670,7 +1756,7 @@ classes and functions that are needed.</p>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">valve_type</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pin</span><span class="si">}</span><span class="s2">[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">]&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="si">}</span><span class="s2">[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">]&quot;</span>
 </pre></div>
 
   </div>
@@ -1686,6 +1772,16 @@ classes and functions that are needed.</p>
           <li><a href="/typing.Generic.ext">typing.Generic</a></li>
           </ul>
           <h3>Class variables</h3>
+            <div class="item">
+            <p id="openoligo.Valve.role" class="name">var <span class="ident">role</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
             <div class="item">
             <p id="openoligo.Valve.valve_type" class="name">var <span class="ident">valve_type</span></p>
             
@@ -1704,6 +1800,17 @@ classes and functions that are needed.</p>
             
   
     <div class="desc"><p>Get the type of the valve.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.Valve.gpio" class="name">var <span class="ident">gpio</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get the GPIO pin number.</p></div>
   <div class="source_cont">
 </div>
 
@@ -1781,10 +1888,21 @@ classes and functions that are needed.</p>
   <div id="source-openoligo.Valve.set" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the state of the valve.&quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span> <span class="k">if</span> <span class="n">state</span> <span class="k">else</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">CLOSED_FLOW</span>
+    <span class="n">__old_state</span><span class="p">:</span> <span class="n">ValveState</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
+    <span class="n">__new_state</span><span class="p">:</span> <span class="n">ValveState</span> <span class="o">=</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span> <span class="k">if</span> <span class="n">state</span> <span class="k">else</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">CLOSED_FLOW</span>
+    <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-        <span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) set to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
+        <span class="n">__old_state</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">,</span>
+        <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
     <span class="p">)</span>
 </pre></div>
 
@@ -1934,19 +2052,6 @@ classes and functions that are needed.</p>
 
     <h2 class="section-title" id="header-submodules">Sub-modules</h2>
       <div class="item">
-      <p class="name"><a href="container/index.html">openoligo.container</a></p>
-      
-  
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="fixed_keys_dict.html">openoligo.fixed_keys_dict</a></p>
-      
-  
-    <div class="desc"><p>A dict with fixed set of keys.</p></div>
-
-      </div>
-      <div class="item">
       <p class="name"><a href="hal/index.html">openoligo.hal</a></p>
       
   
@@ -1972,6 +2077,13 @@ classes and functions that are needed.</p>
       
   
     <div class="desc"><p>Import convenience for the protocol module.</p></div>
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="seq.html">openoligo.seq</a></p>
+      
+  
+    <div class="desc"><p>Sequence class for DNA, RNA and modified Nucleic Acid sequences.</p></div>
 
       </div>
       <div class="item">

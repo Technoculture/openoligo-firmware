@@ -1063,9 +1063,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
       
   <ul>
-    <li class="mono"><a href="#openoligo.log_config.FORMAT">FORMAT</a></li>
+    <li class="mono"><a href="#openoligo.log_config.CONSOLE_FORMAT">CONSOLE_FORMAT</a></li>
+    <li class="mono"><a href="#openoligo.log_config.FILE_FORMAT">FILE_FORMAT</a></li>
     <li class="mono"><a href="#openoligo.log_config.LOG_LEVEL">LOG_LEVEL</a></li>
     <li class="mono"><a href="#openoligo.log_config.logger">logger</a></li>
+    <li class="mono"><a href="#openoligo.log_config.rich">rich</a></li>
+    <li class="mono"><a href="#openoligo.log_config.rot">rot</a></li>
   </ul>
 
     </li>
@@ -1090,8 +1093,10 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Logging configuration for OpenOligo</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">logging.handlers</span> <span class="kn">import</span> <span class="n">RotatingFileHandler</span>
+
 <span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
 <span class="kn">from</span> <span class="nn">rich.logging</span> <span class="kn">import</span> <span class="n">RichHandler</span>
 
@@ -1099,14 +1104,25 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="n">load_dotenv</span><span class="p">()</span>
 
 <span class="c1"># Configure the logger</span>
-<span class="n">FORMAT</span> <span class="o">=</span> <span class="s2">&quot;&lt;</span><span class="si">%(filename)s</span><span class="s2">:</span><span class="si">%(lineno)d</span><span class="s2">&gt; </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
-<span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OO_LOG_LEVEL&quot;</span><span class="p">,</span> <span class="s2">&quot;NOTSET&quot;</span><span class="p">)</span>
+<span class="n">CONSOLE_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;&lt;</span><span class="si">%(filename)s</span><span class="s2">:</span><span class="si">%(lineno)d</span><span class="s2">&gt; </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
+<span class="n">FILE_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> &lt;</span><span class="si">%(filename)s</span><span class="s2">:</span><span class="si">%(lineno)d</span><span class="s2">&gt; [</span><span class="si">%(levelname)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
+<span class="c1"># DATE_FORMAT = &quot;%Y-%m-%d %H:%M:%S&quot;</span>
+<span class="c1"># DATE_FORMAT = &quot;%H:%M:%S&quot;</span>
+<span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OO_LOG_LEVEL&quot;</span><span class="p">,</span> <span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
-    <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">getLevelName</span><span class="p">(</span><span class="n">LOG_LEVEL</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="s2">&quot;[</span><span class="si">%X</span><span class="s2">]&quot;</span><span class="p">,</span> <span class="n">handlers</span><span class="o">=</span><span class="p">[</span><span class="n">RichHandler</span><span class="p">()]</span>
-<span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">)</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;rich&quot;</span><span class="p">)</span>
+<span class="n">rot</span> <span class="o">=</span> <span class="n">RotatingFileHandler</span><span class="p">(</span><span class="s2">&quot;openoligo.log&quot;</span><span class="p">,</span> <span class="n">maxBytes</span><span class="o">=</span><span class="mi">1000000</span><span class="p">,</span> <span class="n">backupCount</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">rot</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">FILE_FORMAT</span><span class="p">))</span>
+<span class="n">rot</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+<span class="n">rich</span> <span class="o">=</span> <span class="n">RichHandler</span><span class="p">()</span>
+<span class="n">rich</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">CONSOLE_FORMAT</span><span class="p">))</span>
+<span class="n">rich</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">getLevelName</span><span class="p">(</span><span class="n">LOG_LEVEL</span><span class="p">))</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">rot</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">rich</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1116,7 +1132,15 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <section id="section-items">
     <h2 class="section-title" id="header-variables">Module variables</h2>
       <div class="item">
-      <p id="openoligo.log_config.FORMAT" class="name">var <span class="ident">FORMAT</span></p>
+      <p id="openoligo.log_config.CONSOLE_FORMAT" class="name">var <span class="ident">CONSOLE_FORMAT</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="openoligo.log_config.FILE_FORMAT" class="name">var <span class="ident">FILE_FORMAT</span></p>
       
   
   <div class="source_cont">
@@ -1133,6 +1157,22 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       </div>
       <div class="item">
       <p id="openoligo.log_config.logger" class="name">var <span class="ident">logger</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="openoligo.log_config.rich" class="name">var <span class="ident">rich</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="openoligo.log_config.rot" class="name">var <span class="ident">rot</span></p>
       
   
   <div class="source_cont">

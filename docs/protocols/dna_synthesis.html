@@ -1094,75 +1094,75 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">DNA Snthesis Protocol</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">Bio.Seq</span> <span class="kn">import</span> <span class="n">Seq</span>  <span class="c1"># type: ignore</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
-<span class="kn">from</span> <span class="nn">openoligo.utils</span> <span class="kn">import</span> <span class="n">wait_async</span>
-<span class="kn">from</span> <span class="nn">openoligo.steps.flow</span> <span class="kn">import</span> <span class="n">solvent_wash_all</span><span class="p">,</span> <span class="n">dry_all</span>
 
 <span class="kn">from</span> <span class="nn">openoligo</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">openoligo.instrument</span> <span class="kn">import</span> <span class="n">Instrument</span>
+<span class="kn">from</span> <span class="nn">openoligo.seq</span> <span class="kn">import</span> <span class="n">Seq</span>
+<span class="kn">from</span> <span class="nn">openoligo.steps.flow</span> <span class="kn">import</span> <span class="n">dry_all</span><span class="p">,</span> <span class="n">send_to_waste_rxn</span><span class="p">,</span> <span class="n">solvent_wash_all</span>
+<span class="kn">from</span> <span class="nn">openoligo.steps.types</span> <span class="kn">import</span> <span class="n">step</span>
+<span class="kn">from</span> <span class="nn">openoligo.utils</span> <span class="kn">import</span> <span class="n">wait_async</span>
 
 
-<span class="k">async</span> <span class="k">def</span> <span class="nf">detritylate</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="nd">@step</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">detritylate</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Remove the trityl group from the 5&#39;-end of the DNA sequence.</span>
-<span class="sd">    Involves the reagent to be sent to the reactor, and then the reactor to be washed and dried.</span>
+<span class="sd">    Add 3% trichloroacetic acid in dichloromethane to the reactor</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Add 3% trichloroacetic acid in dichloromethane to the reactor&quot;</span><span class="p">)</span>
-    <span class="c1"># send_to_reactor(&quot;CAP&quot;)</span>
+    <span class="k">await</span> <span class="n">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="s2">&quot;act&quot;</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
 
 
-<span class="k">async</span> <span class="k">def</span> <span class="nf">activate</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="nd">@step</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    0.1 M phosphoramidite monomer and 0.5 M tetrazole in acetonitrile</span>
+<span class="sd">    Add 0.1 M phosphoramidite monomer and 0.5 M tetrazole to the reactor</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Add 0.1 M phosphoramidite monomer and 0.5 M tetrazole to the reactor&quot;</span><span class="p">)</span>
-    <span class="c1"># 1. Trigger transports</span>
-    <span class="c1">#    send_to_reactor(&quot;0.1 M phosphoramidite monomer and 0.5 M tetrazole in acetonitrile&quot;)</span>
-    <span class="c1"># 2. Wait for residence time</span>
+    <span class="k">await</span> <span class="n">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="s2">&quot;act&quot;</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
 
 
-<span class="k">async</span> <span class="k">def</span> <span class="nf">cap</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="nd">@step</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">cap</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    acetic anhydride/pyridine/THF 1/1/8 and 17.6% w/v N-methyl imidazole in acetonitrile</span>
+<span class="sd">    Add acetic anhydride/pyridine/THF and N-methyl imidazole to the reactor</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Add acetic anhydride/pyridine/THF and N-methyl imidazole to the reactor&quot;</span><span class="p">)</span>
-    <span class="c1"># send_to_reactor(&quot;acetic anhydride/pyridine/THF and N-methyl imidazole&quot;)</span>
+    <span class="k">await</span> <span class="n">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="s2">&quot;cap1&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="s2">&quot;cap2&quot;</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
 
 
-<span class="k">async</span> <span class="k">def</span> <span class="nf">oxidize</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="nd">@step</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">oxidize</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Oxidize the DNA sequence.</span>
-<span class="sd">    0.015 M iodine in water/pyridine/THF 2/20/78</span>
+<span class="sd">    Add 0.015 M iodine in water/pyridine/THF to the reactor</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Add 0.015 M iodine in water/pyridine/THF to the reactor&quot;</span><span class="p">)</span>
-    <span class="c1"># send_to_reactor(&quot;Oxidizing the DNA sequence&quot;)</span>
+    <span class="k">await</span> <span class="n">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="s2">&quot;oxi&quot;</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>
 
 
-<span class="k">async</span> <span class="k">def</span> <span class="nf">cleave</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="nd">@step</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">cleave</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cleave the DNA sequence from the solid support.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Cleaving the DNA sequence from the solid support&quot;</span><span class="p">)</span>
-    <span class="c1"># send_to_reactor(&quot;Cleaving the DNA sequence from the solid support&quot;)</span>
+    <span class="k">await</span> <span class="n">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="s2">&quot;clde&quot;</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">180</span><span class="p">)</span>
 
 
-<span class="k">async</span> <span class="k">def</span> <span class="nf">deprotect</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="nd">@step</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">deprotect</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Remove the protecting groups from the DNA sequence.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Removing protecting groups from the DNA sequence&quot;</span><span class="p">)</span>
-    <span class="c1"># send_to_reactor(&quot;Removing protecting groups from the DNA sequence&quot;)</span>
+    <span class="k">await</span> <span class="n">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="s2">&quot;deb&quot;</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>
 
 
-<span class="k">async</span> <span class="k">def</span> <span class="nf">synthesize</span><span class="p">(</span><span class="n">seq</span><span class="p">:</span> <span class="n">Seq</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">synthesize</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="n">Seq</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Synthesize a DNA sequence.</span>
 
@@ -1172,39 +1172,39 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initiating synthesis of DNA sequence: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>  <span class="c1"># start timer</span>
     <span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="k">as</span> <span class="n">pbar</span><span class="p">:</span>
-        <span class="n">solvent_wash_all</span><span class="p">()</span>
-        <span class="n">dry_all</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
         <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">base_index</span><span class="p">,</span> <span class="n">base</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Adding </span><span class="si">%s</span><span class="s2">th base &#39;</span><span class="si">%s</span><span class="s2">&#39; to growing DNA strand&quot;</span><span class="p">,</span> <span class="n">base_index</span><span class="p">,</span> <span class="n">base</span><span class="p">)</span>
 
-            <span class="k">await</span> <span class="n">detritylate</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">detritylate</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
-            <span class="n">solvent_wash_all</span><span class="p">()</span>
-            <span class="n">dry_all</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
-            <span class="k">await</span> <span class="n">activate</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">activate</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
-            <span class="n">solvent_wash_all</span><span class="p">()</span>
-            <span class="n">dry_all</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
-            <span class="k">await</span> <span class="n">cap</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">cap</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
-            <span class="n">solvent_wash_all</span><span class="p">()</span>
-            <span class="n">dry_all</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
-            <span class="k">await</span> <span class="n">oxidize</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">oxidize</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
-            <span class="n">solvent_wash_all</span><span class="p">()</span>
-            <span class="n">dry_all</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
             <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="k">await</span> <span class="n">cleave</span><span class="p">()</span>
-        <span class="k">await</span> <span class="n">deprotect</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">cleave</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">deprotect</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
         <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>  <span class="c1"># end timer</span>
@@ -1224,24 +1224,22 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <div class="item">
     <div class="name def" id="openoligo.protocols.dna_synthesis.activate">
-    <p>async def <span class="ident">activate</span>(</p><p>)</p>
+    <p>async def <span class="ident">activate</span>(</p><p>instrument: openoligo.instrument.Instrument)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>0.1 M phosphoramidite monomer and 0.5 M tetrazole in acetonitrile</p></div>
+    <div class="desc"><p>Add 0.1 M phosphoramidite monomer and 0.5 M tetrazole to the reactor</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.dna_synthesis.activate', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.protocols.dna_synthesis.activate" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">activate</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@step</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    0.1 M phosphoramidite monomer and 0.5 M tetrazole in acetonitrile</span>
+<span class="sd">    Add 0.1 M phosphoramidite monomer and 0.5 M tetrazole to the reactor</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Add 0.1 M phosphoramidite monomer and 0.5 M tetrazole to the reactor&quot;</span><span class="p">)</span>
-    <span class="c1"># 1. Trigger transports</span>
-    <span class="c1">#    send_to_reactor(&quot;0.1 M phosphoramidite monomer and 0.5 M tetrazole in acetonitrile&quot;)</span>
-    <span class="c1"># 2. Wait for residence time</span>
+    <span class="k">await</span> <span class="n">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="s2">&quot;act&quot;</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
 </pre></div>
 
@@ -1253,22 +1251,23 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <div class="item">
     <div class="name def" id="openoligo.protocols.dna_synthesis.cap">
-    <p>async def <span class="ident">cap</span>(</p><p>)</p>
+    <p>async def <span class="ident">cap</span>(</p><p>instrument: openoligo.instrument.Instrument)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>acetic anhydride/pyridine/THF 1/1/8 and 17.6% w/v N-methyl imidazole in acetonitrile</p></div>
+    <div class="desc"><p>Add acetic anhydride/pyridine/THF and N-methyl imidazole to the reactor</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.dna_synthesis.cap', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.protocols.dna_synthesis.cap" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">cap</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@step</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">cap</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    acetic anhydride/pyridine/THF 1/1/8 and 17.6% w/v N-methyl imidazole in acetonitrile</span>
+<span class="sd">    Add acetic anhydride/pyridine/THF and N-methyl imidazole to the reactor</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Add acetic anhydride/pyridine/THF and N-methyl imidazole to the reactor&quot;</span><span class="p">)</span>
-    <span class="c1"># send_to_reactor(&quot;acetic anhydride/pyridine/THF and N-methyl imidazole&quot;)</span>
+    <span class="k">await</span> <span class="n">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="s2">&quot;cap1&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="s2">&quot;cap2&quot;</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
 </pre></div>
 
@@ -1280,7 +1279,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <div class="item">
     <div class="name def" id="openoligo.protocols.dna_synthesis.cleave">
-    <p>async def <span class="ident">cleave</span>(</p><p>)</p>
+    <p>async def <span class="ident">cleave</span>(</p><p>instrument: openoligo.instrument.Instrument)</p>
     </div>
     
 
@@ -1290,12 +1289,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.dna_synthesis.cleave', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.protocols.dna_synthesis.cleave" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">cleave</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@step</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">cleave</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cleave the DNA sequence from the solid support.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Cleaving the DNA sequence from the solid support&quot;</span><span class="p">)</span>
-    <span class="c1"># send_to_reactor(&quot;Cleaving the DNA sequence from the solid support&quot;)</span>
+    <span class="k">await</span> <span class="n">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="s2">&quot;clde&quot;</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">180</span><span class="p">)</span>
 </pre></div>
 
@@ -1307,7 +1306,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <div class="item">
     <div class="name def" id="openoligo.protocols.dna_synthesis.deprotect">
-    <p>async def <span class="ident">deprotect</span>(</p><p>)</p>
+    <p>async def <span class="ident">deprotect</span>(</p><p>instrument: openoligo.instrument.Instrument)</p>
     </div>
     
 
@@ -1317,12 +1316,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.dna_synthesis.deprotect', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.protocols.dna_synthesis.deprotect" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">deprotect</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@step</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">deprotect</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Remove the protecting groups from the DNA sequence.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Removing protecting groups from the DNA sequence&quot;</span><span class="p">)</span>
-    <span class="c1"># send_to_reactor(&quot;Removing protecting groups from the DNA sequence&quot;)</span>
+    <span class="k">await</span> <span class="n">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="s2">&quot;deb&quot;</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>
 </pre></div>
 
@@ -1334,24 +1333,22 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <div class="item">
     <div class="name def" id="openoligo.protocols.dna_synthesis.detritylate">
-    <p>async def <span class="ident">detritylate</span>(</p><p>)</p>
+    <p>async def <span class="ident">detritylate</span>(</p><p>instrument: openoligo.instrument.Instrument)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Remove the trityl group from the 5'-end of the DNA sequence.
-Involves the reagent to be sent to the reactor, and then the reactor to be washed and dried.</p></div>
+    <div class="desc"><p>Add 3% trichloroacetic acid in dichloromethane to the reactor</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.dna_synthesis.detritylate', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.protocols.dna_synthesis.detritylate" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">detritylate</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@step</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">detritylate</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Remove the trityl group from the 5&#39;-end of the DNA sequence.</span>
-<span class="sd">    Involves the reagent to be sent to the reactor, and then the reactor to be washed and dried.</span>
+<span class="sd">    Add 3% trichloroacetic acid in dichloromethane to the reactor</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Add 3% trichloroacetic acid in dichloromethane to the reactor&quot;</span><span class="p">)</span>
-    <span class="c1"># send_to_reactor(&quot;CAP&quot;)</span>
+    <span class="k">await</span> <span class="n">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="s2">&quot;act&quot;</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
 </pre></div>
 
@@ -1363,24 +1360,22 @@ Involves the reagent to be sent to the reactor, and then the reactor to be washe
       
   <div class="item">
     <div class="name def" id="openoligo.protocols.dna_synthesis.oxidize">
-    <p>async def <span class="ident">oxidize</span>(</p><p>)</p>
+    <p>async def <span class="ident">oxidize</span>(</p><p>instrument: openoligo.instrument.Instrument)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Oxidize the DNA sequence.
-0.015 M iodine in water/pyridine/THF 2/20/78</p></div>
+    <div class="desc"><p>Add 0.015 M iodine in water/pyridine/THF to the reactor</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.dna_synthesis.oxidize', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.protocols.dna_synthesis.oxidize" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">oxidize</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@step</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">oxidize</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Oxidize the DNA sequence.</span>
-<span class="sd">    0.015 M iodine in water/pyridine/THF 2/20/78</span>
+<span class="sd">    Add 0.015 M iodine in water/pyridine/THF to the reactor</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Add 0.015 M iodine in water/pyridine/THF to the reactor&quot;</span><span class="p">)</span>
-    <span class="c1"># send_to_reactor(&quot;Oxidizing the DNA sequence&quot;)</span>
+    <span class="k">await</span> <span class="n">send_to_waste_rxn</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="s2">&quot;oxi&quot;</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>
 </pre></div>
 
@@ -1392,7 +1387,7 @@ Involves the reagent to be sent to the reactor, and then the reactor to be washe
       
   <div class="item">
     <div class="name def" id="openoligo.protocols.dna_synthesis.synthesize">
-    <p>async def <span class="ident">synthesize</span>(</p><p>seq: Bio.Seq.Seq)</p>
+    <p>async def <span class="ident">synthesize</span>(</p><p>instrument: openoligo.instrument.Instrument, seq: openoligo.seq.Seq)</p>
     </div>
     
 
@@ -1404,7 +1399,7 @@ Involves the reagent to be sent to the reactor, and then the reactor to be washe
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.dna_synthesis.synthesize', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.protocols.dna_synthesis.synthesize" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">synthesize</span><span class="p">(</span><span class="n">seq</span><span class="p">:</span> <span class="n">Seq</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">synthesize</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="n">Seq</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Synthesize a DNA sequence.</span>
 
@@ -1414,39 +1409,39 @@ Involves the reagent to be sent to the reactor, and then the reactor to be washe
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initiating synthesis of DNA sequence: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>  <span class="c1"># start timer</span>
     <span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="k">as</span> <span class="n">pbar</span><span class="p">:</span>
-        <span class="n">solvent_wash_all</span><span class="p">()</span>
-        <span class="n">dry_all</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
         <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">base_index</span><span class="p">,</span> <span class="n">base</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Adding </span><span class="si">%s</span><span class="s2">th base &#39;</span><span class="si">%s</span><span class="s2">&#39; to growing DNA strand&quot;</span><span class="p">,</span> <span class="n">base_index</span><span class="p">,</span> <span class="n">base</span><span class="p">)</span>
 
-            <span class="k">await</span> <span class="n">detritylate</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">detritylate</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
-            <span class="n">solvent_wash_all</span><span class="p">()</span>
-            <span class="n">dry_all</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
-            <span class="k">await</span> <span class="n">activate</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">activate</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
-            <span class="n">solvent_wash_all</span><span class="p">()</span>
-            <span class="n">dry_all</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
-            <span class="k">await</span> <span class="n">cap</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">cap</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
-            <span class="n">solvent_wash_all</span><span class="p">()</span>
-            <span class="n">dry_all</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
-            <span class="k">await</span> <span class="n">oxidize</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">oxidize</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
-            <span class="n">solvent_wash_all</span><span class="p">()</span>
-            <span class="n">dry_all</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
             <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="k">await</span> <span class="n">cleave</span><span class="p">()</span>
-        <span class="k">await</span> <span class="n">deprotect</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">cleave</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">deprotect</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
         <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>  <span class="c1"># end timer</span>
