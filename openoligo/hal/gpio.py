@@ -5,7 +5,7 @@ import importlib
 import logging
 from abc import ABC, abstractmethod
 
-from openoligo.hal.types import Board, GpioMode
+from openoligo.hal.types import Board, GpioMode, is_rpi
 
 
 def get_gpio():
@@ -18,15 +18,6 @@ def get_gpio():
             return MockGPIO()
     except (FileNotFoundError, ModuleNotFoundError):
         return MockGPIO()
-
-
-def is_rpi() -> bool:
-    """Returns True if running on a Raspberry Pi, False otherwise."""
-    try:
-        with open("/proc/cpuinfo", "r", encoding="utf-8") as file:
-            return "Raspberry" in file.read()
-    except FileNotFoundError:
-        return False
 
 
 class GPIOInterface(ABC):

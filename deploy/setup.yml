@@ -1,7 +1,7 @@
 ---
-- hosts: beaglebone.local
+- hosts: arm.local
   vars:
-    ansible_user: debian
+    ansible_user: ubuntu
     git_username: sutyum
     git_email: satyam@technoculture.io
     git_repository: technoculture/OpenOligo

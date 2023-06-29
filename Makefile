@@ -4,11 +4,10 @@ TESTDIR:=tests
 EXAMPLEDIR:=examples
 DOCSDIR:=docs
 
-RPI_HOSTNAME?=beaglebone.local
-RPI_USER?=debian
-
+TARGET_HOSTNAME?=arm.local
+TARGET_USER?=ubuntu
+TARGET_DIR?=/home/$(TARGET_USER)
 LOCAL_DIR:=$(shell pwd)
-REMOTE_DIR:=/home/$(RPI_USER)
 
 # Using .DEFAULT_GOAL to explicitly define the default target
 .DEFAULT_GOAL := help
@@ -45,7 +44,7 @@ help:
 	@echo "Category: Code delivery"
 	@echo "  publish         Publish the package"
 	@echo "  deploy          Deploy the code to BeagleBone"
-	@echo "  get_from_pi     Get the deployed code from BeagleBone"
+	@echo "  pull            Get the deployed code from BeagleBone"
 	@echo "  ssh             SSH to BeagleBone"
 	@echo
 	@echo "Category: Miscellaneous"
@@ -90,17 +89,19 @@ req:
 
 install:
 	@poetry lock
-	@if [ -f /proc/cpuinfo ] && grep -q Raspberry /proc/cpuinfo; then \
-		@poetry install --extras "rpi"; \
+	@if [ -f /proc/cpuinfo ] && grep -q AM33XX /proc/cpuinfo; then \
+		poetry install --extras "bb"; \
+	elif [ -f /proc/cpuinfo ] && grep -q Raspberry /proc/cpuinfo; then \
+		poetry install --extras "rpi"; \
 	else \
-		@poetry install; \
+		poetry install; \
 	fi
 
 shell:
 	@poetry shell
 
 ssh:
-	ssh $(RPI_USER)@$(RPI_HOSTNAME)
+	ssh $(TARGET_USER)@$(TARGET_HOSTNAME)
 
 jupyter:
 	@echo
@@ -111,16 +112,16 @@ jupyter:
 	@echo
 	@echo "Open http://localhost:8080/notebooks/scratch/api_scratchpad.ipynb in your browser"
 	@echo
-	ssh -N -L 8880:localhost:8888 $(RPI_USER)@$(RPI_HOSTNAME)
+	ssh -N -L 8880:localhost:8888 $(TARGET_USER)@$(TARGET_HOSTNAME)
 
-#deploy-setup:
-#	@ansible-playbook -i $(RPI_HOSTNAME), deploy/setup.yml --ask-pass --ask-become-pass
+deploy-setup:
+	@ansible-playbook -i $(TARGET_USER), deploy/setup.yml --ask-pass --ask-become-pass
 
 deploy:
-	rsync -avz $(LOCAL_DIR) $(RPI_USER)@$(RPI_HOSTNAME):$(REMOTE_DIR)
+	rsync -avz $(LOCAL_DIR) $(TARGET_USER)@$(TARGET_HOSTNAME):$(TARGET_DIR)
 
-get_from_pi:
-	rsync -avz $(RPI_USER)@$(RPI_HOSTNAME):$(REMOTE_DIR) $(LOCAL_DIR)
+pull:
+	rsync -avz $(TARGET_USER)@$(TARGET_HOSTNAME):$(TARGET_DIR) $(LOCAL_DIR)
 
 tree:
 	@tre -E '__pycache__|.git|.DS_Store|build|dist|.github|.flake8|__init__.py|scratch|tests'

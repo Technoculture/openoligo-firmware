@@ -5,7 +5,42 @@ from enum import Enum
 from typing import Protocol
 
 
-class Board(Enum):
+def is_rpi() -> bool:
+    """Returns True if running on a Raspberry Pi, False otherwise."""
+    try:
+        with open("/proc/cpuinfo", "r", encoding="utf-8") as file:
+            return "Raspberry" in file.read()
+    except FileNotFoundError:
+        return False
+
+
+def is_bb() -> bool:
+    """Returns True if running on a Raspberry Pi, False otherwise."""
+    try:
+        with open("/proc/cpuinfo", "r", encoding="utf-8") as file:
+            return "AM33XX" in file.read()
+    except FileNotFoundError:
+        return False
+
+
+class Platform(Enum):
+    """Platform type."""
+
+    RPI = "RPI"
+    BB = "BB"
+    SIM = "SIM"
+
+
+def get_platform() -> Platform:
+    """Get the platform type."""
+    if is_rpi():
+        return Platform.RPI
+    if is_bb():
+        return Platform.BB
+    return Platform.SIM
+
+
+class RPiBoard(Enum):
     """
     Enumerates the GPIO pins on the Raspberry Pi 3 Model B.
     """
@@ -38,6 +73,50 @@ class Board(Enum):
     P37 = 37
     P38 = 38
     P40 = 40
+
+
+class BbBoard(Enum):
+    """
+    Enumerates the GPIO pins on the Beaglebone Black.
+    """
+
+    P3 = 3
+    P5 = 5
+    P7 = 7
+    P8 = 8
+    P10 = 10
+    P11 = 11
+    P12 = 12
+    P13 = 13
+    P15 = 15
+    P16 = 16
+    P18 = 18
+    P19 = 19
+    P21 = 21
+    P22 = 22
+    P23 = 23
+    P24 = 24
+    P26 = 26
+    P27 = 27
+    P28 = 28
+    P29 = 29
+    P31 = 31
+    P32 = 32
+    P33 = 33
+    P35 = 35
+    P36 = 36
+    P37 = 37
+    P38 = 38
+    P40 = 40
+
+
+__platform__ = get_platform()
+
+
+if __platform__ == Platform.BB:
+    Board = BbBoard
+else:
+    Board = RPiBoard  # Also acts as a mock board
 
 
 class GpioMode(Enum):
