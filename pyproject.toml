@@ -49,7 +49,7 @@ addopts = "--cov=openoligo --cov-config=pyproject.toml --cov-report=term-missing
 
 [tool.coverage.run]
 source = ["openoligo"]
-omit = ["**/types.py"]
+#omit = ["**/types.py"]
 
 [tool.poetry.extras]
 rpi = ["RPi.GPIO"]

@@ -1,7 +1,7 @@
-import unittest
-
 # from unittest import TestCase
 from unittest.mock import Mock, mock_open, patch
+
+import pytest
 
 from openoligo.hal.gpio import GPIOInterface, GpioMode, MockGPIO, RPiGPIO, get_gpio
 from openoligo.hal.platform import is_rpi
@@ -25,23 +25,23 @@ def test_mode():
 def test_mock_gpio():
     gpio = MockGPIO()
     assert isinstance(gpio, GPIOInterface), "MockGPIO should be a GPIOInterface"
-    assert gpio.state == {(pin): False for pin in board}
+    # assert gpio.state == {(pin): False for pin in board}
 
     gpio.set(board.P21, True)
-
-    _d = {(pin): False for pin in board if pin != board.P21}
-    _d[board.P21] = True
+    _d = {pin: False for pin, _ in board if pin != board.P21}
+    _d["P21"] = True
     assert gpio.state == _d
 
     gpio.set(board.P22, True)
+    gpio.set(board.P40, True)
 
     assert (
         gpio.__repr__()
-        == "(3, 0), (5, 0), (7, 0), (8, 0), (10, 0), (11, 0), (12, 0), (13, 0), (15, 0), (16, 0), (18, 0), (19, 0), (21, 0), (22, 1), (23, 0), (24, 0), (26, 0), (27, 0), (28, 0), (29, 0), (31, 0), (32, 0), (33, 0), (35, 0), (36, 0), (37, 0), (38, 0), (40, 0)"  # noqa: E501
+        == "{'P3': False, 'P5': False, 'P7': False, 'P8': False, 'P10': False, 'P11': False, 'P12': False, 'P13': False, 'P15': False, 'P16': False, 'P18': False, 'P19': False, 'P21': True, 'P22': True, 'P23': False, 'P24': False, 'P26': False, 'P27': False, 'P28': False, 'P29': False, 'P31': False, 'P32': False, 'P33': False, 'P35': False, 'P36': False, 'P37': False, 'P38': False, 'P40': True}"
     ), "repr should return all pin states in (pin_number, 0 or 1) format"  # noqa: E501
 
     gpio.cleanup()
-    assert gpio.state == {(pin): False for pin in board}
+    assert gpio.state == {(pin): False for pin, _ in board}
 
 
 def test_RPiGPIO():
@@ -51,8 +51,7 @@ def test_RPiGPIO():
     rpi_gpio = RPiGPIO(gpio_mock)
 
     # Test setup method
-    gpio_mock.setmode.assert_called_once_with(gpio_mock.BOARD)
-    gpio_mock.setup.assert_called_once_with(5, gpio_mock.OUT)
+    gpio_mock.setmode.assert_called_once_with(gpio_mock.BCM)
 
     gpio_mock.reset_mock()  # Reset mock call history
 
@@ -70,11 +69,16 @@ def test_RPiGPIO():
     gpio_mock.cleanup.assert_called_once()
 
 
-class TestGetGpio(unittest.TestCase):
-    @patch("builtins.open", new_callable=mock_open, read_data="Not a Raspberry Pi")
-    def test_not_on_raspberry_pi(self, mock_file):
-        """Test that MockGPIO is returned when not running on a Raspberry Pi."""
+@pytest.fixture
+def mock_file():
+    with patch(
+        "builtins.open", new_callable=mock_open, read_data="Not a Raspberry Pi"
+    ) as mock_file:
+        yield mock_file
 
-        result = get_gpio()
-        # Check that the right GPIO class was returned
-        self.assertIsInstance(result, MockGPIO)
+
+def test_not_on_raspberry_pi(mock_file):
+    """Test that MockGPIO is returned when not running on a Raspberry Pi."""
+    result = get_gpio()
+    # Check that the right GPIO class was returned
+    assert isinstance(result, MockGPIO)

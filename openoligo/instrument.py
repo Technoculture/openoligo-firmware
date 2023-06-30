@@ -90,7 +90,9 @@ class Instrument(metaclass=Singleton):
             raise OneDestinationException("There must be exactly one destination valve")
 
         if len(valve_types[ValveRole.TRANSIT]) > 0:
-            logging.debug("Make sure that the transit valve(s) are in the route you expect")
+            logging.debug(
+                "Make sure that the transit valve(s) are in the route you expect"
+            )  # pragma: no cover
 
     def all_except(self, name: list[str]) -> None:
         """
@@ -120,4 +122,4 @@ class Instrument(metaclass=Singleton):
         """
         Return a string representation of the instrument.
         """
-        return f"Instrument({self.pinout})"
+        return f"Instrument({self.pinout})"  # pragma: no cover

@@ -1,3 +1,5 @@
+import pytest
+
 from openoligo.hal.platform import Platform
 from openoligo.hal.types import Board, board
 
@@ -20,3 +22,14 @@ def test_board():
 
     assert len(bb) == 28
     assert len(rpi) == 28
+
+    with pytest.raises(AttributeError):
+        bb.foo
+
+    with pytest.raises(AttributeError):
+        bb.P10000
+
+
+def test_board_loop():
+    for pin, _ in board:
+        assert isinstance(pin, str)

@@ -60,7 +60,7 @@ class RPiGPIO(GPIOInterface):
     def set(self, pin: str, value: bool) -> None:
         """Set the output value of a GPIO pin."""
         super().set(pin, value)
-        self.gpio.output(pin, self.gpio.HIGH if value else self.gpio.LOW)
+        self.gpio.output(int(pin), self.gpio.HIGH if value else self.gpio.LOW)
 
     def value(self, pin: str) -> bool:
         return self.gpio.input(pin)
@@ -71,7 +71,7 @@ class RPiGPIO(GPIOInterface):
 
     def __repr__(self) -> str:
         """Return a string representation of the GPIO module."""
-        return ", ".join(f"({pin}, {1 if self.value(pin) else 0})" for pin in board)
+        return ", ".join(f"({pin}, {1 if self.value(pin) else 0})" for pin, _ in board)
 
 
 class MockGPIO(GPIOInterface):
@@ -83,27 +83,35 @@ class MockGPIO(GPIOInterface):
         and the values are their mock states
         """
         self.state: dict[str, bool] = {}
+        for pin, _ in board:
+            self.state[pin] = False
 
     def setup_pin(
-        self, pin: str, mode: GpioMode = GpioMode.OUT
+        self, pin: str, _: GpioMode = GpioMode.OUT
     ) -> None:  # pylint: disable=unused-argument
         """Set up a GPIO pin."""
         self.state[pin] = False
 
-    def set(self, pin: str, value: bool):
+    def set(self, pin: str, value: bool) -> None:
         """Set the output value of a GPIO pin."""
-        super().set(pin, value)
-        self.state[pin] = value
+        # super().set(pin, value)
+        if pin.startswith("P"):
+            self.state[pin] = value
+        else:
+            self.state[f"P{pin}"] = value
 
     def value(self, pin: str) -> bool:
         """Get the value of a GPIO pin."""
-        return self.state[pin]
+        if pin.startswith("P"):
+            return self.state[pin]
+        return self.state[f"P{pin}"]
 
     def cleanup(self):
         """Clean up GPIO."""
-        for pin in board:
+        for pin, _ in board:
             self.set(pin, False)
 
     def __repr__(self) -> str:
         """Return a string representation of the GPIO module."""
-        return ", ".join(f"({pin}, {1 if self.value(pin) else 0})" for pin in board)
+        # return ", ".join(f"({pin}, {self.value(pin)})" for pin, _ in board)
+        return self.state.__repr__()

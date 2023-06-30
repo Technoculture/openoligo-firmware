@@ -41,9 +41,9 @@ class Board:
         """Return a string representation of the board."""
         return f"{self.__class__.__name__}({self.board_dict})"
 
-    def __iter__(self) -> Iterator[str]:
+    def __iter__(self) -> Iterator[tuple[str, str]]:
         """Return an iterator over the pin names."""
-        return iter(self.board_dict.keys())
+        return iter(self.board_dict.items())
 
 
 board = Board(__platform__)
