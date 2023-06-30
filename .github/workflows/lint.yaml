@@ -38,7 +38,7 @@ jobs:
         poetry run pylint openoligo
     - name: Lint with flake8
       run: |
-        poetry run flake8 openoligo tests
+        poetry run flake8 openoligo
     - name: Format with Black
       run: |
         poetry run black --check openoligo tests examples

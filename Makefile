@@ -63,7 +63,7 @@ format:
 	@poetry run isort $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR) $(EXECNAME)
 	@poetry run black $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
 
-format_check:
+format-check:
 	@poetry run black --check $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
 
 lint:
