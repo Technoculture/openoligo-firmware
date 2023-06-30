@@ -1,12 +1,12 @@
 import pytest
 
 from openoligo.hal.devices import Switch, Valve
-from openoligo.hal.types import Board, ValveState, ValveType
+from openoligo.hal.types import ValveState, ValveType, board
 
 
 def test_nc_no_valve():
-    s1 = Valve(gpio_pin=Board.P3)
-    s2 = Valve(gpio_pin=Board.P5)
+    s1 = Valve(gpio_pin=board.P3)
+    s2 = Valve(gpio_pin=board.P5)
 
     assert s1._state == ValveState.CLOSED_FLOW, "NC valve _state should be closed by default"
     assert not s1.value, "NC valve value should be closed by default"
@@ -29,11 +29,11 @@ def test_nc_no_valve():
 
 
 def test_simulated_switch():
-    s1 = Switch(gpio_pin=Board.P3)
-    assert s1.gpio_pin == Board.P3
+    s1 = Switch(gpio_pin=board.P3)
+    assert s1.gpio_pin == board.P3
 
 
 @pytest.mark.parametrize("valve_type", [ValveType.NORMALLY_CLOSED, ValveType.NORMALLY_OPEN])
 def test_get_type(valve_type):
-    m = Valve(gpio_pin=Board.P3)
+    m = Valve(gpio_pin=board.P3)
     assert m.get_type == valve_type, "get_type should return the valve type"

@@ -6,7 +6,6 @@ from openoligo.hal.board import Pinout
 from openoligo.hal.devices import Switch, Valve
 from openoligo.hal.gpio import Platform, __platform__
 from openoligo.hal.types import (
-    Board,
     GpioMode,
     InvalidManifoldSizeError,
     Switchable,
@@ -21,7 +20,7 @@ __all__ = [
     "Platform",
     "Valve",
     "Switch",
-    "Board",
+    "board",
     "GpioMode",
     "Pinout",
     "InvalidManifoldSizeError",

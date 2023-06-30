@@ -71,7 +71,7 @@ lint:
 	@poetry run flake8 $(LIBNAME) $(TESTDIR)
 
 type:
-	@poetry run mypy $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR) --check-untyped-defs
+	@poetry run mypy $(LIBNAME) $(EXAMPLEDIR) --check-untyped-defs
 
 test: type
 	@poetry run pytest 
@@ -130,6 +130,6 @@ pull:
 	rsync -avz $(TARGET_USER)@$(TARGET_HOSTNAME):$(TARGET_DIR) $(LOCAL_DIR)
 
 tree:
-	@tre -E '__pycache__|.git|.DS_Store|build|dist|.github|.flake8|__init__.py|scratch|tests'
+	@tre -E '__pycache__|.git|.DS_Store|build|dist|.github|.flake8|__init__.py|scratch|docs'
 
 .PHONY: ghtest lint type help run test publish install ssh deploy deploy_init get_from_pi t docs

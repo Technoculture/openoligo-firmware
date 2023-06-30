@@ -4,7 +4,7 @@ Pins in the Raspberry Pi GPIO header.
 from typing import Dict, TypedDict
 
 from openoligo.hal.devices import Switch, Valve
-from openoligo.hal.types import Board, NoSuchPinInPinout, Switchable, ValveRole
+from openoligo.hal.types import Board, NoSuchPinInPinout, Switchable, ValveRole, board
 from openoligo.utils.singleton import Singleton
 
 
@@ -26,15 +26,15 @@ class FixedPinoutDict(TypedDict):
 
 
 fixed_pinout: FixedPinoutDict = {
-    "waste": Valve(gpio_pin=Board.P7, role=ValveRole.OUTLET),
-    "waste_rxn": Valve(gpio_pin=Board.P5, role=ValveRole.OUTLET),
-    "prod": Valve(gpio_pin=Board.P8, role=ValveRole.OUTLET),
-    "branch": Valve(gpio_pin=Board.P12, role=ValveRole.BRANCH),
-    "rxn_out": Valve(gpio_pin=Board.P13, role=ValveRole.TRANSIT),
-    "sol": Valve(gpio_pin=Board.P3),
-    "gas": Valve(gpio_pin=Board.P10),
-    "valve_pressure": Switch(gpio_pin=Board.P11),
-    "gas_pressure": Switch(gpio_pin=Board.P29),
+    "waste": Valve(gpio_pin=board.P7, role=ValveRole.OUTLET),
+    "waste_rxn": Valve(gpio_pin=board.P5, role=ValveRole.OUTLET),
+    "prod": Valve(gpio_pin=board.P8, role=ValveRole.OUTLET),
+    "branch": Valve(gpio_pin=board.P12, role=ValveRole.BRANCH),
+    "rxn_out": Valve(gpio_pin=board.P13, role=ValveRole.TRANSIT),
+    "sol": Valve(gpio_pin=board.P3),
+    "gas": Valve(gpio_pin=board.P10),
+    "valve_pressure": Switch(gpio_pin=board.P11),
+    "gas_pressure": Switch(gpio_pin=board.P29),
 }
 
 
@@ -44,7 +44,7 @@ def list_configurable_pins() -> dict[str, Board]:
     These ar all pins in the board that are not part of the fiixed pinout.
     """
     fixed_pins = [sw.gpio_pin for sw in fixed_pinout.values()]  # type: ignore
-    return [pin for pin in Board if pin not in fixed_pins]  # type: ignore
+    return [pin for pin in board if pin not in fixed_pins]  # type: ignore
 
 
 class Pinout(metaclass=Singleton):

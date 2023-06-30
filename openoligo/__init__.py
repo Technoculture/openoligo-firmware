@@ -12,7 +12,6 @@ from openoligo.instrument import *
 from openoligo.utils import *
 
 __all__ = [
-    "Board",
     "Valve",
     "Switch",
     "ValveState",

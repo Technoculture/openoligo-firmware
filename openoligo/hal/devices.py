@@ -5,7 +5,7 @@ import logging
 from dataclasses import dataclass, field
 
 from openoligo.hal.gpio import get_gpio
-from openoligo.hal.types import Board, Switchable, Valvable, ValveRole, ValveState, ValveType
+from openoligo.hal.types import Switchable, Valvable, ValveRole, ValveState, ValveType
 
 
 @dataclass
@@ -19,7 +19,7 @@ class Switch(Switchable):
         board: Board object to access the GPIO pins.
     """
 
-    gpio_pin: Board
+    gpio_pin: str
     _state: bool = field(default=False, init=False)
     _switch_count: int = field(default=0, init=False, repr=False)
 
@@ -49,11 +49,6 @@ class Switch(Switchable):
             extra={"markup": True},
         )
 
-    @property
-    def gpio(self) -> Board:
-        """Get the GPIO pin number."""
-        return self.gpio_pin
-
     def toggle(self):
         """Toggle the state of the switch."""
         self.set(not self._state)
@@ -72,7 +67,7 @@ class Valve(Valvable):
     A valve that actually controls a GPIO pin on the Raspberry Pi.
     """
 
-    gpio_pin: Board
+    gpio_pin: str
     role: ValveRole = field(default=ValveRole.INLET)
     valve_type: ValveType = field(default=ValveType.NORMALLY_OPEN)
     _switch_count: int = field(init=False, default=0)
@@ -118,11 +113,6 @@ class Valve(Valvable):
             self._state,
             extra={"markup": True},
         )
-
-    @property
-    def gpio(self) -> Board:
-        """Get the GPIO pin number."""
-        return self.gpio_pin
 
     @property
     def value(self) -> bool:
