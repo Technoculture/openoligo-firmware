@@ -24,14 +24,13 @@ def test_mode():
 
 def test_mock_gpio():
     gpio = MockGPIO()
-    assert isinstance(gpio, GPIOInterface)
-    assert isinstance(gpio, MockGPIO)
-    assert gpio.state == {(pin.value): False for pin in board}
+    assert isinstance(gpio, GPIOInterface), "MockGPIO should be a GPIOInterface"
+    assert gpio.state == {(pin): False for pin in board}
 
     gpio.set(board.P21, True)
 
-    _d = {(pin.value): False for pin in board if pin != board.P21}
-    _d[board.P21.value] = True
+    _d = {(pin): False for pin in board if pin != board.P21}
+    _d[board.P21] = True
     assert gpio.state == _d
 
     gpio.set(board.P22, True)
@@ -42,7 +41,7 @@ def test_mock_gpio():
     ), "repr should return all pin states in (pin_number, 0 or 1) format"  # noqa: E501
 
     gpio.cleanup()
-    assert gpio.state == {(pin.value): False for pin in board}
+    assert gpio.state == {(pin): False for pin in board}
 
 
 def test_RPiGPIO():

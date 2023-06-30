@@ -3,8 +3,6 @@ Provides the platform on which the program is running.
 """
 from enum import Enum
 
-# from typing import TypedDict
-
 
 def is_rpi() -> bool:
     """Returns True if running on a Raspberry Pi, False otherwise."""
@@ -43,40 +41,6 @@ def get_platform() -> Platform:
 
 __platform__ = get_platform()
 
-
-# class MinimumCommonPinout(TypedDict):
-#    """
-#    Minimum common pinout for all platforms.
-#    """
-#
-#    P3: str
-#    P5: str
-#    P7: str
-#    P8: str
-#    P10: str
-#    P11: str
-#    P12: str
-#    P13: str
-#    P15: str
-#    P16: str
-#    P18: str
-#    P19: str
-#    P21: str
-#    P22: str
-#    P23: str
-#    P24: str
-#    P26: str
-#    P27: str
-#    P28: str
-#    P29: str
-#    P31: str
-#    P32: str
-#    P33: str
-#    P35: str
-#    P36: str
-#    P37: str
-#    P38: str
-#    P40: str
 
 MinimumCommonPinout = dict[str, str]
 

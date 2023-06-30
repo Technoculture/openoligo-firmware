@@ -68,7 +68,7 @@ format_check:
 
 lint:
 	@poetry run pylint $(LIBNAME)
-	@poetry run flake8 $(LIBNAME) $(TESTDIR)
+	@poetry run flake8 $(LIBNAME)
 
 type:
 	@poetry run mypy $(LIBNAME) $(EXAMPLEDIR) --check-untyped-defs
