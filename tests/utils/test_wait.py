@@ -33,4 +33,4 @@ def test_wait_async(factor):
 async def test_wait_async_calls_sleep():
     with patch("asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
         await wait_async(1)
-        mock_sleep.assert_awaited_once_with(1 / 2)
+        mock_sleep.assert_awaited_once_with(1 / 1000)
