@@ -1,6 +1,6 @@
 LIBNAME:=openoligo
 EXECNAME:=./examples/dna_synthesis.py
-SERVER_EXECNAME:=server.py
+SERVER_EXECNAME:=./api/server.py
 TESTDIR:=tests
 EXAMPLEDIR:=examples
 DOCSDIR:=docs
@@ -38,6 +38,7 @@ help:
 	@echo "Category: Build and run"
 	@echo "  all             Run format, lint, type checks, tests, and generate coverage report"
 	@echo "  run             Run the application"
+	@echo "  server          Run the API server"
 	@echo "  install         Install the package"
 	@echo "  shell           Run a shell in the virtual environment"
 	@echo "  jupyter         Start a tunnel to the Jupyter notebook server"
@@ -58,6 +59,9 @@ all: format lint test coverage
 
 run:
 	@poetry run python $(EXECNAME)
+
+server:
+	@poetry run python $(SERVER_EXECNAME)
 
 format:
 	@poetry run isort $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR) $(EXECNAME)
