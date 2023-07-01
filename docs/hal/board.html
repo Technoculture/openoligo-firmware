@@ -1132,7 +1132,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">TypedDict</span>
 
-<span class="kn">from</span> <span class="nn">openoligo.hal.devices</span> <span class="kn">import</span> <span class="n">Switch</span><span class="p">,</span> <span class="n">Valve</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.devices</span> <span class="kn">import</span> <span class="n">DigitalSensor</span><span class="p">,</span> <span class="n">Switch</span><span class="p">,</span> <span class="n">Valve</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.types</span> <span class="kn">import</span> <span class="n">Board</span><span class="p">,</span> <span class="n">NoSuchPinInPinout</span><span class="p">,</span> <span class="n">Switchable</span><span class="p">,</span> <span class="n">ValveRole</span><span class="p">,</span> <span class="n">board</span>
 <span class="kn">from</span> <span class="nn">openoligo.utils.singleton</span> <span class="kn">import</span> <span class="n">Singleton</span>
 
@@ -1152,6 +1152,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">gas</span><span class="p">:</span> <span class="n">Valve</span>
     <span class="n">valve_pressure</span><span class="p">:</span> <span class="n">Switch</span>
     <span class="n">gas_pressure</span><span class="p">:</span> <span class="n">Switch</span>
+    <span class="n">valve_regulator_err</span><span class="p">:</span> <span class="n">DigitalSensor</span>
+    <span class="n">flow_regulator_err</span><span class="p">:</span> <span class="n">DigitalSensor</span>
 
 
 <span class="n">fixed_pinout</span><span class="p">:</span> <span class="n">FixedPinoutDict</span> <span class="o">=</span> <span class="p">{</span>
@@ -1164,6 +1166,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="s2">&quot;gas&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P10</span><span class="p">),</span>
     <span class="s2">&quot;valve_pressure&quot;</span><span class="p">:</span> <span class="n">Switch</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P11</span><span class="p">),</span>
     <span class="s2">&quot;gas_pressure&quot;</span><span class="p">:</span> <span class="n">Switch</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P29</span><span class="p">),</span>
+    <span class="s2">&quot;valve_regulator_err&quot;</span><span class="p">:</span> <span class="n">DigitalSensor</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P31</span><span class="p">),</span>
+    <span class="s2">&quot;flow_regulator_err&quot;</span><span class="p">:</span> <span class="n">DigitalSensor</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P33</span><span class="p">),</span>
 <span class="p">}</span>
 
 
@@ -1331,6 +1335,8 @@ These ar all pins in the board that are not part of the fiixed pinout.</p></div>
     <span class="n">gas</span><span class="p">:</span> <span class="n">Valve</span>
     <span class="n">valve_pressure</span><span class="p">:</span> <span class="n">Switch</span>
     <span class="n">gas_pressure</span><span class="p">:</span> <span class="n">Switch</span>
+    <span class="n">valve_regulator_err</span><span class="p">:</span> <span class="n">DigitalSensor</span>
+    <span class="n">flow_regulator_err</span><span class="p">:</span> <span class="n">DigitalSensor</span>
 </pre></div>
 
   </div>

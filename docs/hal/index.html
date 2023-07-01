@@ -1978,6 +1978,7 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get the current value of the switch.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
 </pre></div>
 
@@ -2424,6 +2425,11 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the current value of the valve.&quot;&quot;&quot;</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">valve_type</span> <span class="o">==</span> <span class="n">ValveType</span><span class="o">.</span><span class="n">NORMALLY_CLOSED</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span> <span class="k">if</span> <span class="n">val</span> <span class="k">else</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">CLOSED_FLOW</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">CLOSED_FLOW</span> <span class="k">if</span> <span class="n">val</span> <span class="k">else</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span>
 
     <span class="nd">@property</span>
