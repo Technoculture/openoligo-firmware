@@ -5,17 +5,15 @@ import logging
 import uvicorn
 from tortoise import Tortoise
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import Response
 from tortoise.exceptions import ValidationError
 
 from api.models import (
-    SequenceJob,
-    InstrumentStatus,
-    JobModelIn,
-    JobModelOut,
-    InstrumentStatusModelOut,
+    TaskQueue,
+    TaskQueueModel,
 )
 
-from openoligo.seq import Seq
+from openoligo.hal.platform import Platform, __platform__
 
 
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
@@ -25,7 +23,13 @@ app = FastAPI()
 
 @app.on_event("startup")
 async def startup_event():
-    await Tortoise.init(db_url="sqlite://openoligo.db", modules={"models": ["api.models"]})
+    if not __platform__:
+        raise RuntimeError("No platform detected")
+
+    db_url = "sqlite://openoligo.db"
+    if __platform__ == Platform.RPI or __platform__ == Platform.BB:
+        db_url = "sqlite:////var/log/openoligo.db"
+    await Tortoise.init(db_url=db_url, modules={"models": ["api.models"]})
     await Tortoise.generate_schemas()
 
 
@@ -34,43 +38,43 @@ def root():
     return {"status": "ok"}
 
 
-@app.post("/sequence/")
-async def add_sequence(sequence: JobModelIn):
+@app.post("/queue")
+async def add_to_queue(task: TaskQueueModel):
     try:
-        await SequenceJob.create(sequence=sequence.sequence)
+        await TaskQueue.create(sequence=task.sequence, category=task.category)
+        return Response(status_code=201)
     except ValidationError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
-@app.get("/sequence/", response_model=list[JobModelOut])
-async def get_sequences_list():
-    return await SequenceJob.all().limit(100)
+@app.get("/queue/", response_model=list[TaskQueueModel])
+async def get_task_queue():
+    return await TaskQueue.all().limit(100)
 
 
-@app.get("/sequence/{sequence_id}", response_model=JobModelOut)
-async def get_sequence(sequence_id: int):
-    sequence = await SequenceJob.get_or_none(id=sequence_id)
-    if sequence is None:
+@app.get("/queue/{task_id}", response_model=TaskQueueModel)
+async def get_task(task_id: int):
+    task = await TaskQueue.get_or_none(id=task_id)
+    if task is None:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return task
+
+
+@app.patch("/queue/{task_id}", status_code=200)
+async def update_task(task_id: int, sequence: str):
+    task = await TaskQueue.get_or_none(id=task_id)
+
+    if task is None:
         raise HTTPException(status_code=404, detail="Sequence not found")
-    return sequence
 
+    if task.status != "queued":
+        raise HTTPException(status_code=400, detail="Task is not queued")
 
-@app.patch("/sequence/{sequence_id}")
-async def update_sequence(sequence_id: int, sequence: str):
-    seq = await SequenceJob.get_or_none(id=sequence_id)
-    if seq is None:
-        raise HTTPException(status_code=404, detail="Sequence not found")
-    seq.sequence = sequence
-    await seq.save()
+    task.sequence = sequence
+    await task.save()
 
-
-@app.get("/status/{instrument_status_id}", response_model=InstrumentStatusModelOut)
-async def get_instrument_status(instrument_status_id: int):
-    status = await InstrumentStatus.get_or_none(id=instrument_status_id)
-    if status is None:
-        raise HTTPException(status_code=404, detail="Instrument status not found")
-    return status
+    return Response(status_code=204)
 
 
 if __name__ == "__main__":
-    uvicorn.run("api.server:app", host="127.0.0.1", port=8000, reload=True)
+    uvicorn.run("api.server:app", host="127.0.0.1", port=9191, reload=True)

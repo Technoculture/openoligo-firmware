@@ -67,7 +67,7 @@ class Seq:
         return self.seq[key]
 
 
-class Category(str, Enum):
+class SeqCategory(str, Enum):
     """
     Enum for the different sequence categories.
     """

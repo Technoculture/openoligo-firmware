@@ -1,15 +1,11 @@
 [tool.poetry]
 name = "OpenOligo"
-version = "0.1.5"
+version = "0.1.6"
 description = "An open-source platform for programmatically interacting with and managing Nucleic acid sequences synthesis processes."
 license = "Apache-2.0"
 authors = ["Satyam Tiwary <satyam@technoculture.io>"]
 readme = "README.md"
 keywords = ["DNA", "synthesis", "genetics", "open-source"]
-
-[tool.poetry.scripts]
-oligo-server = 'app.server:main'
-oligo-synth = 'examples.dna_synthesis:main'
 
 [tool.poetry.dependencies]
 python = "^3.9"
