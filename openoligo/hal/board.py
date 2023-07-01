@@ -3,7 +3,7 @@ Pins in the Raspberry Pi GPIO header.
 """
 from typing import Dict, TypedDict
 
-from openoligo.hal.devices import Switch, Valve
+from openoligo.hal.devices import DigitalSensor, Switch, Valve
 from openoligo.hal.types import Board, NoSuchPinInPinout, Switchable, ValveRole, board
 from openoligo.utils.singleton import Singleton
 
@@ -23,6 +23,8 @@ class FixedPinoutDict(TypedDict):
     gas: Valve
     valve_pressure: Switch
     gas_pressure: Switch
+    valve_regulator_err: DigitalSensor
+    flow_regulator_err: DigitalSensor
 
 
 fixed_pinout: FixedPinoutDict = {
@@ -35,6 +37,8 @@ fixed_pinout: FixedPinoutDict = {
     "gas": Valve(gpio_pin=board.P10),
     "valve_pressure": Switch(gpio_pin=board.P11),
     "gas_pressure": Switch(gpio_pin=board.P29),
+    "valve_regulator_err": DigitalSensor(gpio_pin=board.P31),
+    "flow_regulator_err": DigitalSensor(gpio_pin=board.P33),
 }
 
 

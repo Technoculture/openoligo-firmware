@@ -4,7 +4,7 @@ Switches can be used to control devices that can be turned on and off.
 import logging
 from dataclasses import dataclass, field
 
-from openoligo.hal.gpio import get_gpio
+from openoligo.hal.gpio import GpioMode, get_gpio
 from openoligo.hal.types import Switchable, Valvable, ValveRole, ValveState, ValveType
 
 
@@ -58,6 +58,38 @@ class Switch(Switchable):
         """
         Get the current value of the switch.
         """
+        self._state = self.controller.value(self.gpio_pin)
+        return self._state
+
+
+@dataclass
+class DigitalSensor(Switchable):
+    """
+    A digital sensor that actually controls a GPIO pin on the Raspberry Pi.
+    """
+
+    gpio_pin: str
+    _state: bool = field(default=False, init=False)
+
+    def __post_init__(self):
+        """Initialize the switch."""
+        self.controller = get_gpio()
+        self.controller.setup_pin(self.gpio_pin, GpioMode.IN)
+
+    def set(self, _: bool):
+        """A digital sensor cannot be set"""
+        raise NotImplementedError
+
+    def toggle(self):
+        """A digital sensor cannot be toggled"""
+        raise NotImplementedError
+
+    @property
+    def value(self) -> bool:
+        """
+        Get the current value of the switch.
+        """
+        self._state = self.controller.value(self.gpio_pin)
         return self._state
 
 
@@ -117,6 +149,11 @@ class Valve(Valvable):
     @property
     def value(self) -> bool:
         """Get the current value of the valve."""
+        val = self.controller.value(self.gpio_pin)
+        if self.valve_type == ValveType.NORMALLY_CLOSED:
+            self._state = ValveState.OPEN_FLOW if val else ValveState.CLOSED_FLOW
+        else:
+            self._state = ValveState.CLOSED_FLOW if val else ValveState.OPEN_FLOW
         return self._state == ValveState.OPEN_FLOW
 
     @property

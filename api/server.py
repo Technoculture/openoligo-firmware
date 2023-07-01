@@ -8,14 +8,14 @@ from fastapi import FastAPI, HTTPException
 from tortoise.exceptions import ValidationError
 
 from api.models import (
-    Sequence,
+    SequenceJob,
     InstrumentStatus,
-    SequenceModelIn,
-    SequenceModelOut,
+    JobModelIn,
+    JobModelOut,
     InstrumentStatusModelOut,
 )
 
-# import openoligo as oo
+from openoligo.seq import Seq
 
 
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
@@ -35,24 +35,33 @@ def root():
 
 
 @app.post("/sequence/")
-async def add_sequence(sequence: SequenceModelIn):
+async def add_sequence(sequence: JobModelIn):
     try:
-        await Sequence.create(sequence=sequence.sequence)
+        await SequenceJob.create(sequence=sequence.sequence)
     except ValidationError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
-@app.get("/sequence/", response_model=list[SequenceModelOut])
+@app.get("/sequence/", response_model=list[JobModelOut])
 async def get_sequences_list():
-    return await Sequence.all().limit(100)
+    return await SequenceJob.all().limit(100)
 
 
-@app.get("/sequence/{sequence_id}", response_model=SequenceModelOut)
+@app.get("/sequence/{sequence_id}", response_model=JobModelOut)
 async def get_sequence(sequence_id: int):
-    sequence = await Sequence.get_or_none(id=sequence_id)
+    sequence = await SequenceJob.get_or_none(id=sequence_id)
     if sequence is None:
         raise HTTPException(status_code=404, detail="Sequence not found")
     return sequence
+
+
+@app.patch("/sequence/{sequence_id}")
+async def update_sequence(sequence_id: int, sequence: str):
+    seq = await SequenceJob.get_or_none(id=sequence_id)
+    if seq is None:
+        raise HTTPException(status_code=404, detail="Sequence not found")
+    seq.sequence = sequence
+    await seq.save()
 
 
 @app.get("/status/{instrument_status_id}", response_model=InstrumentStatusModelOut)

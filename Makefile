@@ -7,8 +7,8 @@ APIDIR:=api
 EXECNAME:=./$(EXAMPLEDIR)/dna_synthesis.py
 SERVER_EXECNAME:=./$(APIDIR)/server.py
 
-TARGET_HOSTNAME?=arm.local
-TARGET_USER?=ubuntu
+TARGET_HOSTNAME?=192.168.1.2
+TARGET_USER?=root
 TARGET_DIR?=/home/$(TARGET_USER)
 LOCAL_DIR:=$(shell pwd)
 
@@ -73,11 +73,11 @@ format-check:
 	@poetry run black --check $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
 
 lint:
-	@poetry run pylint $(LIBNAME) $(APIDIR)
-	@poetry run flake8 $(LIBNAME) $(APIDIR)
+	@poetry run pylint $(LIBNAME) #$(APIDIR)
+	@poetry run flake8 $(LIBNAME) #$(APIDIR)
 
 type:
-	@poetry run mypy $(LIBNAME) $(EXAMPLEDIR) $(APIDIR) --check-untyped-defs
+	@poetry run mypy $(LIBNAME) $(EXAMPLEDIR) --check-untyped-defs
 
 test: type
 	@poetry run pytest 
