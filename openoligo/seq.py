@@ -2,6 +2,7 @@
 Sequence class for DNA, RNA and modified Nucleic Acid sequences.
 """
 import re
+from enum import Enum
 
 
 def is_valid_dna(sequence):
@@ -64,3 +65,13 @@ class Seq:
         Allows indexing of the sequence.
         """
         return self.seq[key]
+
+
+class Category(str, Enum):
+    """
+    Enum for the different sequence categories.
+    """
+
+    DNA = "DNA"
+    RNA = "RNA"
+    MODIFIED = "MODIFIED"

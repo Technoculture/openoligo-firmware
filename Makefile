@@ -73,11 +73,11 @@ format-check:
 	@poetry run black --check $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
 
 lint:
-	@poetry run pylint $(LIBNAME)
-	@poetry run flake8 $(LIBNAME)
+	@poetry run pylint $(LIBNAME) $(APIDIR)
+	@poetry run flake8 $(LIBNAME) $(APIDIR)
 
 type:
-	@poetry run mypy $(LIBNAME) $(EXAMPLEDIR) --check-untyped-defs
+	@poetry run mypy $(LIBNAME) $(EXAMPLEDIR) $(APIDIR) --check-untyped-defs
 
 test: type
 	@poetry run pytest 
