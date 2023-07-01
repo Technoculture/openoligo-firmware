@@ -1074,8 +1074,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <li class="mono"><a href="#openoligo.utils.wait.ms">ms</a></li>
     <li class="mono"><a href="#openoligo.utils.wait.wait">wait</a></li>
     <li class="mono"><a href="#openoligo.utils.wait.wait_async">wait_async</a></li>
-    <li class="mono"><a href="#openoligo.utils.wait.with_wait">with_wait</a></li>
-    <li class="mono"><a href="#openoligo.utils.wait.with_wait_async">with_wait_async</a></li>
   </ul>
 
     </li>
@@ -1102,16 +1100,15 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
 
 <span class="kn">from</span> <span class="nn">openoligo.utils.sim</span> <span class="kn">import</span> <span class="n">SIMULATION_SPEEDUP_FACTOR</span>
 
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">wait_async</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wait for a given number of seconds.&quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
     <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span> <span class="o">/</span> <span class="n">SIMULATION_SPEEDUP_FACTOR</span><span class="p">)</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Done waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Done waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 
 
 <span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1119,20 +1116,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span> <span class="o">/</span> <span class="n">SIMULATION_SPEEDUP_FACTOR</span><span class="p">)</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Done waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>
-
-
-<span class="k">async</span> <span class="k">def</span> <span class="nf">with_wait_async</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Call a function, then wait for a given number of seconds.&quot;&quot;&quot;</span>
-    <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="n">seconds</span> <span class="o">/</span> <span class="n">SIMULATION_SPEEDUP_FACTOR</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">with_wait</span><span class="p">(</span>
-    <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=unused-argument</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Call a function, then wait for a given number of seconds.&quot;&quot;&quot;</span>
-    <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">wait</span><span class="p">(</span><span class="n">seconds</span> <span class="o">/</span> <span class="n">SIMULATION_SPEEDUP_FACTOR</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">ms</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>  <span class="c1"># pylint: disable=invalid-name</span>
@@ -1219,59 +1202,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div id="source-openoligo.utils.wait.wait_async" class="source">
     <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">wait_async</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wait for a given number of seconds.&quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
     <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span> <span class="o">/</span> <span class="n">SIMULATION_SPEEDUP_FACTOR</span><span class="p">)</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Done waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-      
-  <div class="item">
-    <div class="name def" id="openoligo.utils.wait.with_wait">
-    <p>def <span class="ident">with_wait</span>(</p><p>func: Callable, seconds: float, *args, **kwargs)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Call a function, then wait for a given number of seconds.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.utils.wait.with_wait', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.utils.wait.with_wait" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">with_wait</span><span class="p">(</span>
-    <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=unused-argument</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Call a function, then wait for a given number of seconds.&quot;&quot;&quot;</span>
-    <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">wait</span><span class="p">(</span><span class="n">seconds</span> <span class="o">/</span> <span class="n">SIMULATION_SPEEDUP_FACTOR</span><span class="p">)</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-      
-  <div class="item">
-    <div class="name def" id="openoligo.utils.wait.with_wait_async">
-    <p>async def <span class="ident">with_wait_async</span>(</p><p>func: Callable, seconds: float, *args, **kwargs)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Call a function, then wait for a given number of seconds.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.utils.wait.with_wait_async', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.utils.wait.with_wait_async" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">with_wait_async</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Call a function, then wait for a given number of seconds.&quot;&quot;&quot;</span>
-    <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="n">seconds</span> <span class="o">/</span> <span class="n">SIMULATION_SPEEDUP_FACTOR</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Done waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 </pre></div>
 
   </div>

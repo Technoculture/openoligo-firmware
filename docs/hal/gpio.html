@@ -1072,11 +1072,25 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
+        <span class="class_name"><a href="#openoligo.hal.gpio.BbGPIO">BbGPIO</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#openoligo.hal.gpio.BbGPIO.cleanup">cleanup</a></li>
+    <li class="mono"><a href="#openoligo.hal.gpio.BbGPIO.on_edge">on_edge</a></li>
+    <li class="mono"><a href="#openoligo.hal.gpio.BbGPIO.set">set</a></li>
+    <li class="mono"><a href="#openoligo.hal.gpio.BbGPIO.setup_pin">setup_pin</a></li>
+    <li class="mono"><a href="#openoligo.hal.gpio.BbGPIO.value">value</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
         <span class="class_name"><a href="#openoligo.hal.gpio.GPIOInterface">GPIOInterface</a></span>
         
           
   <ul>
     <li class="mono"><a href="#openoligo.hal.gpio.GPIOInterface.cleanup">cleanup</a></li>
+    <li class="mono"><a href="#openoligo.hal.gpio.GPIOInterface.on_edge">on_edge</a></li>
     <li class="mono"><a href="#openoligo.hal.gpio.GPIOInterface.set">set</a></li>
     <li class="mono"><a href="#openoligo.hal.gpio.GPIOInterface.setup_pin">setup_pin</a></li>
     <li class="mono"><a href="#openoligo.hal.gpio.GPIOInterface.value">value</a></li>
@@ -1089,6 +1103,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
           
   <ul>
     <li class="mono"><a href="#openoligo.hal.gpio.MockGPIO.cleanup">cleanup</a></li>
+    <li class="mono"><a href="#openoligo.hal.gpio.MockGPIO.on_edge">on_edge</a></li>
     <li class="mono"><a href="#openoligo.hal.gpio.MockGPIO.set">set</a></li>
     <li class="mono"><a href="#openoligo.hal.gpio.MockGPIO.setup_pin">setup_pin</a></li>
     <li class="mono"><a href="#openoligo.hal.gpio.MockGPIO.value">value</a></li>
@@ -1101,6 +1116,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
           
   <ul>
     <li class="mono"><a href="#openoligo.hal.gpio.RPiGPIO.cleanup">cleanup</a></li>
+    <li class="mono"><a href="#openoligo.hal.gpio.RPiGPIO.on_edge">on_edge</a></li>
     <li class="mono"><a href="#openoligo.hal.gpio.RPiGPIO.set">set</a></li>
     <li class="mono"><a href="#openoligo.hal.gpio.RPiGPIO.setup_pin">setup_pin</a></li>
     <li class="mono"><a href="#openoligo.hal.gpio.RPiGPIO.value">value</a></li>
@@ -1129,20 +1145,21 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">GPIO access abstraction: RPi.GPIO on Raspberry Pi, MockGPIO otherwise.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
 
-<span class="kn">from</span> <span class="nn">openoligo.hal.types</span> <span class="kn">import</span> <span class="n">Board</span><span class="p">,</span> <span class="n">GpioMode</span><span class="p">,</span> <span class="n">Platform</span><span class="p">,</span> <span class="n">__platform__</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.platform</span> <span class="kn">import</span> <span class="n">Platform</span><span class="p">,</span> <span class="n">__platform__</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.types</span> <span class="kn">import</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">GpioMode</span><span class="p">,</span> <span class="n">board</span>
 
 
 <span class="k">def</span> <span class="nf">get_gpio</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the GPIO module.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">__platform__</span> <span class="o">==</span> <span class="n">Platform</span><span class="o">.</span><span class="n">BB</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">MockGPIO</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="n">__platform__</span> <span class="o">==</span> <span class="n">Platform</span><span class="o">.</span><span class="n">RPI</span><span class="p">:</span>
+        <span class="n">gpio</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;Adafruit_BBIO.GPIO&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">BbGPIO</span><span class="p">(</span><span class="n">gpio</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">__platform__</span> <span class="o">==</span> <span class="n">Platform</span><span class="o">.</span><span class="n">RPI</span><span class="p">:</span>
         <span class="n">gpio</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;RPi.GPIO&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">RPiGPIO</span><span class="p">(</span><span class="n">gpio</span><span class="p">)</span>
-    <span class="c1"># elif __platform__ == Platform.SIM:</span>
     <span class="k">return</span> <span class="n">MockGPIO</span><span class="p">()</span>
 
 
@@ -1150,17 +1167,20 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;GPIO interface.&quot;&quot;&quot;</span>
 
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a GPIO pin.&quot;&quot;&quot;</span>
 
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the output value of a GPIO pin.&quot;&quot;&quot;</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Setting pin </span><span class="si">%s</span><span class="s2"> to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pin</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value of a GPIO pin.&quot;&quot;&quot;</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">on_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a callback for a GPIO pin edge.&quot;&quot;&quot;</span>
 
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1175,22 +1195,27 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;GPIO access on Raspberry Pi.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gpio</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Import Board.GPIO&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Import RPi.GPIO&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span> <span class="o">=</span> <span class="n">gpio</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">setmode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">BOARD</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">setmode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">BCM</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">setwarnings</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a GPIO pin.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">OUT</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">OUT</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the output value of a GPIO pin.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">HIGH</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">LOW</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">pin</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">HIGH</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">LOW</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value of a GPIO pin.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">on_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a callback for a GPIO pin edge.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">add_event_detect</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">add_event_callback</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Clean up GPIO.&quot;&quot;&quot;</span>
@@ -1198,7 +1223,41 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the GPIO module.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="mi">1</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">0</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">for</span> <span class="n">pin</span> <span class="ow">in</span> <span class="n">Board</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">pin</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="mi">1</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">0</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">for</span> <span class="n">pin</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">board</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">BbGPIO</span><span class="p">(</span><span class="n">GPIOInterface</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;GPIO access on Beaglebone Black Board.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gpio</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Import Adafruit_BBIO.GPIO&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span> <span class="o">=</span> <span class="n">gpio</span>
+
+    <span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a GPIO pin.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">OUT</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the output value of a GPIO pin.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">output</span><span class="p">(</span>
+            <span class="n">pin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">HIGH</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">LOW</span><span class="p">,</span> <span class="n">pull_up_down</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">PUD_UP</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value of a GPIO pin.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">on_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a callback for a GPIO pin edge.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">add_event_detect</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">edge</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Clean up GPIO.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the GPIO module.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">pin</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="mi">1</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">0</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">for</span> <span class="n">pin</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">board</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">MockGPIO</span><span class="p">(</span><span class="n">GPIOInterface</span><span class="p">):</span>
@@ -1209,31 +1268,41 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">        Initialize the state. Its keys are the pin numbers,</span>
 <span class="sd">        and the values are their mock states</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">pin</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">board</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=unused-argument</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a GPIO pin.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the output value of a GPIO pin.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="n">pin</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">pin</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value of a GPIO pin.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">pin</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">pin</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">on_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a callback for a GPIO pin edge.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Clean up GPIO.&quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">pin</span> <span class="ow">in</span> <span class="n">Board</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">pin</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">board</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the GPIO module.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="mi">1</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">0</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">for</span> <span class="n">pin</span> <span class="ow">in</span> <span class="n">Board</span><span class="p">)</span>
+        <span class="c1"># return &quot;, &quot;.join(f&quot;({pin}, {self.value(pin)})&quot; for pin, _ in board)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
 </pre></div>
 
   </div>
@@ -1259,11 +1328,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_gpio</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the GPIO module.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">__platform__</span> <span class="o">==</span> <span class="n">Platform</span><span class="o">.</span><span class="n">BB</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">MockGPIO</span><span class="p">()</span>
-    <span class="k">elif</span> <span class="n">__platform__</span> <span class="o">==</span> <span class="n">Platform</span><span class="o">.</span><span class="n">RPI</span><span class="p">:</span>
+        <span class="n">gpio</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;Adafruit_BBIO.GPIO&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">BbGPIO</span><span class="p">(</span><span class="n">gpio</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">__platform__</span> <span class="o">==</span> <span class="n">Platform</span><span class="o">.</span><span class="n">RPI</span><span class="p">:</span>
         <span class="n">gpio</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;RPi.GPIO&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">RPiGPIO</span><span class="p">(</span><span class="n">gpio</span><span class="p">)</span>
-    <span class="c1"># elif __platform__ == Platform.SIM:</span>
     <span class="k">return</span> <span class="n">MockGPIO</span><span class="p">()</span>
 </pre></div>
 
@@ -1274,6 +1343,199 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
 
     <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="openoligo.hal.gpio.BbGPIO" class="name">class <span class="ident">BbGPIO</span></p>
+      
+  
+    <div class="desc"><p>GPIO access on Beaglebone Black Board.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.BbGPIO', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.gpio.BbGPIO" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">BbGPIO</span><span class="p">(</span><span class="n">GPIOInterface</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;GPIO access on Beaglebone Black Board.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gpio</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Import Adafruit_BBIO.GPIO&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span> <span class="o">=</span> <span class="n">gpio</span>
+
+    <span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a GPIO pin.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">OUT</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the output value of a GPIO pin.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">output</span><span class="p">(</span>
+            <span class="n">pin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">HIGH</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">LOW</span><span class="p">,</span> <span class="n">pull_up_down</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">PUD_UP</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value of a GPIO pin.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">on_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a callback for a GPIO pin edge.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">add_event_detect</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">edge</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Clean up GPIO.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the GPIO module.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">pin</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="mi">1</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">0</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">for</span> <span class="n">pin</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">board</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#openoligo.hal.gpio.GPIOInterface">GPIOInterface</a></li>
+          <li><a href="/abc.ABC.ext">abc.ABC</a></li>
+          </ul>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.gpio.BbGPIO.cleanup">
+    <p>def <span class="ident">cleanup</span>(</p><p>self)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#openoligo.hal.gpio.GPIOInterface">GPIOInterface</a></code>.<code><a href="#openoligo.hal.gpio.GPIOInterface.cleanup">cleanup</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Clean up GPIO.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.BbGPIO.cleanup', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.gpio.BbGPIO.cleanup" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clean up GPIO.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.gpio.BbGPIO.on_edge">
+    <p>def <span class="ident">on_edge</span>(</p><p>self, pin: str, *, edge: openoligo.hal.types.GpioEdge, callback: Callable)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#openoligo.hal.gpio.GPIOInterface">GPIOInterface</a></code>.<code><a href="#openoligo.hal.gpio.GPIOInterface.on_edge">on_edge</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Set up a callback for a GPIO pin edge.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.BbGPIO.on_edge', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.gpio.BbGPIO.on_edge" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">on_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up a callback for a GPIO pin edge.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">add_event_detect</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">edge</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.gpio.BbGPIO.set">
+    <p>def <span class="ident">set</span>(</p><p>self, pin: str, value: bool)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#openoligo.hal.gpio.GPIOInterface">GPIOInterface</a></code>.<code><a href="#openoligo.hal.gpio.GPIOInterface.set">set</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Set the output value of a GPIO pin.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.BbGPIO.set', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.gpio.BbGPIO.set" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the output value of a GPIO pin.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">output</span><span class="p">(</span>
+        <span class="n">pin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">HIGH</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">LOW</span><span class="p">,</span> <span class="n">pull_up_down</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">PUD_UP</span>
+    <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.gpio.BbGPIO.setup_pin">
+    <p>def <span class="ident">setup_pin</span>(</p><p>self, pin: str, mode: openoligo.hal.types.GpioMode = &lt;GpioMode.OUT: 1&gt;)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#openoligo.hal.gpio.GPIOInterface">GPIOInterface</a></code>.<code><a href="#openoligo.hal.gpio.GPIOInterface.setup_pin">setup_pin</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Set up a GPIO pin.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.BbGPIO.setup_pin', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.gpio.BbGPIO.setup_pin" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up a GPIO pin.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">OUT</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.gpio.BbGPIO.value">
+    <p>def <span class="ident">value</span>(</p><p>self, pin: str)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#openoligo.hal.gpio.GPIOInterface">GPIOInterface</a></code>.<code><a href="#openoligo.hal.gpio.GPIOInterface.value">value</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Get the value of a GPIO pin.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.BbGPIO.value', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.gpio.BbGPIO.value" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the value of a GPIO pin.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
       
       <div class="item">
       <p id="openoligo.hal.gpio.GPIOInterface" class="name">class <span class="ident">GPIOInterface</span></p>
@@ -1287,17 +1549,20 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;GPIO interface.&quot;&quot;&quot;</span>
 
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a GPIO pin.&quot;&quot;&quot;</span>
 
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the output value of a GPIO pin.&quot;&quot;&quot;</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Setting pin </span><span class="si">%s</span><span class="s2"> to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pin</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value of a GPIO pin.&quot;&quot;&quot;</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">on_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a callback for a GPIO pin edge.&quot;&quot;&quot;</span>
 
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1343,8 +1608,31 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
             
   <div class="item">
+    <div class="name def" id="openoligo.hal.gpio.GPIOInterface.on_edge">
+    <p>def <span class="ident">on_edge</span>(</p><p>self, pin: str, *, edge: openoligo.hal.types.GpioEdge, callback: Callable)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Set up a callback for a GPIO pin edge.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.GPIOInterface.on_edge', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.gpio.GPIOInterface.on_edge" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">on_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up a callback for a GPIO pin edge.&quot;&quot;&quot;</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
     <div class="name def" id="openoligo.hal.gpio.GPIOInterface.set">
-    <p>def <span class="ident">set</span>(</p><p>self, pin: openoligo.hal.types.RPiBoard, value: bool)</p>
+    <p>def <span class="ident">set</span>(</p><p>self, pin: str, value: bool)</p>
     </div>
     
 
@@ -1355,9 +1643,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.GPIOInterface.set', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.hal.gpio.GPIOInterface.set" class="source">
     <div class="codehilite"><pre><span></span><span class="nd">@abstractmethod</span>
-<span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the output value of a GPIO pin.&quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Setting pin </span><span class="si">%s</span><span class="s2"> to </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pin</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1368,7 +1655,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
   <div class="item">
     <div class="name def" id="openoligo.hal.gpio.GPIOInterface.setup_pin">
-    <p>def <span class="ident">setup_pin</span>(</p><p>self, pin: openoligo.hal.types.RPiBoard, mode: openoligo.hal.types.GpioMode)</p>
+    <p>def <span class="ident">setup_pin</span>(</p><p>self, pin: str, mode: openoligo.hal.types.GpioMode)</p>
     </div>
     
 
@@ -1379,7 +1666,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.GPIOInterface.setup_pin', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.hal.gpio.GPIOInterface.setup_pin" class="source">
     <div class="codehilite"><pre><span></span><span class="nd">@abstractmethod</span>
-<span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up a GPIO pin.&quot;&quot;&quot;</span>
 </pre></div>
 
@@ -1391,7 +1678,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
   <div class="item">
     <div class="name def" id="openoligo.hal.gpio.GPIOInterface.value">
-    <p>def <span class="ident">value</span>(</p><p>self, pin: openoligo.hal.types.RPiBoard)</p>
+    <p>def <span class="ident">value</span>(</p><p>self, pin: str)</p>
     </div>
     
 
@@ -1402,7 +1689,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.GPIOInterface.value', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.hal.gpio.GPIOInterface.value" class="source">
     <div class="codehilite"><pre><span></span><span class="nd">@abstractmethod</span>
-<span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the value of a GPIO pin.&quot;&quot;&quot;</span>
 </pre></div>
 
@@ -1430,31 +1717,41 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">        Initialize the state. Its keys are the pin numbers,</span>
 <span class="sd">        and the values are their mock states</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">pin</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">board</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=unused-argument</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a GPIO pin.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the output value of a GPIO pin.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="n">pin</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">pin</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value of a GPIO pin.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">pin</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">pin</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">on_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a callback for a GPIO pin edge.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Clean up GPIO.&quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">pin</span> <span class="ow">in</span> <span class="n">Board</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">pin</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">board</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the GPIO module.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="mi">1</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">0</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">for</span> <span class="n">pin</span> <span class="ow">in</span> <span class="n">Board</span><span class="p">)</span>
+        <span class="c1"># return &quot;, &quot;.join(f&quot;({pin}, {self.value(pin)})&quot; for pin, _ in board)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
 </pre></div>
 
   </div>
@@ -1487,7 +1784,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div id="source-openoligo.hal.gpio.MockGPIO.cleanup" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Clean up GPIO.&quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">pin</span> <span class="ow">in</span> <span class="n">Board</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">pin</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">board</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 </pre></div>
 
@@ -1498,8 +1795,34 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
             
   <div class="item">
+    <div class="name def" id="openoligo.hal.gpio.MockGPIO.on_edge">
+    <p>def <span class="ident">on_edge</span>(</p><p>self, pin: str, *, edge: openoligo.hal.types.GpioEdge, callback: Callable)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#openoligo.hal.gpio.GPIOInterface">GPIOInterface</a></code>.<code><a href="#openoligo.hal.gpio.GPIOInterface.on_edge">on_edge</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Set up a callback for a GPIO pin edge.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.MockGPIO.on_edge', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.gpio.MockGPIO.on_edge" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">on_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up a callback for a GPIO pin edge.&quot;&quot;&quot;</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
     <div class="name def" id="openoligo.hal.gpio.MockGPIO.set">
-    <p>def <span class="ident">set</span>(</p><p>self, pin: openoligo.hal.types.RPiBoard, value: bool)</p>
+    <p>def <span class="ident">set</span>(</p><p>self, pin: str, value: bool)</p>
     </div>
     
     <p class="inheritance">
@@ -1513,10 +1836,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.MockGPIO.set', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.hal.gpio.MockGPIO.set" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the output value of a GPIO pin.&quot;&quot;&quot;</span>
-    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">if</span> <span class="n">pin</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">pin</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 </pre></div>
 
   </div>
@@ -1527,7 +1852,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
   <div class="item">
     <div class="name def" id="openoligo.hal.gpio.MockGPIO.setup_pin">
-    <p>def <span class="ident">setup_pin</span>(</p><p>self, pin: openoligo.hal.types.RPiBoard, mode: openoligo.hal.types.GpioMode = &lt;GpioMode.OUT: 1&gt;)</p>
+    <p>def <span class="ident">setup_pin</span>(</p><p>self, pin: str, _: openoligo.hal.types.GpioMode = &lt;GpioMode.OUT: 1&gt;)</p>
     </div>
     
     <p class="inheritance">
@@ -1542,10 +1867,10 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.MockGPIO.setup_pin', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.hal.gpio.MockGPIO.setup_pin" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=unused-argument</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up a GPIO pin.&quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
 
   </div>
@@ -1556,7 +1881,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
   <div class="item">
     <div class="name def" id="openoligo.hal.gpio.MockGPIO.value">
-    <p>def <span class="ident">value</span>(</p><p>self, pin: openoligo.hal.types.RPiBoard)</p>
+    <p>def <span class="ident">value</span>(</p><p>self, pin: str)</p>
     </div>
     
     <p class="inheritance">
@@ -1570,9 +1895,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.MockGPIO.value', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.hal.gpio.MockGPIO.value" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the value of a GPIO pin.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">pin</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">pin</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
 </pre></div>
 
   </div>
@@ -1595,22 +1922,27 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;GPIO access on Raspberry Pi.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gpio</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Import Board.GPIO&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Import RPi.GPIO&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span> <span class="o">=</span> <span class="n">gpio</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">setmode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">BOARD</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">setmode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">BCM</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">setwarnings</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a GPIO pin.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">OUT</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">OUT</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the output value of a GPIO pin.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">HIGH</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">LOW</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">pin</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">HIGH</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">LOW</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value of a GPIO pin.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">on_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a callback for a GPIO pin edge.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">add_event_detect</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">add_event_callback</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Clean up GPIO.&quot;&quot;&quot;</span>
@@ -1618,7 +1950,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the GPIO module.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="mi">1</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">0</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">for</span> <span class="n">pin</span> <span class="ow">in</span> <span class="n">Board</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">pin</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="mi">1</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="mi">0</span><span class="si">}</span><span class="s2">)&quot;</span> <span class="k">for</span> <span class="n">pin</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">board</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1661,8 +1993,36 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
             
   <div class="item">
+    <div class="name def" id="openoligo.hal.gpio.RPiGPIO.on_edge">
+    <p>def <span class="ident">on_edge</span>(</p><p>self, pin: str, *, edge: openoligo.hal.types.GpioEdge, callback: Callable)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#openoligo.hal.gpio.GPIOInterface">GPIOInterface</a></code>.<code><a href="#openoligo.hal.gpio.GPIOInterface.on_edge">on_edge</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Set up a callback for a GPIO pin edge.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.RPiGPIO.on_edge', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.gpio.RPiGPIO.on_edge" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">on_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up a callback for a GPIO pin edge.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">add_event_detect</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">edge</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">add_event_callback</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
     <div class="name def" id="openoligo.hal.gpio.RPiGPIO.set">
-    <p>def <span class="ident">set</span>(</p><p>self, pin: openoligo.hal.types.RPiBoard, value: bool)</p>
+    <p>def <span class="ident">set</span>(</p><p>self, pin: str, value: bool)</p>
     </div>
     
     <p class="inheritance">
@@ -1676,10 +2036,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.RPiGPIO.set', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.hal.gpio.RPiGPIO.set" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the output value of a GPIO pin.&quot;&quot;&quot;</span>
-    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">HIGH</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">LOW</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">pin</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">HIGH</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">LOW</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1690,7 +2049,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
   <div class="item">
     <div class="name def" id="openoligo.hal.gpio.RPiGPIO.setup_pin">
-    <p>def <span class="ident">setup_pin</span>(</p><p>self, pin: openoligo.hal.types.RPiBoard, mode: openoligo.hal.types.GpioMode = &lt;GpioMode.OUT: 1&gt;)</p>
+    <p>def <span class="ident">setup_pin</span>(</p><p>self, pin: str, mode: openoligo.hal.types.GpioMode = &lt;GpioMode.OUT: 1&gt;)</p>
     </div>
     
     <p class="inheritance">
@@ -1704,9 +2063,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.RPiGPIO.setup_pin', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.hal.gpio.RPiGPIO.setup_pin" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up a GPIO pin.&quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">OUT</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">OUT</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">IN</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1717,7 +2076,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
   <div class="item">
     <div class="name def" id="openoligo.hal.gpio.RPiGPIO.value">
-    <p>def <span class="ident">value</span>(</p><p>self, pin: openoligo.hal.types.RPiBoard)</p>
+    <p>def <span class="ident">value</span>(</p><p>self, pin: str)</p>
     </div>
     
     <p class="inheritance">
@@ -1731,8 +2090,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.gpio.RPiGPIO.value', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.hal.gpio.RPiGPIO.value" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="n">Board</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">pin</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the value of a GPIO pin.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">pin</span><span class="p">)</span>
 </pre></div>
 
   </div>

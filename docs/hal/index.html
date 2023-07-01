@@ -1064,17 +1064,21 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <ul>
     <li class="mono"><a href="#openoligo.hal.__platform__">__platform__</a></li>
+    <li class="mono"><a href="#openoligo.hal.board">board</a></li>
   </ul>
 
     </li>
 
+    <li class="set"><h3><a href="#header-functions">Functions</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#openoligo.hal.list_configurable_pins">list_configurable_pins</a></li>
+  </ul>
+
+    </li>
 
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
-        <li class="mono">
-        <span class="class_name"><a href="#openoligo.hal.RPiBoard">Board</a></span>
-        
-        </li>
         <li class="mono">
         <span class="class_name"><a href="#openoligo.hal.GpioMode">GpioMode</a></span>
         
@@ -1085,6 +1089,19 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
           
   <ul>
     <li class="mono"><a href="#openoligo.hal.InvalidManifoldSizeError.with_traceback">with_traceback</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#openoligo.hal.MockGPIO">MockGPIO</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#openoligo.hal.MockGPIO.cleanup">cleanup</a></li>
+    <li class="mono"><a href="#openoligo.hal.MockGPIO.on_edge">on_edge</a></li>
+    <li class="mono"><a href="#openoligo.hal.MockGPIO.set">set</a></li>
+    <li class="mono"><a href="#openoligo.hal.MockGPIO.setup_pin">setup_pin</a></li>
+    <li class="mono"><a href="#openoligo.hal.MockGPIO.value">value</a></li>
   </ul>
 
         </li>
@@ -1167,7 +1184,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
     <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
       <ul>
-        <li class="mono"><a href="board.html">openoligo.hal.board</a></li>
+        <li class="mono"><a href="#openoligo.hal.board">board</a></li>
         <li class="mono"><a href="devices.html">openoligo.hal.devices</a></li>
         <li class="mono"><a href="gpio.html">openoligo.hal.gpio</a></li>
         <li class="mono"><a href="platform.html">openoligo.hal.platform</a></li>
@@ -1193,11 +1210,10 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">Driver imports for convenience.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">openoligo.hal.board</span> <span class="kn">import</span> <span class="n">Pinout</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.board</span> <span class="kn">import</span> <span class="n">Pinout</span><span class="p">,</span> <span class="n">list_configurable_pins</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.devices</span> <span class="kn">import</span> <span class="n">Switch</span><span class="p">,</span> <span class="n">Valve</span>
-<span class="kn">from</span> <span class="nn">openoligo.hal.gpio</span> <span class="kn">import</span> <span class="n">Platform</span><span class="p">,</span> <span class="n">__platform__</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.gpio</span> <span class="kn">import</span> <span class="n">MockGPIO</span><span class="p">,</span> <span class="n">Platform</span><span class="p">,</span> <span class="n">__platform__</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.types</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">Board</span><span class="p">,</span>
     <span class="n">GpioMode</span><span class="p">,</span>
     <span class="n">InvalidManifoldSizeError</span><span class="p">,</span>
     <span class="n">Switchable</span><span class="p">,</span>
@@ -1205,6 +1221,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">Valvable</span><span class="p">,</span>
     <span class="n">ValveState</span><span class="p">,</span>
     <span class="n">ValveType</span><span class="p">,</span>
+    <span class="n">board</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -1212,7 +1229,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="s2">&quot;Platform&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Valve&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Switch&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Board&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;board&quot;</span><span class="p">,</span>
     <span class="s2">&quot;GpioMode&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Pinout&quot;</span><span class="p">,</span>
     <span class="s2">&quot;InvalidManifoldSizeError&quot;</span><span class="p">,</span>
@@ -1221,6 +1238,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="s2">&quot;Valvable&quot;</span><span class="p">,</span>
     <span class="s2">&quot;ValveState&quot;</span><span class="p">,</span>
     <span class="s2">&quot;ValveType&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;list_configurable_pins&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;MockGPIO&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
 
@@ -1238,365 +1257,46 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 
       </div>
-
-
-    <h2 class="section-title" id="header-classes">Classes</h2>
-      
       <div class="item">
-      <p id="openoligo.hal.RPiBoard" class="name">class <span class="ident">Board</span></p>
+      <p id="openoligo.hal.board" class="name">var <span class="ident">board</span></p>
       
   
-    <div class="desc"><p>Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.RPiBoard', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.hal.RPiBoard" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">RPiBoard</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+</div>
 
-    <span class="n">P3</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">P5</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">P7</span> <span class="o">=</span> <span class="mi">7</span>
-    <span class="n">P8</span> <span class="o">=</span> <span class="mi">8</span>
-    <span class="n">P10</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">P11</span> <span class="o">=</span> <span class="mi">11</span>
-    <span class="n">P12</span> <span class="o">=</span> <span class="mi">12</span>
-    <span class="n">P13</span> <span class="o">=</span> <span class="mi">13</span>
-    <span class="n">P15</span> <span class="o">=</span> <span class="mi">15</span>
-    <span class="n">P16</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="n">P18</span> <span class="o">=</span> <span class="mi">18</span>
-    <span class="n">P19</span> <span class="o">=</span> <span class="mi">19</span>
-    <span class="n">P21</span> <span class="o">=</span> <span class="mi">21</span>
-    <span class="n">P22</span> <span class="o">=</span> <span class="mi">22</span>
-    <span class="n">P23</span> <span class="o">=</span> <span class="mi">23</span>
-    <span class="n">P24</span> <span class="o">=</span> <span class="mi">24</span>
-    <span class="n">P26</span> <span class="o">=</span> <span class="mi">26</span>
-    <span class="n">P27</span> <span class="o">=</span> <span class="mi">27</span>
-    <span class="n">P28</span> <span class="o">=</span> <span class="mi">28</span>
-    <span class="n">P29</span> <span class="o">=</span> <span class="mi">29</span>
-    <span class="n">P31</span> <span class="o">=</span> <span class="mi">31</span>
-    <span class="n">P32</span> <span class="o">=</span> <span class="mi">32</span>
-    <span class="n">P33</span> <span class="o">=</span> <span class="mi">33</span>
-    <span class="n">P35</span> <span class="o">=</span> <span class="mi">35</span>
-    <span class="n">P36</span> <span class="o">=</span> <span class="mi">36</span>
-    <span class="n">P37</span> <span class="o">=</span> <span class="mi">37</span>
-    <span class="n">P38</span> <span class="o">=</span> <span class="mi">38</span>
-    <span class="n">P40</span> <span class="o">=</span> <span class="mi">40</span>
+      </div>
+
+    <h2 class="section-title" id="header-functions">Functions</h2>
+      
+  <div class="item">
+    <div class="name def" id="openoligo.hal.list_configurable_pins">
+    <p>def <span class="ident">list_configurable_pins</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Returns a list of all configurable pins.
+These ar all pins in the board that are not part of the fiixed pinout.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.list_configurable_pins', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.list_configurable_pins" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">list_configurable_pins</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Board</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a list of all configurable pins.</span>
+<span class="sd">    These ar all pins in the board that are not part of the fiixed pinout.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fixed_pins</span> <span class="o">=</span> <span class="p">[</span><span class="n">sw</span><span class="o">.</span><span class="n">gpio_pin</span> <span class="k">for</span> <span class="n">sw</span> <span class="ow">in</span> <span class="n">fixed_pinout</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>  <span class="c1"># type: ignore</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">pin</span> <span class="k">for</span> <span class="n">pin</span> <span class="ow">in</span> <span class="n">board</span> <span class="k">if</span> <span class="n">pin</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fixed_pins</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
 </pre></div>
 
   </div>
 </div>
 
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
-          </ul>
-          <h3>Class variables</h3>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P10" class="name">var <span class="ident">P10</span></p>
-            
-
-            
+  </div>
   
-  <div class="source_cont">
-</div>
 
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P11" class="name">var <span class="ident">P11</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P12" class="name">var <span class="ident">P12</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P13" class="name">var <span class="ident">P13</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P15" class="name">var <span class="ident">P15</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P16" class="name">var <span class="ident">P16</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P18" class="name">var <span class="ident">P18</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P19" class="name">var <span class="ident">P19</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P21" class="name">var <span class="ident">P21</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P22" class="name">var <span class="ident">P22</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P23" class="name">var <span class="ident">P23</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P24" class="name">var <span class="ident">P24</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P26" class="name">var <span class="ident">P26</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P27" class="name">var <span class="ident">P27</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P28" class="name">var <span class="ident">P28</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P29" class="name">var <span class="ident">P29</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P3" class="name">var <span class="ident">P3</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P31" class="name">var <span class="ident">P31</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P32" class="name">var <span class="ident">P32</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P33" class="name">var <span class="ident">P33</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P35" class="name">var <span class="ident">P35</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P36" class="name">var <span class="ident">P36</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P37" class="name">var <span class="ident">P37</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P38" class="name">var <span class="ident">P38</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P40" class="name">var <span class="ident">P40</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P5" class="name">var <span class="ident">P5</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P7" class="name">var <span class="ident">P7</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.P8" class="name">var <span class="ident">P8</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.name" class="name">var <span class="ident">name</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.RPiBoard.value" class="name">var <span class="ident">value</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-      </div>
-      </div>
+    <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
       <p id="openoligo.hal.GpioMode" class="name">class <span class="ident">GpioMode</span></p>
@@ -1714,6 +1414,195 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <div class="desc"><p>Exception.with_traceback(tb) &ndash;
 set self.<strong>traceback</strong> to tb and return self.</p></div>
   <div class="source_cont">
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="openoligo.hal.MockGPIO" class="name">class <span class="ident">MockGPIO</span></p>
+      
+  
+    <div class="desc"><p>Mock GPIO access.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.MockGPIO', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.MockGPIO" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">MockGPIO</span><span class="p">(</span><span class="n">GPIOInterface</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mock GPIO access.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the state. Its keys are the pin numbers,</span>
+<span class="sd">        and the values are their mock states</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">pin</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">board</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=unused-argument</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a GPIO pin.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the output value of a GPIO pin.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">pin</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">pin</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value of a GPIO pin.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">pin</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">pin</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">on_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up a callback for a GPIO pin edge.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Clean up GPIO.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">pin</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">board</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the GPIO module.&quot;&quot;&quot;</span>
+        <span class="c1"># return &quot;, &quot;.join(f&quot;({pin}, {self.value(pin)})&quot; for pin, _ in board)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="gpio.html#openoligo.hal.gpio.GPIOInterface">openoligo.hal.gpio.GPIOInterface</a></li>
+          <li><a href="/abc.ABC.ext">abc.ABC</a></li>
+          </ul>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.MockGPIO.cleanup">
+    <p>def <span class="ident">cleanup</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Clean up GPIO.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.MockGPIO.cleanup', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.MockGPIO.cleanup" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clean up GPIO.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">pin</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">board</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">pin</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.MockGPIO.on_edge">
+    <p>def <span class="ident">on_edge</span>(</p><p>self, pin: str, *, edge: openoligo.hal.types.GpioEdge, callback: Callable)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Set up a callback for a GPIO pin edge.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.MockGPIO.on_edge', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.MockGPIO.on_edge" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">on_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up a callback for a GPIO pin edge.&quot;&quot;&quot;</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.MockGPIO.set">
+    <p>def <span class="ident">set</span>(</p><p>self, pin: str, value: bool)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Set the output value of a GPIO pin.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.MockGPIO.set', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.MockGPIO.set" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the output value of a GPIO pin.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">pin</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">pin</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.MockGPIO.setup_pin">
+    <p>def <span class="ident">setup_pin</span>(</p><p>self, pin: str, _: openoligo.hal.types.GpioMode = &lt;GpioMode.OUT: 1&gt;)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Set up a GPIO pin.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.MockGPIO.setup_pin', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.MockGPIO.setup_pin" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">setup_pin</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">_</span><span class="p">:</span> <span class="n">GpioMode</span> <span class="o">=</span> <span class="n">GpioMode</span><span class="o">.</span><span class="n">OUT</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pylint: disable=unused-argument</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up a GPIO pin.&quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.MockGPIO.value">
+    <p>def <span class="ident">value</span>(</p><p>self, pin: str)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Get the value of a GPIO pin.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.MockGPIO.value', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.MockGPIO.value" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pin</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the value of a GPIO pin.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">pin</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">pin</span><span class="p">]</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;P</span><span class="si">{</span><span class="n">pin</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span>
+</pre></div>
+
+  </div>
 </div>
 
   </div>
@@ -2050,7 +1939,7 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
 <span class="sd">        board: Board object to access the GPIO pins.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">gpio_pin</span><span class="p">:</span> <span class="n">Board</span>
+    <span class="n">gpio_pin</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">_switch_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -2080,11 +1969,6 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
             <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
         <span class="p">)</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Board</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span>
-
     <span class="k">def</span> <span class="nf">toggle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Toggle the state of the switch.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">)</span>
@@ -2109,21 +1993,6 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
           <li><a href="/typing.Generic.ext">typing.Generic</a></li>
           </ul>
           <h3>Instance variables</h3>
-            <div class="item">
-            <p id="openoligo.hal.Switch.gpio" class="name">var <span class="ident">gpio</span></p>
-            
-    <p class="inheritance">
-     <strong>Inheritance:</strong>
-       <code><a href="#openoligo.hal.Switchable">Switchable</a></code>.<code><a href="#openoligo.hal.Switchable.gpio">gpio</a></code>
-    </p>
-
-            
-  
-    <div class="desc inherited"><p>Get the GPIO pin number.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
             <div class="item">
             <p id="openoligo.hal.Switch.value" class="name">var <span class="ident">value</span></p>
             
@@ -2230,10 +2099,10 @@ be able to set, get the current value and toggle the state of the switch.</p></d
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the state of the switch.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Board</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+    <span class="c1">#    @property</span>
+    <span class="c1">#    def gpio(self) -&gt; Board:</span>
+    <span class="c1">#        &quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
+    <span class="c1">#        raise NotImplementedError</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -2252,17 +2121,6 @@ be able to set, get the current value and toggle the state of the switch.</p></d
           <li><a href="/typing.Generic.ext">typing.Generic</a></li>
           </ul>
           <h3>Instance variables</h3>
-            <div class="item">
-            <p id="openoligo.hal.Switchable.gpio" class="name">var <span class="ident">gpio</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Get the GPIO pin number.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
             <div class="item">
             <p id="openoligo.hal.Switchable.value" class="name">var <span class="ident">value</span></p>
             
@@ -2411,21 +2269,6 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
 
             </div>
             <div class="item">
-            <p id="openoligo.hal.Valvable.gpio" class="name">var <span class="ident">gpio</span></p>
-            
-    <p class="inheritance">
-     <strong>Inheritance:</strong>
-       <code><a href="#openoligo.hal.Switchable">Switchable</a></code>.<code><a href="#openoligo.hal.Switchable.gpio">gpio</a></code>
-    </p>
-
-            
-  
-    <div class="desc inherited"><p>Get the GPIO pin number.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
             <p id="openoligo.hal.Valvable.value" class="name">var <span class="ident">value</span></p>
             
     <p class="inheritance">
@@ -2531,7 +2374,7 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
 <span class="sd">    A valve that actually controls a GPIO pin on the Raspberry Pi.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">gpio_pin</span><span class="p">:</span> <span class="n">Board</span>
+    <span class="n">gpio_pin</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">role</span><span class="p">:</span> <span class="n">ValveRole</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">INLET</span><span class="p">)</span>
     <span class="n">valve_type</span><span class="p">:</span> <span class="n">ValveType</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">ValveType</span><span class="o">.</span><span class="n">NORMALLY_OPEN</span><span class="p">)</span>
     <span class="n">_switch_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -2577,11 +2420,6 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
             <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">,</span>
             <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
         <span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Board</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -2642,21 +2480,6 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
             
   
     <div class="desc inherited"><p>Get the type of the valve.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.Valve.gpio" class="name">var <span class="ident">gpio</span></p>
-            
-    <p class="inheritance">
-     <strong>Inheritance:</strong>
-       <code><a href="#openoligo.hal.Valvable">Valvable</a></code>.<code><a href="#openoligo.hal.Valvable.gpio">gpio</a></code>
-    </p>
-
-            
-  
-    <div class="desc inherited"><p>Get the GPIO pin number.</p></div>
   <div class="source_cont">
 </div>
 
@@ -2914,7 +2737,7 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
 
     <h2 class="section-title" id="header-submodules">Sub-modules</h2>
       <div class="item">
-      <p class="name"><a href="board.html">openoligo.hal.board</a></p>
+      <p class="name"><a href="#openoligo.hal.board">board</a></p>
       
   
     <div class="desc"><p>Pins in the Raspberry Pi GPIO header.</p></div>

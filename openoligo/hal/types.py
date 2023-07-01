@@ -56,6 +56,14 @@ class GpioMode(Enum):
     OUT = 1
 
 
+class GpioEdge(Enum):
+    """GPIO edge."""
+
+    RISING = 0
+    FALLING = 1
+    BOTH = 2
+
+
 class ValveState(Enum):
     """This class represents the state of a valve."""
 

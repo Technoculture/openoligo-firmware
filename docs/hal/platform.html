@@ -1060,6 +1060,15 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <li class="mono"><a href="index.html">openoligo.hal</a></li>
       </ul>
     </li>
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#openoligo.hal.platform.PLATFORM_TO_BOARD">PLATFORM_TO_BOARD</a></li>
+    <li class="mono"><a href="#openoligo.hal.platform.bb_board_pins">bb_board_pins</a></li>
+    <li class="mono"><a href="#openoligo.hal.platform.rpi_board_pins">rpi_board_pins</a></li>
+  </ul>
+
+    </li>
 
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
@@ -1073,6 +1082,25 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
+        <li class="mono">
+        <span class="class_name"><a href="#openoligo.hal.platform.dict">MinimumCommonPinout</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#openoligo.hal.platform.dict.clear">clear</a></li>
+    <li class="mono"><a href="#openoligo.hal.platform.dict.copy">copy</a></li>
+    <li class="mono"><a href="#openoligo.hal.platform.dict.fromkeys">fromkeys</a></li>
+    <li class="mono"><a href="#openoligo.hal.platform.dict.get">get</a></li>
+    <li class="mono"><a href="#openoligo.hal.platform.dict.items">items</a></li>
+    <li class="mono"><a href="#openoligo.hal.platform.dict.keys">keys</a></li>
+    <li class="mono"><a href="#openoligo.hal.platform.dict.pop">pop</a></li>
+    <li class="mono"><a href="#openoligo.hal.platform.dict.popitem">popitem</a></li>
+    <li class="mono"><a href="#openoligo.hal.platform.dict.setdefault">setdefault</a></li>
+    <li class="mono"><a href="#openoligo.hal.platform.dict.update">update</a></li>
+    <li class="mono"><a href="#openoligo.hal.platform.dict.values">values</a></li>
+  </ul>
+
+        </li>
         <li class="mono">
         <span class="class_name"><a href="#openoligo.hal.platform.Platform">Platform</a></span>
         
@@ -1137,6 +1165,80 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
 <span class="n">__platform__</span> <span class="o">=</span> <span class="n">get_platform</span><span class="p">()</span>
+
+
+<span class="n">MinimumCommonPinout</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span>
+
+
+<span class="n">rpi_board_pins</span><span class="p">:</span> <span class="n">MinimumCommonPinout</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;P3&quot;</span><span class="p">:</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P5&quot;</span><span class="p">:</span> <span class="s2">&quot;5&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P7&quot;</span><span class="p">:</span> <span class="s2">&quot;7&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P8&quot;</span><span class="p">:</span> <span class="s2">&quot;8&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P10&quot;</span><span class="p">:</span> <span class="s2">&quot;10&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P11&quot;</span><span class="p">:</span> <span class="s2">&quot;11&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P12&quot;</span><span class="p">:</span> <span class="s2">&quot;12&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P13&quot;</span><span class="p">:</span> <span class="s2">&quot;13&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P15&quot;</span><span class="p">:</span> <span class="s2">&quot;15&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P16&quot;</span><span class="p">:</span> <span class="s2">&quot;16&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P18&quot;</span><span class="p">:</span> <span class="s2">&quot;18&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P19&quot;</span><span class="p">:</span> <span class="s2">&quot;19&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P21&quot;</span><span class="p">:</span> <span class="s2">&quot;21&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P22&quot;</span><span class="p">:</span> <span class="s2">&quot;22&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P23&quot;</span><span class="p">:</span> <span class="s2">&quot;23&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P24&quot;</span><span class="p">:</span> <span class="s2">&quot;24&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P26&quot;</span><span class="p">:</span> <span class="s2">&quot;26&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P27&quot;</span><span class="p">:</span> <span class="s2">&quot;27&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P28&quot;</span><span class="p">:</span> <span class="s2">&quot;28&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P29&quot;</span><span class="p">:</span> <span class="s2">&quot;29&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P31&quot;</span><span class="p">:</span> <span class="s2">&quot;31&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P32&quot;</span><span class="p">:</span> <span class="s2">&quot;32&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P33&quot;</span><span class="p">:</span> <span class="s2">&quot;33&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P35&quot;</span><span class="p">:</span> <span class="s2">&quot;35&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P36&quot;</span><span class="p">:</span> <span class="s2">&quot;36&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P37&quot;</span><span class="p">:</span> <span class="s2">&quot;37&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P38&quot;</span><span class="p">:</span> <span class="s2">&quot;38&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P40&quot;</span><span class="p">:</span> <span class="s2">&quot;40&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="n">bb_board_pins</span><span class="p">:</span> <span class="n">MinimumCommonPinout</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;P3&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_11&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P5&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_12&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P7&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_13&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P8&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_14&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P10&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_15&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P11&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_16&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P12&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_17&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P13&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_18&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P15&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_19&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P16&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_20&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P18&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_21&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P19&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_22&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P21&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_23&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P22&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_24&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P23&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_25&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P24&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_26&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P26&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_27&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P27&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_28&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P28&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_29&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P29&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_30&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P31&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_31&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P32&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_32&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P33&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_33&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P35&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_34&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P36&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_35&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P37&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_36&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P38&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_37&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;P40&quot;</span><span class="p">:</span> <span class="s2">&quot;P8_38&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="n">PLATFORM_TO_BOARD</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Platform</span><span class="p">,</span> <span class="n">MinimumCommonPinout</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">Platform</span><span class="o">.</span><span class="n">BB</span><span class="p">:</span> <span class="n">bb_board_pins</span><span class="p">,</span>
+    <span class="n">Platform</span><span class="o">.</span><span class="n">RPI</span><span class="p">:</span> <span class="n">rpi_board_pins</span><span class="p">,</span>
+    <span class="n">Platform</span><span class="o">.</span><span class="n">SIM</span><span class="p">:</span> <span class="n">rpi_board_pins</span><span class="p">,</span>
+<span class="p">}</span>
 </pre></div>
 
   </div>
@@ -1144,6 +1246,31 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   </header>
 
   <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="openoligo.hal.platform.PLATFORM_TO_BOARD" class="name">var <span class="ident">PLATFORM_TO_BOARD</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="openoligo.hal.platform.bb_board_pins" class="name">var <span class="ident">bb_board_pins</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="openoligo.hal.platform.rpi_board_pins" class="name">var <span class="ident">rpi_board_pins</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
 
     <h2 class="section-title" id="header-functions">Functions</h2>
       
@@ -1229,6 +1356,205 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
 
     <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="openoligo.hal.platform.dict" class="name">class <span class="ident">MinimumCommonPinout</span></p>
+      
+  
+    <div class="desc"><p>dict() -&gt; new empty dictionary
+dict(mapping) -&gt; new dictionary initialized from a mapping object's
+    (key, value) pairs
+dict(iterable) -&gt; new dictionary initialized as if via:
+    d = {}
+    for k, v in iterable:
+        d[k] = v
+dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
+    in the keyword argument list.  For example:  dict(one=1, two=2)</p></div>
+  <div class="source_cont">
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="/builtins.dict.ext">builtins.dict</a></li>
+          </ul>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.platform.dict.clear">
+    <p>def <span class="ident">clear</span>(</p><p>...)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>D.clear() -&gt; None.  Remove all items from D.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.platform.dict.copy">
+    <p>def <span class="ident">copy</span>(</p><p>...)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>D.copy() -&gt; a shallow copy of D</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.platform.dict.fromkeys">
+    <p>def <span class="ident">fromkeys</span>(</p><p>iterable, value=None, /)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Create a new dictionary with keys from iterable and values set to value.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.platform.dict.get">
+    <p>def <span class="ident">get</span>(</p><p>self, key, default=None, /)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Return the value for key if key is in the dictionary, else default.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.platform.dict.items">
+    <p>def <span class="ident">items</span>(</p><p>...)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>D.items() -&gt; a set-like object providing a view on D's items</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.platform.dict.keys">
+    <p>def <span class="ident">keys</span>(</p><p>...)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>D.keys() -&gt; a set-like object providing a view on D's keys</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.platform.dict.pop">
+    <p>def <span class="ident">pop</span>(</p><p>...)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>D.pop(k[,d]) -&gt; v, remove specified key and return the corresponding value.</p>
+<p>If the key is not found, return the default if given; otherwise,
+raise a KeyError.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.platform.dict.popitem">
+    <p>def <span class="ident">popitem</span>(</p><p>self, /)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Remove and return a (key, value) pair as a 2-tuple.</p>
+<p>Pairs are returned in LIFO (last-in, first-out) order.
+Raises KeyError if the dict is empty.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.platform.dict.setdefault">
+    <p>def <span class="ident">setdefault</span>(</p><p>self, key, default=None, /)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Insert key with a value of default if key is not in the dictionary.</p>
+<p>Return the value for key if key is in the dictionary, else default.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.platform.dict.update">
+    <p>def <span class="ident">update</span>(</p><p>...)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>D.update([E, ]**F) -&gt; None.  Update D from dict/iterable E and F.
+If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
+If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
+In either case, this is followed by: for k in F:  D[k] = F[k]</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.platform.dict.values">
+    <p>def <span class="ident">values</span>(</p><p>...)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>D.values() -&gt; an object providing a view on D's values</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+      </div>
+      </div>
       
       <div class="item">
       <p id="openoligo.hal.platform.Platform" class="name">class <span class="ident">Platform</span></p>

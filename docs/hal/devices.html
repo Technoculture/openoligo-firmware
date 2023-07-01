@@ -1110,7 +1110,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 
 <span class="kn">from</span> <span class="nn">openoligo.hal.gpio</span> <span class="kn">import</span> <span class="n">get_gpio</span>
-<span class="kn">from</span> <span class="nn">openoligo.hal.types</span> <span class="kn">import</span> <span class="n">Board</span><span class="p">,</span> <span class="n">Switchable</span><span class="p">,</span> <span class="n">Valvable</span><span class="p">,</span> <span class="n">ValveRole</span><span class="p">,</span> <span class="n">ValveState</span><span class="p">,</span> <span class="n">ValveType</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.types</span> <span class="kn">import</span> <span class="n">Switchable</span><span class="p">,</span> <span class="n">Valvable</span><span class="p">,</span> <span class="n">ValveRole</span><span class="p">,</span> <span class="n">ValveState</span><span class="p">,</span> <span class="n">ValveType</span>
 
 
 <span class="nd">@dataclass</span>
@@ -1124,7 +1124,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">        board: Board object to access the GPIO pins.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">gpio_pin</span><span class="p">:</span> <span class="n">Board</span>
+    <span class="n">gpio_pin</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">_switch_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -1154,11 +1154,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
         <span class="p">)</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Board</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span>
-
     <span class="k">def</span> <span class="nf">toggle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Toggle the state of the switch.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">)</span>
@@ -1177,7 +1172,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">    A valve that actually controls a GPIO pin on the Raspberry Pi.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">gpio_pin</span><span class="p">:</span> <span class="n">Board</span>
+    <span class="n">gpio_pin</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">role</span><span class="p">:</span> <span class="n">ValveRole</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">INLET</span><span class="p">)</span>
     <span class="n">valve_type</span><span class="p">:</span> <span class="n">ValveType</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">ValveType</span><span class="o">.</span><span class="n">NORMALLY_OPEN</span><span class="p">)</span>
     <span class="n">_switch_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -1225,11 +1220,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Board</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span>
-
-    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the current value of the valve.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span>
@@ -1275,7 +1265,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">        board: Board object to access the GPIO pins.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">gpio_pin</span><span class="p">:</span> <span class="n">Board</span>
+    <span class="n">gpio_pin</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">_switch_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -1305,11 +1295,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
         <span class="p">)</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Board</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span>
-
     <span class="k">def</span> <span class="nf">toggle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Toggle the state of the switch.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">)</span>
@@ -1334,17 +1319,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
           <li><a href="/typing.Generic.ext">typing.Generic</a></li>
           </ul>
           <h3>Instance variables</h3>
-            <div class="item">
-            <p id="openoligo.hal.devices.Switch.gpio" class="name">var <span class="ident">gpio</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Get the GPIO pin number.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
             <div class="item">
             <p id="openoligo.hal.devices.Switch.value" class="name">var <span class="ident">value</span></p>
             
@@ -1434,7 +1408,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">    A valve that actually controls a GPIO pin on the Raspberry Pi.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">gpio_pin</span><span class="p">:</span> <span class="n">Board</span>
+    <span class="n">gpio_pin</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">role</span><span class="p">:</span> <span class="n">ValveRole</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">INLET</span><span class="p">)</span>
     <span class="n">valve_type</span><span class="p">:</span> <span class="n">ValveType</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">ValveType</span><span class="o">.</span><span class="n">NORMALLY_OPEN</span><span class="p">)</span>
     <span class="n">_switch_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -1480,11 +1454,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">,</span>
             <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
         <span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Board</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -1541,17 +1510,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
   
     <div class="desc"><p>Get the type of the valve.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.devices.Valve.gpio" class="name">var <span class="ident">gpio</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Get the GPIO pin number.</p></div>
   <div class="source_cont">
 </div>
 

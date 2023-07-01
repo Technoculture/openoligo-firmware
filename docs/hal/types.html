@@ -1060,16 +1060,25 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <li class="mono"><a href="index.html">openoligo.hal</a></li>
       </ul>
     </li>
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#openoligo.hal.types.PLATFORM_TO_BOARD">PLATFORM_TO_BOARD</a></li>
+    <li class="mono"><a href="#openoligo.hal.types.board">board</a></li>
+    <li class="mono"><a href="#openoligo.hal.types.rpi_board_pins">rpi_board_pins</a></li>
+  </ul>
+
+    </li>
 
 
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#openoligo.hal.types.BbBoard">BbBoard</a></span>
+        <span class="class_name"><a href="#openoligo.hal.types.Board">Board</a></span>
         
         </li>
         <li class="mono">
-        <span class="class_name"><a href="#openoligo.hal.types.RPiBoard">RPiBoard</a></span>
+        <span class="class_name"><a href="#openoligo.hal.types.GpioEdge">GpioEdge</a></span>
         
         </li>
         <li class="mono">
@@ -1111,10 +1120,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <li class="mono"><a href="#openoligo.hal.types.OneSourceException.with_traceback">with_traceback</a></li>
   </ul>
 
-        </li>
-        <li class="mono">
-        <span class="class_name"><a href="#openoligo.hal.types.RPiBoard">RPiBoard</a></span>
-        
         </li>
         <li class="mono">
         <span class="class_name"><a href="#openoligo.hal.types.Switchable">Switchable</a></span>
@@ -1179,85 +1184,51 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">This module contains definitions of protocols and exceptions related to switchable devices.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Protocol</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Protocol</span>
 
-<span class="kn">from</span> <span class="nn">openoligo.hal.platform</span> <span class="kn">import</span> <span class="n">Platform</span><span class="p">,</span> <span class="n">__platform__</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.platform</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PLATFORM_TO_BOARD</span><span class="p">,</span>
+    <span class="n">MinimumCommonPinout</span><span class="p">,</span>
+    <span class="n">Platform</span><span class="p">,</span>
+    <span class="n">__platform__</span><span class="p">,</span>
+    <span class="n">rpi_board_pins</span><span class="p">,</span>
+<span class="p">)</span>
 
 
-<span class="k">class</span> <span class="nc">RPiBoard</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Board</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</span>
+<span class="sd">    Represents a board with a minimum common pinout.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">P3</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">P5</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">P7</span> <span class="o">=</span> <span class="mi">7</span>
-    <span class="n">P8</span> <span class="o">=</span> <span class="mi">8</span>
-    <span class="n">P10</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">P11</span> <span class="o">=</span> <span class="mi">11</span>
-    <span class="n">P12</span> <span class="o">=</span> <span class="mi">12</span>
-    <span class="n">P13</span> <span class="o">=</span> <span class="mi">13</span>
-    <span class="n">P15</span> <span class="o">=</span> <span class="mi">15</span>
-    <span class="n">P16</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="n">P18</span> <span class="o">=</span> <span class="mi">18</span>
-    <span class="n">P19</span> <span class="o">=</span> <span class="mi">19</span>
-    <span class="n">P21</span> <span class="o">=</span> <span class="mi">21</span>
-    <span class="n">P22</span> <span class="o">=</span> <span class="mi">22</span>
-    <span class="n">P23</span> <span class="o">=</span> <span class="mi">23</span>
-    <span class="n">P24</span> <span class="o">=</span> <span class="mi">24</span>
-    <span class="n">P26</span> <span class="o">=</span> <span class="mi">26</span>
-    <span class="n">P27</span> <span class="o">=</span> <span class="mi">27</span>
-    <span class="n">P28</span> <span class="o">=</span> <span class="mi">28</span>
-    <span class="n">P29</span> <span class="o">=</span> <span class="mi">29</span>
-    <span class="n">P31</span> <span class="o">=</span> <span class="mi">31</span>
-    <span class="n">P32</span> <span class="o">=</span> <span class="mi">32</span>
-    <span class="n">P33</span> <span class="o">=</span> <span class="mi">33</span>
-    <span class="n">P35</span> <span class="o">=</span> <span class="mi">35</span>
-    <span class="n">P36</span> <span class="o">=</span> <span class="mi">36</span>
-    <span class="n">P37</span> <span class="o">=</span> <span class="mi">37</span>
-    <span class="n">P38</span> <span class="o">=</span> <span class="mi">38</span>
-    <span class="n">P40</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="n">board_dict</span><span class="p">:</span> <span class="n">MinimumCommonPinout</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">:</span> <span class="n">Platform</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a board given a particular platform.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">board_dict</span> <span class="o">=</span> <span class="n">PLATFORM_TO_BOARD</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">platform</span><span class="p">,</span> <span class="n">rpi_board_pins</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the pin number (as a string) for a given pin name.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">board_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> has no pin </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> has no attribute </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of pins on the board.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board_dict</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the board.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">board_dict</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator over the pin names.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 
 
-<span class="k">class</span> <span class="nc">BbBoard</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Enumerates the GPIO pins on the Beaglebone Black.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">P3</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">P5</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">P7</span> <span class="o">=</span> <span class="mi">7</span>
-    <span class="n">P8</span> <span class="o">=</span> <span class="mi">8</span>
-    <span class="n">P10</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">P11</span> <span class="o">=</span> <span class="mi">11</span>
-    <span class="n">P12</span> <span class="o">=</span> <span class="mi">12</span>
-    <span class="n">P13</span> <span class="o">=</span> <span class="mi">13</span>
-    <span class="n">P15</span> <span class="o">=</span> <span class="mi">15</span>
-    <span class="n">P16</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="n">P18</span> <span class="o">=</span> <span class="mi">18</span>
-    <span class="n">P19</span> <span class="o">=</span> <span class="mi">19</span>
-    <span class="n">P21</span> <span class="o">=</span> <span class="mi">21</span>
-    <span class="n">P22</span> <span class="o">=</span> <span class="mi">22</span>
-    <span class="n">P23</span> <span class="o">=</span> <span class="mi">23</span>
-    <span class="n">P24</span> <span class="o">=</span> <span class="mi">24</span>
-    <span class="n">P26</span> <span class="o">=</span> <span class="mi">26</span>
-    <span class="n">P27</span> <span class="o">=</span> <span class="mi">27</span>
-    <span class="n">P28</span> <span class="o">=</span> <span class="mi">28</span>
-    <span class="n">P29</span> <span class="o">=</span> <span class="mi">29</span>
-    <span class="n">P31</span> <span class="o">=</span> <span class="mi">31</span>
-    <span class="n">P32</span> <span class="o">=</span> <span class="mi">32</span>
-    <span class="n">P33</span> <span class="o">=</span> <span class="mi">33</span>
-    <span class="n">P35</span> <span class="o">=</span> <span class="mi">35</span>
-    <span class="n">P36</span> <span class="o">=</span> <span class="mi">36</span>
-    <span class="n">P37</span> <span class="o">=</span> <span class="mi">37</span>
-    <span class="n">P38</span> <span class="o">=</span> <span class="mi">38</span>
-    <span class="n">P40</span> <span class="o">=</span> <span class="mi">40</span>
-
-
-<span class="k">if</span> <span class="n">__platform__</span> <span class="o">==</span> <span class="n">Platform</span><span class="o">.</span><span class="n">BB</span><span class="p">:</span>
-    <span class="n">Board</span> <span class="o">=</span> <span class="n">BbBoard</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">Board</span> <span class="o">=</span> <span class="n">RPiBoard</span>  <span class="c1"># Also acts as a mock board</span>
+<span class="n">board</span> <span class="o">=</span> <span class="n">Board</span><span class="p">(</span><span class="n">__platform__</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">GpioMode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -1265,6 +1236,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
     <span class="n">IN</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">OUT</span> <span class="o">=</span> <span class="mi">1</span>
+
+
+<span class="k">class</span> <span class="nc">GpioEdge</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;GPIO edge.&quot;&quot;&quot;</span>
+
+    <span class="n">RISING</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">FALLING</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">BOTH</span> <span class="o">=</span> <span class="mi">2</span>
 
 
 <span class="k">class</span> <span class="nc">ValveState</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -1304,10 +1283,10 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the state of the switch.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Board</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+    <span class="c1">#    @property</span>
+    <span class="c1">#    def gpio(self) -&gt; Board:</span>
+    <span class="c1">#        &quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
+    <span class="c1">#        raise NotImplementedError</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -1373,51 +1352,74 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   </header>
 
   <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="openoligo.hal.types.PLATFORM_TO_BOARD" class="name">var <span class="ident">PLATFORM_TO_BOARD</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="openoligo.hal.types.board" class="name">var <span class="ident">board</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="openoligo.hal.types.rpi_board_pins" class="name">var <span class="ident">rpi_board_pins</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
 
 
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="openoligo.hal.types.BbBoard" class="name">class <span class="ident">BbBoard</span></p>
+      <p id="openoligo.hal.types.Board" class="name">class <span class="ident">Board</span></p>
       
   
-    <div class="desc"><p>Enumerates the GPIO pins on the Beaglebone Black.</p></div>
+    <div class="desc"><p>Represents a board with a minimum common pinout.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.types.BbBoard', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.hal.types.BbBoard" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">BbBoard</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.types.Board', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.types.Board" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Board</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Enumerates the GPIO pins on the Beaglebone Black.</span>
+<span class="sd">    Represents a board with a minimum common pinout.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">P3</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">P5</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">P7</span> <span class="o">=</span> <span class="mi">7</span>
-    <span class="n">P8</span> <span class="o">=</span> <span class="mi">8</span>
-    <span class="n">P10</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">P11</span> <span class="o">=</span> <span class="mi">11</span>
-    <span class="n">P12</span> <span class="o">=</span> <span class="mi">12</span>
-    <span class="n">P13</span> <span class="o">=</span> <span class="mi">13</span>
-    <span class="n">P15</span> <span class="o">=</span> <span class="mi">15</span>
-    <span class="n">P16</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="n">P18</span> <span class="o">=</span> <span class="mi">18</span>
-    <span class="n">P19</span> <span class="o">=</span> <span class="mi">19</span>
-    <span class="n">P21</span> <span class="o">=</span> <span class="mi">21</span>
-    <span class="n">P22</span> <span class="o">=</span> <span class="mi">22</span>
-    <span class="n">P23</span> <span class="o">=</span> <span class="mi">23</span>
-    <span class="n">P24</span> <span class="o">=</span> <span class="mi">24</span>
-    <span class="n">P26</span> <span class="o">=</span> <span class="mi">26</span>
-    <span class="n">P27</span> <span class="o">=</span> <span class="mi">27</span>
-    <span class="n">P28</span> <span class="o">=</span> <span class="mi">28</span>
-    <span class="n">P29</span> <span class="o">=</span> <span class="mi">29</span>
-    <span class="n">P31</span> <span class="o">=</span> <span class="mi">31</span>
-    <span class="n">P32</span> <span class="o">=</span> <span class="mi">32</span>
-    <span class="n">P33</span> <span class="o">=</span> <span class="mi">33</span>
-    <span class="n">P35</span> <span class="o">=</span> <span class="mi">35</span>
-    <span class="n">P36</span> <span class="o">=</span> <span class="mi">36</span>
-    <span class="n">P37</span> <span class="o">=</span> <span class="mi">37</span>
-    <span class="n">P38</span> <span class="o">=</span> <span class="mi">38</span>
-    <span class="n">P40</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="n">board_dict</span><span class="p">:</span> <span class="n">MinimumCommonPinout</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">platform</span><span class="p">:</span> <span class="n">Platform</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a board given a particular platform.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">board_dict</span> <span class="o">=</span> <span class="n">PLATFORM_TO_BOARD</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">platform</span><span class="p">,</span> <span class="n">rpi_board_pins</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the pin number (as a string) for a given pin name.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;P&quot;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">board_dict</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> has no pin </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> has no attribute </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of pins on the board.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board_dict</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the board.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">board_dict</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator over the pin names.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">board_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 </pre></div>
 
   </div>
@@ -1425,355 +1427,23 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
       <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
-          </ul>
-          <h3>Class variables</h3>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P10" class="name">var <span class="ident">P10</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P11" class="name">var <span class="ident">P11</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P12" class="name">var <span class="ident">P12</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P13" class="name">var <span class="ident">P13</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P15" class="name">var <span class="ident">P15</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P16" class="name">var <span class="ident">P16</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P18" class="name">var <span class="ident">P18</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P19" class="name">var <span class="ident">P19</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P21" class="name">var <span class="ident">P21</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P22" class="name">var <span class="ident">P22</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P23" class="name">var <span class="ident">P23</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P24" class="name">var <span class="ident">P24</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P26" class="name">var <span class="ident">P26</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P27" class="name">var <span class="ident">P27</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P28" class="name">var <span class="ident">P28</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P29" class="name">var <span class="ident">P29</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P3" class="name">var <span class="ident">P3</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P31" class="name">var <span class="ident">P31</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P32" class="name">var <span class="ident">P32</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P33" class="name">var <span class="ident">P33</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P35" class="name">var <span class="ident">P35</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P36" class="name">var <span class="ident">P36</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P37" class="name">var <span class="ident">P37</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P38" class="name">var <span class="ident">P38</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P40" class="name">var <span class="ident">P40</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P5" class="name">var <span class="ident">P5</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P7" class="name">var <span class="ident">P7</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.P8" class="name">var <span class="ident">P8</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.name" class="name">var <span class="ident">name</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.BbBoard.value" class="name">var <span class="ident">value</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
       </div>
       </div>
       
       <div class="item">
-      <p id="openoligo.hal.types.RPiBoard" class="name">class <span class="ident">Board</span></p>
+      <p id="openoligo.hal.types.GpioEdge" class="name">class <span class="ident">GpioEdge</span></p>
       
   
-    <div class="desc"><p>Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</p></div>
+    <div class="desc"><p>GPIO edge.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.types.RPiBoard', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.hal.types.RPiBoard" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">RPiBoard</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.types.GpioEdge', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.types.GpioEdge" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">GpioEdge</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;GPIO edge.&quot;&quot;&quot;</span>
 
-    <span class="n">P3</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">P5</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">P7</span> <span class="o">=</span> <span class="mi">7</span>
-    <span class="n">P8</span> <span class="o">=</span> <span class="mi">8</span>
-    <span class="n">P10</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">P11</span> <span class="o">=</span> <span class="mi">11</span>
-    <span class="n">P12</span> <span class="o">=</span> <span class="mi">12</span>
-    <span class="n">P13</span> <span class="o">=</span> <span class="mi">13</span>
-    <span class="n">P15</span> <span class="o">=</span> <span class="mi">15</span>
-    <span class="n">P16</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="n">P18</span> <span class="o">=</span> <span class="mi">18</span>
-    <span class="n">P19</span> <span class="o">=</span> <span class="mi">19</span>
-    <span class="n">P21</span> <span class="o">=</span> <span class="mi">21</span>
-    <span class="n">P22</span> <span class="o">=</span> <span class="mi">22</span>
-    <span class="n">P23</span> <span class="o">=</span> <span class="mi">23</span>
-    <span class="n">P24</span> <span class="o">=</span> <span class="mi">24</span>
-    <span class="n">P26</span> <span class="o">=</span> <span class="mi">26</span>
-    <span class="n">P27</span> <span class="o">=</span> <span class="mi">27</span>
-    <span class="n">P28</span> <span class="o">=</span> <span class="mi">28</span>
-    <span class="n">P29</span> <span class="o">=</span> <span class="mi">29</span>
-    <span class="n">P31</span> <span class="o">=</span> <span class="mi">31</span>
-    <span class="n">P32</span> <span class="o">=</span> <span class="mi">32</span>
-    <span class="n">P33</span> <span class="o">=</span> <span class="mi">33</span>
-    <span class="n">P35</span> <span class="o">=</span> <span class="mi">35</span>
-    <span class="n">P36</span> <span class="o">=</span> <span class="mi">36</span>
-    <span class="n">P37</span> <span class="o">=</span> <span class="mi">37</span>
-    <span class="n">P38</span> <span class="o">=</span> <span class="mi">38</span>
-    <span class="n">P40</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="n">RISING</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">FALLING</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">BOTH</span> <span class="o">=</span> <span class="mi">2</span>
 </pre></div>
 
   </div>
@@ -1787,7 +1457,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
           </ul>
           <h3>Class variables</h3>
             <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P10" class="name">var <span class="ident">P10</span></p>
+            <p id="openoligo.hal.types.GpioEdge.BOTH" class="name">var <span class="ident">BOTH</span></p>
             
 
             
@@ -1797,7 +1467,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
             </div>
             <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P11" class="name">var <span class="ident">P11</span></p>
+            <p id="openoligo.hal.types.GpioEdge.FALLING" class="name">var <span class="ident">FALLING</span></p>
             
 
             
@@ -1807,7 +1477,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
             </div>
             <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P12" class="name">var <span class="ident">P12</span></p>
+            <p id="openoligo.hal.types.GpioEdge.RISING" class="name">var <span class="ident">RISING</span></p>
             
 
             
@@ -1817,7 +1487,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
             </div>
             <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P13" class="name">var <span class="ident">P13</span></p>
+            <p id="openoligo.hal.types.GpioEdge.name" class="name">var <span class="ident">name</span></p>
             
 
             
@@ -1827,257 +1497,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
             </div>
             <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P15" class="name">var <span class="ident">P15</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P16" class="name">var <span class="ident">P16</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P18" class="name">var <span class="ident">P18</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P19" class="name">var <span class="ident">P19</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P21" class="name">var <span class="ident">P21</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P22" class="name">var <span class="ident">P22</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P23" class="name">var <span class="ident">P23</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P24" class="name">var <span class="ident">P24</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P26" class="name">var <span class="ident">P26</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P27" class="name">var <span class="ident">P27</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P28" class="name">var <span class="ident">P28</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P29" class="name">var <span class="ident">P29</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P3" class="name">var <span class="ident">P3</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P31" class="name">var <span class="ident">P31</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P32" class="name">var <span class="ident">P32</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P33" class="name">var <span class="ident">P33</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P35" class="name">var <span class="ident">P35</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P36" class="name">var <span class="ident">P36</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P37" class="name">var <span class="ident">P37</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P38" class="name">var <span class="ident">P38</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P40" class="name">var <span class="ident">P40</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P5" class="name">var <span class="ident">P5</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P7" class="name">var <span class="ident">P7</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P8" class="name">var <span class="ident">P8</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.name" class="name">var <span class="ident">name</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.value" class="name">var <span class="ident">value</span></p>
+            <p id="openoligo.hal.types.GpioEdge.value" class="name">var <span class="ident">value</span></p>
             
 
             
@@ -2396,362 +1816,6 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
       </div>
       
       <div class="item">
-      <p id="openoligo.hal.types.RPiBoard" class="name">class <span class="ident">RPiBoard</span></p>
-      
-  
-    <div class="desc"><p>Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.types.RPiBoard', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.hal.types.RPiBoard" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">RPiBoard</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">P3</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">P5</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">P7</span> <span class="o">=</span> <span class="mi">7</span>
-    <span class="n">P8</span> <span class="o">=</span> <span class="mi">8</span>
-    <span class="n">P10</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">P11</span> <span class="o">=</span> <span class="mi">11</span>
-    <span class="n">P12</span> <span class="o">=</span> <span class="mi">12</span>
-    <span class="n">P13</span> <span class="o">=</span> <span class="mi">13</span>
-    <span class="n">P15</span> <span class="o">=</span> <span class="mi">15</span>
-    <span class="n">P16</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="n">P18</span> <span class="o">=</span> <span class="mi">18</span>
-    <span class="n">P19</span> <span class="o">=</span> <span class="mi">19</span>
-    <span class="n">P21</span> <span class="o">=</span> <span class="mi">21</span>
-    <span class="n">P22</span> <span class="o">=</span> <span class="mi">22</span>
-    <span class="n">P23</span> <span class="o">=</span> <span class="mi">23</span>
-    <span class="n">P24</span> <span class="o">=</span> <span class="mi">24</span>
-    <span class="n">P26</span> <span class="o">=</span> <span class="mi">26</span>
-    <span class="n">P27</span> <span class="o">=</span> <span class="mi">27</span>
-    <span class="n">P28</span> <span class="o">=</span> <span class="mi">28</span>
-    <span class="n">P29</span> <span class="o">=</span> <span class="mi">29</span>
-    <span class="n">P31</span> <span class="o">=</span> <span class="mi">31</span>
-    <span class="n">P32</span> <span class="o">=</span> <span class="mi">32</span>
-    <span class="n">P33</span> <span class="o">=</span> <span class="mi">33</span>
-    <span class="n">P35</span> <span class="o">=</span> <span class="mi">35</span>
-    <span class="n">P36</span> <span class="o">=</span> <span class="mi">36</span>
-    <span class="n">P37</span> <span class="o">=</span> <span class="mi">37</span>
-    <span class="n">P38</span> <span class="o">=</span> <span class="mi">38</span>
-    <span class="n">P40</span> <span class="o">=</span> <span class="mi">40</span>
-</pre></div>
-
-  </div>
-</div>
-
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
-          </ul>
-          <h3>Class variables</h3>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P10" class="name">var <span class="ident">P10</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P11" class="name">var <span class="ident">P11</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P12" class="name">var <span class="ident">P12</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P13" class="name">var <span class="ident">P13</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P15" class="name">var <span class="ident">P15</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P16" class="name">var <span class="ident">P16</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P18" class="name">var <span class="ident">P18</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P19" class="name">var <span class="ident">P19</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P21" class="name">var <span class="ident">P21</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P22" class="name">var <span class="ident">P22</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P23" class="name">var <span class="ident">P23</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P24" class="name">var <span class="ident">P24</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P26" class="name">var <span class="ident">P26</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P27" class="name">var <span class="ident">P27</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P28" class="name">var <span class="ident">P28</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P29" class="name">var <span class="ident">P29</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P3" class="name">var <span class="ident">P3</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P31" class="name">var <span class="ident">P31</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P32" class="name">var <span class="ident">P32</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P33" class="name">var <span class="ident">P33</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P35" class="name">var <span class="ident">P35</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P36" class="name">var <span class="ident">P36</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P37" class="name">var <span class="ident">P37</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P38" class="name">var <span class="ident">P38</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P40" class="name">var <span class="ident">P40</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P5" class="name">var <span class="ident">P5</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P7" class="name">var <span class="ident">P7</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.P8" class="name">var <span class="ident">P8</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.name" class="name">var <span class="ident">name</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.RPiBoard.value" class="name">var <span class="ident">value</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-      </div>
-      </div>
-      
-      <div class="item">
       <p id="openoligo.hal.types.Switchable" class="name">class <span class="ident">Switchable</span></p>
       
   
@@ -2774,10 +1838,10 @@ be able to set, get the current value and toggle the state of the switch.</p></d
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the state of the switch.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Board</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+    <span class="c1">#    @property</span>
+    <span class="c1">#    def gpio(self) -&gt; Board:</span>
+    <span class="c1">#        &quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
+    <span class="c1">#        raise NotImplementedError</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -2796,17 +1860,6 @@ be able to set, get the current value and toggle the state of the switch.</p></d
           <li><a href="/typing.Generic.ext">typing.Generic</a></li>
           </ul>
           <h3>Instance variables</h3>
-            <div class="item">
-            <p id="openoligo.hal.types.Switchable.gpio" class="name">var <span class="ident">gpio</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Get the GPIO pin number.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
             <div class="item">
             <p id="openoligo.hal.types.Switchable.value" class="name">var <span class="ident">value</span></p>
             
@@ -2950,21 +2003,6 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
             
   
     <div class="desc"><p>Get the type of the valve.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.hal.types.Valvable.gpio" class="name">var <span class="ident">gpio</span></p>
-            
-    <p class="inheritance">
-     <strong>Inheritance:</strong>
-       <code><a href="#openoligo.hal.types.Switchable">Switchable</a></code>.<code><a href="#openoligo.hal.types.Switchable.gpio">gpio</a></code>
-    </p>
-
-            
-  
-    <div class="desc inherited"><p>Get the GPIO pin number.</p></div>
   <div class="source_cont">
 </div>
 

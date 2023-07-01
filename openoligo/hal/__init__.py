@@ -2,9 +2,9 @@
 Driver imports for convenience.
 """
 
-from openoligo.hal.board import Pinout
+from openoligo.hal.board import Pinout, list_configurable_pins
 from openoligo.hal.devices import Switch, Valve
-from openoligo.hal.gpio import Platform, __platform__
+from openoligo.hal.gpio import MockGPIO, Platform, __platform__
 from openoligo.hal.types import (
     GpioMode,
     InvalidManifoldSizeError,
@@ -13,6 +13,7 @@ from openoligo.hal.types import (
     Valvable,
     ValveState,
     ValveType,
+    board,
 )
 
 __all__ = [
@@ -29,4 +30,6 @@ __all__ = [
     "Valvable",
     "ValveState",
     "ValveType",
+    "list_configurable_pins",
+    "MockGPIO",
 ]

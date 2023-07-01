@@ -1107,23 +1107,23 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="kn">from</span> <span class="nn">openoligo.hal.board</span> <span class="kn">import</span> <span class="n">Pinout</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.devices</span> <span class="kn">import</span> <span class="n">Valve</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.gpio</span> <span class="kn">import</span> <span class="n">get_gpio</span>
-<span class="kn">from</span> <span class="nn">openoligo.hal.types</span> <span class="kn">import</span> <span class="n">Board</span><span class="p">,</span> <span class="n">OneDestinationException</span><span class="p">,</span> <span class="n">OneSourceException</span><span class="p">,</span> <span class="n">ValveRole</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.types</span> <span class="kn">import</span> <span class="n">OneDestinationException</span><span class="p">,</span> <span class="n">OneSourceException</span><span class="p">,</span> <span class="n">ValveRole</span><span class="p">,</span> <span class="n">board</span>
 <span class="kn">from</span> <span class="nn">openoligo.utils.singleton</span> <span class="kn">import</span> <span class="n">Singleton</span>
 
 <span class="n">default_pinout</span> <span class="o">=</span> <span class="n">Pinout</span><span class="p">(</span>
     <span class="n">phosphoramidites</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P26</span><span class="p">),</span>
-        <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P28</span><span class="p">),</span>
-        <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P15</span><span class="p">),</span>
-        <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P16</span><span class="p">),</span>
+        <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P26</span><span class="p">),</span>
+        <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P28</span><span class="p">),</span>
+        <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P15</span><span class="p">),</span>
+        <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P16</span><span class="p">),</span>
     <span class="p">},</span>
     <span class="n">reactants</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;ACT&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P18</span><span class="p">),</span>
-        <span class="s2">&quot;OXI&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P19</span><span class="p">),</span>
-        <span class="s2">&quot;CAP1&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P21</span><span class="p">),</span>
-        <span class="s2">&quot;CAP2&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P22</span><span class="p">),</span>
-        <span class="s2">&quot;DEB&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P23</span><span class="p">),</span>
-        <span class="s2">&quot;CLDE&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">Board</span><span class="o">.</span><span class="n">P24</span><span class="p">),</span>
+        <span class="s2">&quot;ACT&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P18</span><span class="p">),</span>
+        <span class="s2">&quot;OXI&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P19</span><span class="p">),</span>
+        <span class="s2">&quot;CAP1&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P21</span><span class="p">),</span>
+        <span class="s2">&quot;CAP2&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P22</span><span class="p">),</span>
+        <span class="s2">&quot;DEB&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P23</span><span class="p">),</span>
+        <span class="s2">&quot;CLDE&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P24</span><span class="p">),</span>
     <span class="p">},</span>
 <span class="p">)</span>
 
@@ -1191,7 +1191,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             <span class="k">raise</span> <span class="n">OneDestinationException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one destination valve&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Make sure that the transit valve(s) are in the route you expect&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Make sure that the transit valve(s) are in the route you expect&quot;</span>
+            <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 
     <span class="k">def</span> <span class="nf">all_except</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1221,7 +1223,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a string representation of the instrument.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Instrument(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Instrument(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="si">}</span><span class="s2">)&quot;</span>  <span class="c1"># pragma: no cover</span>
 </pre></div>
 
   </div>
@@ -1313,7 +1315,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             <span class="k">raise</span> <span class="n">OneDestinationException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one destination valve&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Make sure that the transit valve(s) are in the route you expect&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Make sure that the transit valve(s) are in the route you expect&quot;</span>
+            <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 
     <span class="k">def</span> <span class="nf">all_except</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1343,7 +1347,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a string representation of the instrument.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Instrument(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="si">}</span><span class="s2">)&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Instrument(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="si">}</span><span class="s2">)&quot;</span>  <span class="c1"># pragma: no cover</span>
 </pre></div>
 
   </div>
@@ -1455,7 +1459,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">OUTLET</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">OneDestinationException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one destination valve&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Make sure that the transit valve(s) are in the route you expect&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s2">&quot;Make sure that the transit valve(s) are in the route you expect&quot;</span>
+        <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 </pre></div>
 
   </div>

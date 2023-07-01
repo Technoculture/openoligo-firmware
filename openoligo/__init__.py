@@ -7,13 +7,16 @@ classes and functions that are needed.
 # flake8: noqa
 
 from openoligo import log_config  # pylint: disable=unused-import
-from openoligo.hal import *
-from openoligo.instrument import *
-from openoligo.utils import *
+from openoligo.instrument import Instrument
+from openoligo.protocols.dna_synthesis import synthesize as synthesize_dna
+from openoligo.seq import Seq
+from openoligo.utils import ms, wait, wait_async
 
 __all__ = [
-    "Valve",
-    "Switch",
-    "ValveState",
-    "ValveType",
+    "Instrument",
+    "wait_async",
+    "wait",
+    "ms",
+    "Seq",
+    "synthesize_dna",
 ]

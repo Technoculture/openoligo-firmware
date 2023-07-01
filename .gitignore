@@ -163,6 +163,8 @@ cython_debug/
 #.idea/
 
 requirements.txt
+*.db
+*.db-*
 
 TODO.md
 dockcross

@@ -1,9 +1,11 @@
 LIBNAME:=openoligo
-EXECNAME:=./examples/dna_synthesis.py
-SERVER_EXECNAME:=./api/server.py
 TESTDIR:=tests
 EXAMPLEDIR:=examples
 DOCSDIR:=docs
+APIDIR:=api
+
+EXECNAME:=./$(EXAMPLEDIR)/dna_synthesis.py
+SERVER_EXECNAME:=./$(APIDIR)/server.py
 
 TARGET_HOSTNAME?=arm.local
 TARGET_USER?=ubuntu
@@ -65,7 +67,7 @@ server:
 
 format:
 	@poetry run isort $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR) $(EXECNAME)
-	@poetry run black $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
+	@poetry run black $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR) $(APIDIR)
 
 format-check:
 	@poetry run black --check $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)

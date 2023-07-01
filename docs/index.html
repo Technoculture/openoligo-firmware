@@ -1057,40 +1057,31 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <h1>Index</h1>
     <ul id="index">
 
+    <li class="set"><h3><a href="#header-functions">Functions</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#openoligo.ms">ms</a></li>
+    <li class="mono"><a href="#openoligo.synthesize_dna">synthesize_dna</a></li>
+    <li class="mono"><a href="#openoligo.wait">wait</a></li>
+    <li class="mono"><a href="#openoligo.wait_async">wait_async</a></li>
+  </ul>
+
+    </li>
 
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#openoligo.RPiBoard">Board</a></span>
-        
-        </li>
-        <li class="mono">
-        <span class="class_name"><a href="#openoligo.Switch">Switch</a></span>
+        <span class="class_name"><a href="#openoligo.Instrument">Instrument</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#openoligo.Switch.set">set</a></li>
-    <li class="mono"><a href="#openoligo.Switch.toggle">toggle</a></li>
+    <li class="mono"><a href="#openoligo.Instrument.all_except">all_except</a></li>
+    <li class="mono"><a href="#openoligo.Instrument.validate_valve_set">validate_valve_set</a></li>
   </ul>
 
         </li>
         <li class="mono">
-        <span class="class_name"><a href="#openoligo.Valve">Valve</a></span>
-        
-          
-  <ul>
-    <li class="mono"><a href="#openoligo.Valve.close">close</a></li>
-    <li class="mono"><a href="#openoligo.Valve.open">open</a></li>
-    <li class="mono"><a href="#openoligo.Valve.set">set</a></li>
-  </ul>
-
-        </li>
-        <li class="mono">
-        <span class="class_name"><a href="#openoligo.ValveState">ValveState</a></span>
-        
-        </li>
-        <li class="mono">
-        <span class="class_name"><a href="#openoligo.ValveType">ValveType</a></span>
+        <span class="class_name"><a href="#openoligo.Seq">Seq</a></span>
         
         </li>
       </ul>
@@ -1133,16 +1124,18 @@ classes and functions that are needed.</p>
 <span class="c1"># flake8: noqa</span>
 
 <span class="kn">from</span> <span class="nn">openoligo</span> <span class="kn">import</span> <span class="n">log_config</span>  <span class="c1"># pylint: disable=unused-import</span>
-<span class="kn">from</span> <span class="nn">openoligo.hal</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">openoligo.instrument</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">openoligo.utils</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">openoligo.instrument</span> <span class="kn">import</span> <span class="n">Instrument</span>
+<span class="kn">from</span> <span class="nn">openoligo.protocols.dna_synthesis</span> <span class="kn">import</span> <span class="n">synthesize</span> <span class="k">as</span> <span class="n">synthesize_dna</span>
+<span class="kn">from</span> <span class="nn">openoligo.seq</span> <span class="kn">import</span> <span class="n">Seq</span>
+<span class="kn">from</span> <span class="nn">openoligo.utils</span> <span class="kn">import</span> <span class="n">ms</span><span class="p">,</span> <span class="n">wait</span><span class="p">,</span> <span class="n">wait_async</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;Board&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Valve&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Switch&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ValveState&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ValveType&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Instrument&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wait_async&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;wait&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ms&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Seq&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;synthesize_dna&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 </pre></div>
 
@@ -1152,433 +1145,259 @@ classes and functions that are needed.</p>
 
   <section id="section-items">
 
+    <h2 class="section-title" id="header-functions">Functions</h2>
+      
+  <div class="item">
+    <div class="name def" id="openoligo.ms">
+    <p>def <span class="ident">ms</span>(</p><p>seconds: float)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Convert seconds to milliseconds.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.ms', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.ms" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">ms</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>  <span class="c1"># pylint: disable=invalid-name</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert seconds to milliseconds.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">seconds</span> <span class="o">/</span> <span class="mi">1000</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.synthesize_dna">
+    <p>async def <span class="ident">synthesize_dna</span>(</p><p>instrument: openoligo.instrument.Instrument, seq: openoligo.seq.Seq)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Synthesize a DNA sequence.</p>
+<p>args:
+    seq: DNA sequence to synthesize.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.synthesize_dna', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.synthesize_dna" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">synthesize</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="n">Seq</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Synthesize a DNA sequence.</span>
+
+<span class="sd">    args:</span>
+<span class="sd">        seq: DNA sequence to synthesize.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initiating synthesis of DNA sequence: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>  <span class="c1"># start timer</span>
+    <span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="k">as</span> <span class="n">pbar</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+
+        <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">base_index</span><span class="p">,</span> <span class="n">base</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Adding </span><span class="si">%s</span><span class="s2">th base &#39;</span><span class="si">%s</span><span class="s2">&#39; to growing DNA strand&quot;</span><span class="p">,</span> <span class="n">base_index</span><span class="p">,</span> <span class="n">base</span><span class="p">)</span>
+
+            <span class="k">await</span> <span class="n">detritylate</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+
+            <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+
+            <span class="k">await</span> <span class="n">activate</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+
+            <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+
+            <span class="k">await</span> <span class="n">cap</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+
+            <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+
+            <span class="k">await</span> <span class="n">oxidize</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+
+            <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">dry_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+
+            <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">await</span> <span class="n">cleave</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">deprotect</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
+
+        <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>  <span class="c1"># end timer</span>
+    <span class="n">elapsed_time_in_minutes</span> <span class="o">=</span> <span class="p">((</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span> <span class="o">*</span> <span class="n">utils</span><span class="o">.</span><span class="n">SIMULATION_SPEEDUP_FACTOR</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;Synthesis complete for DNA sequence: &#39;</span><span class="si">%s</span><span class="s2">&#39; in </span><span class="si">%s</span><span class="s2"> minutes&quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">elapsed_time_in_minutes</span>
+    <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.wait">
+    <p>def <span class="ident">wait</span>(</p><p>seconds: float)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Wait for a given number of seconds.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.wait', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.wait" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wait for a given number of seconds.&quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span> <span class="o">/</span> <span class="n">SIMULATION_SPEEDUP_FACTOR</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Done waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.wait_async">
+    <p>async def <span class="ident">wait_async</span>(</p><p>seconds: float)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Wait for a given number of seconds.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.wait_async', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.wait_async" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">wait_async</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wait for a given number of seconds.&quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span> <span class="o">/</span> <span class="n">SIMULATION_SPEEDUP_FACTOR</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Done waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
 
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="openoligo.RPiBoard" class="name">class <span class="ident">Board</span></p>
+      <p id="openoligo.Instrument" class="name">class <span class="ident">Instrument</span></p>
       
   
-    <div class="desc"><p>Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</p></div>
+    <div class="desc"><p>Unified access to the instrument. Hide the details of the hardware.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.RPiBoard', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.RPiBoard" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">RPiBoard</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.Instrument', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.Instrument" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Instrument</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">Singleton</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Enumerates the GPIO pins on the Raspberry Pi 3 Model B.</span>
+<span class="sd">    Unified access to the instrument. Hide the details of the hardware.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">P3</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">P5</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">P7</span> <span class="o">=</span> <span class="mi">7</span>
-    <span class="n">P8</span> <span class="o">=</span> <span class="mi">8</span>
-    <span class="n">P10</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="n">P11</span> <span class="o">=</span> <span class="mi">11</span>
-    <span class="n">P12</span> <span class="o">=</span> <span class="mi">12</span>
-    <span class="n">P13</span> <span class="o">=</span> <span class="mi">13</span>
-    <span class="n">P15</span> <span class="o">=</span> <span class="mi">15</span>
-    <span class="n">P16</span> <span class="o">=</span> <span class="mi">16</span>
-    <span class="n">P18</span> <span class="o">=</span> <span class="mi">18</span>
-    <span class="n">P19</span> <span class="o">=</span> <span class="mi">19</span>
-    <span class="n">P21</span> <span class="o">=</span> <span class="mi">21</span>
-    <span class="n">P22</span> <span class="o">=</span> <span class="mi">22</span>
-    <span class="n">P23</span> <span class="o">=</span> <span class="mi">23</span>
-    <span class="n">P24</span> <span class="o">=</span> <span class="mi">24</span>
-    <span class="n">P26</span> <span class="o">=</span> <span class="mi">26</span>
-    <span class="n">P27</span> <span class="o">=</span> <span class="mi">27</span>
-    <span class="n">P28</span> <span class="o">=</span> <span class="mi">28</span>
-    <span class="n">P29</span> <span class="o">=</span> <span class="mi">29</span>
-    <span class="n">P31</span> <span class="o">=</span> <span class="mi">31</span>
-    <span class="n">P32</span> <span class="o">=</span> <span class="mi">32</span>
-    <span class="n">P33</span> <span class="o">=</span> <span class="mi">33</span>
-    <span class="n">P35</span> <span class="o">=</span> <span class="mi">35</span>
-    <span class="n">P36</span> <span class="o">=</span> <span class="mi">36</span>
-    <span class="n">P37</span> <span class="o">=</span> <span class="mi">37</span>
-    <span class="n">P38</span> <span class="o">=</span> <span class="mi">38</span>
-    <span class="n">P40</span> <span class="o">=</span> <span class="mi">40</span>
-</pre></div>
-
-  </div>
-</div>
-
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
-          </ul>
-          <h3>Class variables</h3>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P10" class="name">var <span class="ident">P10</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P11" class="name">var <span class="ident">P11</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P12" class="name">var <span class="ident">P12</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P13" class="name">var <span class="ident">P13</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P15" class="name">var <span class="ident">P15</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P16" class="name">var <span class="ident">P16</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P18" class="name">var <span class="ident">P18</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P19" class="name">var <span class="ident">P19</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P21" class="name">var <span class="ident">P21</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P22" class="name">var <span class="ident">P22</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P23" class="name">var <span class="ident">P23</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P24" class="name">var <span class="ident">P24</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P26" class="name">var <span class="ident">P26</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P27" class="name">var <span class="ident">P27</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P28" class="name">var <span class="ident">P28</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P29" class="name">var <span class="ident">P29</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P3" class="name">var <span class="ident">P3</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P31" class="name">var <span class="ident">P31</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P32" class="name">var <span class="ident">P32</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P33" class="name">var <span class="ident">P33</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P35" class="name">var <span class="ident">P35</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P36" class="name">var <span class="ident">P36</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P37" class="name">var <span class="ident">P37</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P38" class="name">var <span class="ident">P38</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P40" class="name">var <span class="ident">P40</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P5" class="name">var <span class="ident">P5</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P7" class="name">var <span class="ident">P7</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.P8" class="name">var <span class="ident">P8</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.name" class="name">var <span class="ident">name</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.RPiBoard.value" class="name">var <span class="ident">value</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-      </div>
-      </div>
-      
-      <div class="item">
-      <p id="openoligo.Switch" class="name">class <span class="ident">Switch</span></p>
-      
-  
-    <div class="desc"><p>A switch that actually controls a GPIO pin on the Raspberry Pi.</p>
-<p>Attributes:
-    name: Name of the switch.
-    gpio_pin: GPIO pin number.
-    board: Board object to access the GPIO pins.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.Switch', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.Switch" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Switch</span><span class="p">(</span><span class="n">Switchable</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A switch that actually controls a GPIO pin on the Raspberry Pi.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        name: Name of the switch.</span>
-<span class="sd">        gpio_pin: GPIO pin number.</span>
-<span class="sd">        board: Board object to access the GPIO pins.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">gpio_pin</span><span class="p">:</span> <span class="n">Board</span>
-    <span class="n">_state</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">_switch_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">repr</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the switch.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pinout</span><span class="p">:</span> <span class="n">Pinout</span> <span class="o">=</span> <span class="n">default_pinout</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the instrument.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span> <span class="o">=</span> <span class="n">pinout</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initializing instrument with pinout: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controller</span> <span class="o">=</span> <span class="n">get_gpio</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set state of the switch ON or OFF.&quot;&quot;&quot;</span>
-        <span class="n">__old_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
-        <span class="n">__new_state</span> <span class="o">=</span> <span class="n">state</span>
+    <span class="k">def</span> <span class="nf">__get_valve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Valve</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a valve by name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">valve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">valve</span><span class="p">,</span> <span class="n">Valve</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> is not a valve&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">valve</span>
 
-        <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Switch </span><span class="si">%s</span><span class="s2"> is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
-            <span class="k">return</span>
+    <span class="k">def</span> <span class="nf">validate_valve_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validate that the list of valves conform to a set of rules.</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="sd">        1. Each valve must be a valve.</span>
+<span class="sd">        2. The list must contain one and only one reagent (inlet) valve.</span>
+<span class="sd">        3. The list must contain one and only one product (outlet) valve.</span>
+<span class="sd">        4. The list may contain zero or more transit valves</span>
+<span class="sd">        5. The list may contain a branch valve, but only one.</span>
 
+<span class="sd">        args:</span>
+<span class="sd">            name: list of valve names</span>
+
+<span class="sd">        raises:</span>
+<span class="sd">            OneSourceException: If there is not exactly one source valve.</span>
+<span class="sd">            OneDestinationException: If there is not exactly one destination valve.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">valve_types</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">ValveRole</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Valve</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">ValveRole</span><span class="o">.</span><span class="n">INLET</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="n">ValveRole</span><span class="o">.</span><span class="n">OUTLET</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="n">ValveRole</span><span class="o">.</span><span class="n">BRANCH</span><span class="p">:</span> <span class="p">[],</span>
+            <span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_name</span><span class="p">),</span> <span class="n">Valve</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s2"> is not a valve&quot;</span><span class="p">)</span>
+            <span class="n">valve</span><span class="p">:</span> <span class="n">Valve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_valve</span><span class="p">(</span><span class="n">_name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">valve</span><span class="o">.</span><span class="n">role</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valve_types</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown valve role: </span><span class="si">{</span><span class="n">valve</span><span class="o">.</span><span class="n">role</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="n">valve_types</span><span class="p">[</span><span class="n">valve</span><span class="o">.</span><span class="n">role</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">valve</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">INLET</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">OneSourceException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one source valve&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">OUTLET</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">OneDestinationException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one destination valve&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s2">&quot;Make sure that the transit valve(s) are in the route you expect&quot;</span>
+            <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
+
+    <span class="k">def</span> <span class="nf">all_except</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the state of a pin on the instrument.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: A list of valve names</span>
+<span class="sd">            state: The state of the pin.</span>
+
+<span class="sd">        raises:</span>
+<span class="sd">            OneSourceException: If there is not exactly one source valve.</span>
+<span class="sd">            OneDestinationException: If there is not exactly one destination valve.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_valve_set</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">all_valves_in_pinout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">valves</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">all_valves_in_pinout</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+                <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-            <span class="s2">&quot;Switch (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
-            <span class="n">__old_state</span><span class="p">,</span>
-            <span class="n">__new_state</span><span class="p">,</span>
-            <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+            <span class="s2">&quot;Set </span><span class="si">%s</span><span class="s2"> to [bold]open[/] and all others to close.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
         <span class="p">)</span>
 
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Board</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span>
-
-    <span class="k">def</span> <span class="nf">toggle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Toggle the state of the switch.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Get the current value of the switch.</span>
+<span class="sd">        Return a string representation of the instrument.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Instrument(</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="si">}</span><span class="s2">)&quot;</span>  <span class="c1"># pragma: no cover</span>
 </pre></div>
 
   </div>
@@ -1586,65 +1405,45 @@ classes and functions that are needed.</p>
 
 
       <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="hal/index.html#openoligo.hal.Switchable">openoligo.hal.Switchable</a></li>
-          <li><a href="/typing.Protocol.ext">typing.Protocol</a></li>
-          <li><a href="/typing.Generic.ext">typing.Generic</a></li>
-          </ul>
-          <h3>Instance variables</h3>
-            <div class="item">
-            <p id="openoligo.Switch.gpio" class="name">var <span class="ident">gpio</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Get the GPIO pin number.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.Switch.value" class="name">var <span class="ident">value</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Get the current value of the switch.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="openoligo.Switch.set">
-    <p>def <span class="ident">set</span>(</p><p>self, state: bool)</p>
+    <div class="name def" id="openoligo.Instrument.all_except">
+    <p>def <span class="ident">all_except</span>(</p><p>self, name: list[str])</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Set state of the switch ON or OFF.</p></div>
+    <div class="desc"><p>Set the state of a pin on the instrument.</p>
+<p>Args:
+    name: A list of valve names
+    state: The state of the pin.</p>
+<p>raises:
+    OneSourceException: If there is not exactly one source valve.
+    OneDestinationException: If there is not exactly one destination valve.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.Switch.set', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.Switch.set" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set state of the switch ON or OFF.&quot;&quot;&quot;</span>
-    <span class="n">__old_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
-    <span class="n">__new_state</span> <span class="o">=</span> <span class="n">state</span>
-    <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Switch </span><span class="si">%s</span><span class="s2"> is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.Instrument.all_except', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.Instrument.all_except" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">all_except</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the state of a pin on the instrument.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        name: A list of valve names</span>
+<span class="sd">        state: The state of the pin.</span>
+<span class="sd">    raises:</span>
+<span class="sd">        OneSourceException: If there is not exactly one source valve.</span>
+<span class="sd">        OneDestinationException: If there is not exactly one destination valve.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">validate_valve_set</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">all_valves_in_pinout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">valves</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">all_valves_in_pinout</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-        <span class="s2">&quot;Switch (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
-        <span class="n">__old_state</span><span class="p">,</span>
-        <span class="n">__new_state</span><span class="p">,</span>
-        <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+        <span class="s2">&quot;Set </span><span class="si">%s</span><span class="s2"> to [bold]open[/] and all others to close.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
     <span class="p">)</span>
 </pre></div>
 
@@ -1655,20 +1454,64 @@ classes and functions that are needed.</p>
   
             
   <div class="item">
-    <div class="name def" id="openoligo.Switch.toggle">
-    <p>def <span class="ident">toggle</span>(</p><p>self)</p>
+    <div class="name def" id="openoligo.Instrument.validate_valve_set">
+    <p>def <span class="ident">validate_valve_set</span>(</p><p>self, name: list[str])</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Toggle the state of the switch.</p></div>
+    <div class="desc"><p>Validate that the list of valves conform to a set of rules.</p>
+<ol>
+<li>Each valve must be a valve.</li>
+<li>The list must contain one and only one reagent (inlet) valve.</li>
+<li>The list must contain one and only one product (outlet) valve.</li>
+<li>The list may contain zero or more transit valves</li>
+<li>The list may contain a branch valve, but only one.</li>
+</ol>
+<p>args:
+    name: list of valve names</p>
+<p>raises:
+    OneSourceException: If there is not exactly one source valve.
+    OneDestinationException: If there is not exactly one destination valve.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.Switch.toggle', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.Switch.toggle" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">toggle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Toggle the state of the switch.&quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">)</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.Instrument.validate_valve_set', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.Instrument.validate_valve_set" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">validate_valve_set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validate that the list of valves conform to a set of rules.</span>
+<span class="sd">    1. Each valve must be a valve.</span>
+<span class="sd">    2. The list must contain one and only one reagent (inlet) valve.</span>
+<span class="sd">    3. The list must contain one and only one product (outlet) valve.</span>
+<span class="sd">    4. The list may contain zero or more transit valves</span>
+<span class="sd">    5. The list may contain a branch valve, but only one.</span>
+<span class="sd">    args:</span>
+<span class="sd">        name: list of valve names</span>
+<span class="sd">    raises:</span>
+<span class="sd">        OneSourceException: If there is not exactly one source valve.</span>
+<span class="sd">        OneDestinationException: If there is not exactly one destination valve.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">valve_types</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">ValveRole</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="n">Valve</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">ValveRole</span><span class="o">.</span><span class="n">INLET</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="n">ValveRole</span><span class="o">.</span><span class="n">OUTLET</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="n">ValveRole</span><span class="o">.</span><span class="n">BRANCH</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">_name</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_name</span><span class="p">),</span> <span class="n">Valve</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_name</span><span class="si">}</span><span class="s2"> is not a valve&quot;</span><span class="p">)</span>
+        <span class="n">valve</span><span class="p">:</span> <span class="n">Valve</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_valve</span><span class="p">(</span><span class="n">_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">valve</span><span class="o">.</span><span class="n">role</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valve_types</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown valve role: </span><span class="si">{</span><span class="n">valve</span><span class="o">.</span><span class="n">role</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">valve_types</span><span class="p">[</span><span class="n">valve</span><span class="o">.</span><span class="n">role</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">valve</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">INLET</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">OneSourceException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one source valve&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">OUTLET</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">OneDestinationException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one destination valve&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s2">&quot;Make sure that the transit valve(s) are in the route you expect&quot;</span>
+        <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 </pre></div>
 
   </div>
@@ -1680,83 +1523,63 @@ classes and functions that are needed.</p>
       </div>
       
       <div class="item">
-      <p id="openoligo.Valve" class="name">class <span class="ident">Valve</span></p>
+      <p id="openoligo.Seq" class="name">class <span class="ident">Seq</span></p>
       
   
-    <div class="desc"><p>A valve that actually controls a GPIO pin on the Raspberry Pi.</p></div>
+    <div class="desc"><p>Representation of the sequence as a string.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.Valve', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.Valve" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Valve</span><span class="p">(</span><span class="n">Valvable</span><span class="p">):</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.Seq', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.Seq" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Seq</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A valve that actually controls a GPIO pin on the Raspberry Pi.</span>
+<span class="sd">    Representation of the sequence as a string.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">gpio_pin</span><span class="p">:</span> <span class="n">Board</span>
-    <span class="n">role</span><span class="p">:</span> <span class="n">ValveRole</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">INLET</span><span class="p">)</span>
-    <span class="n">valve_type</span><span class="p">:</span> <span class="n">ValveType</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">ValveType</span><span class="o">.</span><span class="n">NORMALLY_OPEN</span><span class="p">)</span>
-    <span class="n">_switch_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">_state</span><span class="p">:</span> <span class="n">ValveState</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_dna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid DNA sequence&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the valve.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span> <span class="o">=</span> <span class="n">get_gpio</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">setup_pin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Allows iteration over the sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">ValveState</span><span class="o">.</span><span class="n">CLOSED_FLOW</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">valve_type</span> <span class="o">==</span> <span class="n">ValveType</span><span class="o">.</span><span class="n">NORMALLY_CLOSED</span>
-            <span class="k">else</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span>
-        <span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the next base in the sequence.</span>
 
-    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Open the valve.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the valve.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the state of the valve.&quot;&quot;&quot;</span>
-        <span class="n">__old_state</span><span class="p">:</span> <span class="n">ValveState</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
-        <span class="n">__new_state</span><span class="p">:</span> <span class="n">ValveState</span> <span class="o">=</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span> <span class="k">if</span> <span class="n">state</span> <span class="k">else</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">CLOSED_FLOW</span>
-
-        <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span><span class="p">:</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
-            <span class="k">return</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-            <span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
-            <span class="n">__old_state</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">,</span>
-            <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
-        <span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">gpio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Board</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the GPIO pin number.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the current value of the valve.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">==</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ValveType</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the type of the valve.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">valve_type</span>
+<span class="sd">        raises:</span>
+<span class="sd">            StopIteration: if the end of the sequence is reached.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">raise</span> <span class="ne">StopIteration</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="si">}</span><span class="s2">[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">]&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns string representation of the sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        get the length of the sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Allows indexing of the sequence.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 </pre></div>
 
   </div>
@@ -1764,289 +1587,6 @@ classes and functions that are needed.</p>
 
 
       <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="hal/index.html#openoligo.hal.Valvable">openoligo.hal.Valvable</a></li>
-          <li><a href="hal/index.html#openoligo.hal.Switchable">openoligo.hal.Switchable</a></li>
-          <li><a href="/typing.Protocol.ext">typing.Protocol</a></li>
-          <li><a href="/typing.Generic.ext">typing.Generic</a></li>
-          </ul>
-          <h3>Class variables</h3>
-            <div class="item">
-            <p id="openoligo.Valve.role" class="name">var <span class="ident">role</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.Valve.valve_type" class="name">var <span class="ident">valve_type</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-          <h3>Instance variables</h3>
-            <div class="item">
-            <p id="openoligo.Valve.get_type" class="name">var <span class="ident">get_type</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Get the type of the valve.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.Valve.gpio" class="name">var <span class="ident">gpio</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Get the GPIO pin number.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.Valve.value" class="name">var <span class="ident">value</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Get the current value of the valve.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-          <h3>Methods</h3>
-            
-  <div class="item">
-    <div class="name def" id="openoligo.Valve.close">
-    <p>def <span class="ident">close</span>(</p><p>self)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Close the valve.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.Valve.close', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.Valve.close" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Close the valve.&quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="openoligo.Valve.open">
-    <p>def <span class="ident">open</span>(</p><p>self)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Open the valve.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.Valve.open', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.Valve.open" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Open the valve.&quot;&quot;&quot;</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="openoligo.Valve.set">
-    <p>def <span class="ident">set</span>(</p><p>self, state: bool)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Set the state of the valve.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.Valve.set', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.Valve.set" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the state of the valve.&quot;&quot;&quot;</span>
-    <span class="n">__old_state</span><span class="p">:</span> <span class="n">ValveState</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
-    <span class="n">__new_state</span><span class="p">:</span> <span class="n">ValveState</span> <span class="o">=</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span> <span class="k">if</span> <span class="n">state</span> <span class="k">else</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">CLOSED_FLOW</span>
-    <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-        <span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
-        <span class="n">__old_state</span><span class="p">,</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="p">,</span>
-        <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
-    <span class="p">)</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-      </div>
-      </div>
-      
-      <div class="item">
-      <p id="openoligo.ValveState" class="name">class <span class="ident">ValveState</span></p>
-      
-  
-    <div class="desc"><p>This class represents the state of a valve.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.ValveState', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.ValveState" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ValveState</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;This class represents the state of a valve.&quot;&quot;&quot;</span>
-
-    <span class="n">OPEN_FLOW</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">CLOSED_FLOW</span> <span class="o">=</span> <span class="mi">1</span>
-</pre></div>
-
-  </div>
-</div>
-
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
-          </ul>
-          <h3>Class variables</h3>
-            <div class="item">
-            <p id="openoligo.ValveState.CLOSED_FLOW" class="name">var <span class="ident">CLOSED_FLOW</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.ValveState.OPEN_FLOW" class="name">var <span class="ident">OPEN_FLOW</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.ValveState.name" class="name">var <span class="ident">name</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.ValveState.value" class="name">var <span class="ident">value</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-      </div>
-      </div>
-      
-      <div class="item">
-      <p id="openoligo.ValveType" class="name">class <span class="ident">ValveType</span></p>
-      
-  
-    <div class="desc"><p>Valve Type: NC/NO</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.ValveType', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.ValveType" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ValveType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Valve Type: NC/NO&quot;&quot;&quot;</span>
-
-    <span class="n">NORMALLY_CLOSED</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">NORMALLY_OPEN</span> <span class="o">=</span> <span class="mi">1</span>
-</pre></div>
-
-  </div>
-</div>
-
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
-          </ul>
-          <h3>Class variables</h3>
-            <div class="item">
-            <p id="openoligo.ValveType.NORMALLY_CLOSED" class="name">var <span class="ident">NORMALLY_CLOSED</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.ValveType.NORMALLY_OPEN" class="name">var <span class="ident">NORMALLY_OPEN</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.ValveType.name" class="name">var <span class="ident">name</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.ValveType.value" class="name">var <span class="ident">value</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
       </div>
       </div>
 
