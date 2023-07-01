@@ -2,10 +2,10 @@ LIBNAME:=openoligo
 TESTDIR:=tests
 EXAMPLEDIR:=examples
 DOCSDIR:=docs
-APIDIR:=api
+APIDIR:=$(LIBNAME)/api
 
-EXECNAME:=./$(EXAMPLEDIR)/dna_synthesis.py
-SERVER_EXECNAME:=./$(APIDIR)/server.py
+EXECNAME:=$(EXAMPLEDIR)/dna_synthesis.py
+SERVER_EXECNAME:=$(APIDIR)/server.py
 
 TARGET_HOSTNAME?=192.168.1.2
 TARGET_USER?=root
@@ -36,6 +36,7 @@ help:
 	@echo "  type            Run type checker"
 	@echo "  test            Run tests"
 	@echo "  docs            Generate documentation"
+	@echo "  precommit       Run all pre-commit checks"
 	@echo
 	@echo "Category: Build and run"
 	@echo "  all             Run format, lint, type checks, tests, and generate coverage report"
@@ -60,31 +61,33 @@ help:
 all: format lint test coverage
 
 run:
-	@poetry run python $(EXECNAME)
+	@python $(EXECNAME)
 
 server:
-	@poetry run python $(SERVER_EXECNAME)
+	@python $(SERVER_EXECNAME)
 
 format:
-	@poetry run isort $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR) $(EXECNAME)
-	@poetry run black $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR) $(APIDIR)
+	@isort $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR) $(EXECNAME)
+	@black $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
 
 format-check:
-	@poetry run black --check $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
+	@black --check $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
 
 lint:
-	@poetry run pylint $(LIBNAME) #$(APIDIR)
-	@poetry run flake8 $(LIBNAME) #$(APIDIR)
+	@pylint $(LIBNAME)
+	@flake8 $(LIBNAME)
 
 type:
-	@poetry run mypy $(LIBNAME) $(EXAMPLEDIR) --check-untyped-defs
+	@mypy $(LIBNAME) $(EXAMPLEDIR) --check-untyped-defs --ignore-missing-imports
 
 test: type
-	@poetry run pytest 
+	@pytest 
 
 docs:
-	@poetry run pdocs as_html $(LIBNAME) --overwrite
+	@pdocs as_html $(LIBNAME) --overwrite
 	mv site/* $(DOCSDIR)
+
+precommit: format format-check lint type test docs coverage
 
 publish:
 	@poetry publish --build
@@ -93,7 +96,7 @@ clean:
 	rm *.log *.log.*
 
 coverage:
-	@poetry run coverage-badge -o .github/coverage.svg -f
+	@coverage-badge -o .github/coverage.svg -f
 
 req:
 	poetry export -f requirements.txt --output requirements.txt --without-hashes
@@ -125,9 +128,6 @@ jupyter:
 	@echo "Open http://localhost:8080/notebooks/scratch/api_scratchpad.ipynb in your browser"
 	@echo
 	ssh -N -L 8880:localhost:8888 $(TARGET_USER)@$(TARGET_HOSTNAME)
-
-deploy-setup:
-	@ansible-playbook -i $(TARGET_USER), deploy/setup.yml --ask-pass --ask-become-pass
 
 deploy:
 	rsync -avz $(LOCAL_DIR) $(TARGET_USER)@$(TARGET_HOSTNAME):$(TARGET_DIR)
