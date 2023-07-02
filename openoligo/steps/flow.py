@@ -4,7 +4,7 @@ and to clean columns.
 """
 import logging
 
-from openoligo import Instrument
+from openoligo.instrument import Instrument
 from openoligo.steps.types import FlowBranch, substep
 from openoligo.utils.wait import wait_async
 
