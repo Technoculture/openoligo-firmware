@@ -1,0 +1,3440 @@
+<!doctype html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+
+  
+  <title>openoligo.api.models API documentation</title>
+  <meta name="description" content="Tortoise ORM Models for the OpenOligo API" />
+
+
+  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
+  
+  <style type="text/css">
+* {
+  box-sizing: border-box;
+}
+/*! normalize.css v1.1.1 | MIT License | git.io/normalize */
+
+/* ==========================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+/**
+ * Correct `block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+    display: block;
+}
+
+/**
+ * Correct `inline-block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+audio,
+canvas,
+video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Firefox 3, and Safari 4.
+ * Known issue: no IE 6 support.
+ */
+
+[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/**
+ * 1. Prevent system color scheme's background color being used in Firefox, IE,
+ *    and Opera.
+ * 2. Prevent system color scheme's text color being used in Firefox, IE, and
+ *    Opera.
+ * 3. Correct text resizing oddly in IE 6/7 when body `font-size` is set using
+ *    `em` units.
+ * 4. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+
+html {
+    background: #fff; /* 1 */
+    color: #000; /* 2 */
+    font-size: 100%; /* 3 */
+    -webkit-text-size-adjust: 100%; /* 4 */
+    -ms-text-size-adjust: 100%; /* 4 */
+}
+
+/**
+ * Address `font-family` inconsistency between `textarea` and other form
+ * elements.
+ */
+
+html,
+button,
+input,
+select,
+textarea {
+    font-family: sans-serif;
+}
+
+/**
+ * Address margins handled incorrectly in IE 6/7.
+ */
+
+body {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+/**
+ * Address `outline` inconsistency between Chrome and other browsers.
+ */
+
+a:focus {
+    outline: thin dotted;
+}
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+    outline: 0;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+/**
+ * Address font sizes and margins set differently in IE 6/7.
+ * Address font sizes within `section` and `article` in Firefox 4+, Safari 5,
+ * and Chrome.
+ */
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0;
+}
+
+h3 {
+    font-size: 1.17em;
+    margin: 1em 0;
+}
+
+h4 {
+    font-size: 1em;
+    margin: 1.33em 0;
+}
+
+h5 {
+    font-size: 0.83em;
+    margin: 1.67em 0;
+}
+
+h6 {
+    font-size: 0.67em;
+    margin: 2.33em 0;
+}
+
+/**
+ * Address styling not present in IE 7/8/9, Safari 5, and Chrome.
+ */
+
+abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+/**
+ * Address style set to `bolder` in Firefox 3+, Safari 4/5, and Chrome.
+ */
+
+b,
+strong {
+    font-weight: bold;
+}
+
+blockquote {
+    margin: 1em 40px;
+}
+
+/**
+ * Address styling not present in Safari 5 and Chrome.
+ */
+
+dfn {
+    font-style: italic;
+}
+
+/**
+ * Address differences between Firefox and other browsers.
+ * Known issue: no IE 6/7 normalization.
+ */
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0;
+}
+
+/**
+ * Address styling not present in IE 6/7/8/9.
+ */
+
+mark {
+    background: #ff0;
+    color: #000;
+}
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+p,
+pre {
+    margin: 1em 0;
+}
+
+/**
+ * Correct font family set oddly in IE 6, Safari 4/5, and Chrome.
+ */
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em;
+}
+
+/**
+ * Improve readability of pre-formatted text in all browsers.
+ */
+
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/**
+ * Address CSS quotes not supported in IE 6/7.
+ */
+
+q {
+    quotes: none;
+}
+
+/**
+ * Address `quotes` property not supported in Safari 4.
+ */
+
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+
+small {
+    font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+
+dl,
+menu,
+ol,
+ul {
+    margin: 1em 0;
+}
+
+dd {
+    margin: 0 0 0 40px;
+}
+
+/**
+ * Address paddings set differently in IE 6/7.
+ */
+
+menu,
+ol,
+ul {
+    padding: 0 0 0 40px;
+}
+
+/**
+ * Correct list images handled incorrectly in IE 7.
+ */
+
+nav ul,
+nav ol {
+    list-style: none;
+    list-style-image: none;
+}
+
+/* ==========================================================================
+   Embedded content
+   ========================================================================== */
+
+/**
+ * 1. Remove border when inside `a` element in IE 6/7/8/9 and Firefox 3.
+ * 2. Improve image quality when scaled in IE 7.
+ */
+
+img {
+    border: 0; /* 1 */
+    -ms-interpolation-mode: bicubic; /* 2 */
+}
+
+/**
+ * Correct overflow displayed oddly in IE 9.
+ */
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Figures
+   ========================================================================== */
+
+/**
+ * Address margin not present in IE 6/7/8/9, Safari 5, and Opera 11.
+ */
+
+figure {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/**
+ * Correct margin displayed oddly in IE 6/7.
+ */
+
+form {
+    margin: 0;
+}
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct color not being inherited in IE 6/7/8/9.
+ * 2. Correct text not wrapping in Firefox 3.
+ * 3. Correct alignment displayed oddly in IE 6/7.
+ */
+
+legend {
+    border: 0; /* 1 */
+    padding: 0;
+    white-space: normal; /* 2 */
+    *margin-left: -7px; /* 3 */
+}
+
+/**
+ * 1. Correct font size not being inherited in all browsers.
+ * 2. Address margins set differently in IE 6/7, Firefox 3+, Safari 5,
+ *    and Chrome.
+ * 3. Improve appearance and consistency in all browsers.
+ */
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%; /* 1 */
+    margin: 0; /* 2 */
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
+}
+
+/**
+ * Address Firefox 3+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+button,
+input {
+    line-height: normal;
+}
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Chrome, Safari 5+, and IE 6+.
+ * Correct `select` style inheritance in Firefox 4+ and Opera.
+ */
+
+button,
+select {
+    text-transform: none;
+}
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 4. Remove inner spacing in IE 7 without affecting normal text inputs.
+ *    Known issue: inner spacing remains in IE 6.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+    cursor: pointer; /* 3 */
+    *overflow: visible;  /* 4 */
+}
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+html input[disabled] {
+    cursor: default;
+}
+
+/**
+ * 1. Address box sizing set to content-box in IE 8/9.
+ * 2. Remove excess padding in IE 8/9.
+ * 3. Remove excess padding in IE 7.
+ *    Known issue: excess padding remains in IE 6.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+    *height: 13px; /* 3 */
+    *width: 13px; /* 3 */
+}
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+/**
+ * Remove inner padding and search cancel button in Safari 5 and Chrome
+ * on OS X.
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/**
+ * Remove inner padding and border in Firefox 3+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/**
+ * 1. Remove default vertical scrollbar in IE 6/7/8/9.
+ * 2. Improve readability and alignment in all browsers.
+ */
+
+textarea {
+    overflow: auto; /* 1 */
+    vertical-align: top; /* 2 */
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+/**
+ * Remove most spacing between table cells.
+ */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+</style>
+  <style type="text/css">
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+  }
+  body {
+    background: #fff;
+    font-family: "Source Sans Pro", "Helvetica Neueue", Helvetica, sans;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6em;
+  }
+  #content {
+    width: 70%;
+    max-width: 850px;
+    float: left;
+    padding: 30px 60px;
+    border-left: 1px solid #ddd;
+  }
+  #sidebar {
+    width: 25%;
+    float: left;
+    padding: 30px;
+    overflow: hidden;
+  }
+  #nav {
+    font-size: 130%;
+    margin: 0 0 15px 0;
+  }
+
+  #top {
+    display: block;
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    font-size: .85em;
+    text-transform: uppercase;
+  }
+
+  #footer {
+    font-size: .75em;
+    padding: 5px 30px;
+    border-top: 1px solid #ddd;
+    text-align: right;
+  }
+    #footer p {
+      margin: 0 0 0 30px;
+      display: inline-block;
+    }
+
+  h1, h2, h3, h4, h5 {
+    font-weight: 300;
+  }
+  h1 {
+    font-size: 2.5em;
+    line-height: 1.1em;
+    margin: 0 0 .50em 0;
+  }
+
+  h2 {
+    font-size: 1.75em;
+    margin: 1em 0 .50em 0;
+  }
+
+  h3 {
+    margin: 25px 0 10px 0;
+  }
+
+  h4 {
+    margin: 0;
+    font-size: 105%;
+  }
+
+  a {
+    color: #058;
+    text-decoration: none;
+    transition: color .3s ease-in-out;
+  }
+
+  a:hover {
+    color: #e08524;
+    transition: color .3s ease-in-out;
+  }
+
+  pre, code, .mono, .name {
+    font-family: "Ubuntu Mono", "Cousine", "DejaVu Sans Mono", monospace;
+  }
+
+  .title .name {
+    font-weight: bold;
+  }
+  .section-title {
+    margin-top: 2em;
+  }
+  .ident {
+    color: #900;
+  }
+
+  code {
+    background: #f9f9f9;
+  } 
+
+  pre {
+    background: #fefefe;
+    border: 1px solid #ddd;
+    box-shadow: 2px 2px 0 #f3f3f3;
+    margin: 0 30px;
+    padding: 15px 30px;
+  }
+
+  .codehilite {
+    margin: 0 30px 10px 30px;
+  }
+
+    .codehilite pre {
+      margin: 0;
+    }
+    .codehilite .err { background: #ff3300; color: #fff !important; } 
+
+  table#module-list {
+    font-size: 110%;
+  }
+
+    table#module-list tr td:first-child {
+      padding-right: 10px;
+      white-space: nowrap;
+    }
+
+    table#module-list td {
+      vertical-align: top;
+      padding-bottom: 8px;
+    }
+
+      table#module-list td p {
+        margin: 0 0 7px 0;
+      }
+
+  .def {
+    display: table;
+  }
+
+    .def p {
+      display: table-cell;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .def p:first-child {
+      white-space: nowrap;
+    }
+
+    .def p:last-child {
+      width: 100%;
+    }
+
+
+  #index {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+    ul#index .class_name {
+      /* font-size: 110%; */
+      font-weight: bold;
+    }
+    #index ul {
+      margin: 0;
+    }
+
+  .item {
+    margin: 0 0 15px 0;
+  }
+
+    .item .class {
+      margin: 0 0 25px 30px;
+    }
+
+      .item .class ul.class_list {
+        margin: 0 0 20px 0;
+      }
+
+    .item .name {
+      background: #fafafa;
+      margin: 0;
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 3px;
+      display: inline-block;
+      min-width: 40%;
+    }
+      .item .name:hover {
+        background: #f6f6f6;
+      }
+
+    .item .empty_desc {
+      margin: 0 0 5px 0;
+      padding: 0;
+    }
+
+    .item .inheritance {
+      margin: 3px 0 0 30px;
+    }
+
+    .item .inherited {
+      color: #666;
+    }
+
+    .item .desc {
+      padding: 0 8px;
+      margin: 0;
+    }
+
+      .item .desc p {
+        margin: 0 0 10px 0;
+      }
+
+    .source_cont {
+      margin: 0;
+      padding: 0;
+    }
+
+    .source_link a {
+      background: #ffc300;
+      font-weight: 400;
+      font-size: .75em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 1px 1px 0 #f4b700;
+      
+      padding: 3px 8px;
+      border-radius: 2px;
+      transition: background .3s ease-in-out;
+    }
+      .source_link a:hover {
+        background: #FF7200;
+        text-shadow: none;
+        transition: background .3s ease-in-out;
+      }
+
+    .source {
+      display: none;
+      max-height: 600px;
+      overflow-y: scroll;
+      margin-bottom: 15px;
+    }
+
+      .source .codehilite {
+        margin: 0;
+      }
+
+  .desc h1, .desc h2, .desc h3 {
+    font-size: 100% !important;
+  }
+  .clear {
+    clear: both;
+  }
+
+  @media all and (max-width: 950px) {
+    #sidebar {
+      width: 35%;
+    }
+    #content {
+      width: 65%;
+    }
+  }
+  @media all and (max-width: 650px) {
+    #top {
+      display: none;
+    }
+    #sidebar {
+      float: none;
+      width: auto;
+    }
+    #content {
+      float: none;
+      width: auto;
+      padding: 30px;
+    }
+
+    #index ul {
+      padding: 0;
+      margin-bottom: 15px;
+    }
+    #index ul li {
+      display: inline-block;
+      margin-right: 30px;
+    }
+    #footer {
+      text-align: left;
+    }
+    #footer p {
+      display: block;
+      margin: inherit;
+    }
+  }
+
+  /*****************************/
+</style>
+  <style type="text/css">
+  pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f8f8f8; }
+.codehilite .c { color: #3D7B7B; font-style: italic } /* Comment */
+.codehilite .err { border: 1px solid #FF0000 } /* Error */
+.codehilite .k { color: #008000; font-weight: bold } /* Keyword */
+.codehilite .o { color: #666666 } /* Operator */
+.codehilite .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.codehilite .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.codehilite .cp { color: #9C6500 } /* Comment.Preproc */
+.codehilite .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.codehilite .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.codehilite .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.codehilite .gd { color: #A00000 } /* Generic.Deleted */
+.codehilite .ge { font-style: italic } /* Generic.Emph */
+.codehilite .gr { color: #E40000 } /* Generic.Error */
+.codehilite .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #008400 } /* Generic.Inserted */
+.codehilite .go { color: #717171 } /* Generic.Output */
+.codehilite .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #0044DD } /* Generic.Traceback */
+.codehilite .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.codehilite .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.codehilite .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.codehilite .kp { color: #008000 } /* Keyword.Pseudo */
+.codehilite .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.codehilite .kt { color: #B00040 } /* Keyword.Type */
+.codehilite .m { color: #666666 } /* Literal.Number */
+.codehilite .s { color: #BA2121 } /* Literal.String */
+.codehilite .na { color: #687822 } /* Name.Attribute */
+.codehilite .nb { color: #008000 } /* Name.Builtin */
+.codehilite .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+.codehilite .no { color: #880000 } /* Name.Constant */
+.codehilite .nd { color: #AA22FF } /* Name.Decorator */
+.codehilite .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.codehilite .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.codehilite .nf { color: #0000FF } /* Name.Function */
+.codehilite .nl { color: #767600 } /* Name.Label */
+.codehilite .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+.codehilite .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.codehilite .nv { color: #19177C } /* Name.Variable */
+.codehilite .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+.codehilite .w { color: #bbbbbb } /* Text.Whitespace */
+.codehilite .mb { color: #666666 } /* Literal.Number.Bin */
+.codehilite .mf { color: #666666 } /* Literal.Number.Float */
+.codehilite .mh { color: #666666 } /* Literal.Number.Hex */
+.codehilite .mi { color: #666666 } /* Literal.Number.Integer */
+.codehilite .mo { color: #666666 } /* Literal.Number.Oct */
+.codehilite .sa { color: #BA2121 } /* Literal.String.Affix */
+.codehilite .sb { color: #BA2121 } /* Literal.String.Backtick */
+.codehilite .sc { color: #BA2121 } /* Literal.String.Char */
+.codehilite .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.codehilite .s2 { color: #BA2121 } /* Literal.String.Double */
+.codehilite .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.codehilite .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.codehilite .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.codehilite .sx { color: #008000 } /* Literal.String.Other */
+.codehilite .sr { color: #A45A77 } /* Literal.String.Regex */
+.codehilite .s1 { color: #BA2121 } /* Literal.String.Single */
+.codehilite .ss { color: #19177C } /* Literal.String.Symbol */
+.codehilite .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #0000FF } /* Name.Function.Magic */
+.codehilite .vc { color: #19177C } /* Name.Variable.Class */
+.codehilite .vg { color: #19177C } /* Name.Variable.Global */
+.codehilite .vi { color: #19177C } /* Name.Variable.Instance */
+.codehilite .vm { color: #19177C } /* Name.Variable.Magic */
+.codehilite .il { color: #666666 } /* Literal.Number.Integer.Long */
+  </style>
+  <style type="text/css">
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+    /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+       (-o-min-device-pixel-ratio: 5/4),
+       (-webkit-min-device-pixel-ratio: 1.25),
+       (min-resolution: 120dpi) {
+    /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid required HTTP connection: h5bp.com/r
+   ========================================================================== */
+
+@media print {
+    * {
+        background: transparent !important;
+        color: #000 !important; /* Black prints faster: h5bp.com/s */
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    a,
+    a:visited {
+        text-decoration: underline;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+        content: " (" attr(title) ")";
+    }
+
+    /*
+     * Don't show links for images, or javascript/internal links
+     */
+
+    .ir a:after,
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+
+    pre,
+    blockquote {
+        border: 1px solid #999;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group; /* h5bp.com/t */
+    }
+
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin: 0.5cm;
+    }
+
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+}
+</style>
+
+  <script type="text/javascript">
+  function toggle(id, $link) {
+    $node = document.getElementById(id);
+    if (!$node)
+    return;
+    if (!$node.style.display || $node.style.display == 'none') {
+    $node.style.display = 'block';
+    $link.innerHTML = 'Hide source &nequiv;';
+    } else {
+    $node.style.display = 'none';
+    $link.innerHTML = 'Show source &equiv;';
+    }
+  }
+  </script>
+</head>
+<body>
+<a href="#" id="top">Top</a>
+<div id="container">
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <div id="sidebar">
+    <h1>Index</h1>
+    <ul id="index">
+    <li class="set"><h3>Super-module</h3>
+      <ul>
+        <li class="mono"><a href="index.html">openoligo.api</a></li>
+      </ul>
+    </li>
+
+
+    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
+      <ul>
+        <li class="mono">
+        <span class="class_name"><a href="#openoligo.api.models.SynthesisQueue">TaskQueueModel</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.all">all</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.annotate">annotate</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.bulk_create">bulk_create</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.bulk_update">bulk_update</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.check">check</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.create">create</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.describe">describe</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.exclude">exclude</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.exists">exists</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.fetch_for_list">fetch_for_list</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.filter">filter</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.first">first</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.get">get</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.get_or_create">get_or_create</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.get_or_none">get_or_none</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.in_bulk">in_bulk</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.raw">raw</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.register_listener">register_listener</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.select_for_update">select_for_update</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.update_or_create">update_or_create</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.clone">clone</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.delete">delete</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.fetch_related">fetch_related</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.refresh_from_db">refresh_from_db</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.save">save</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.update_from_dict">update_from_dict</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#openoligo.api.models.TaskQueueIn">TaskQueueInModel</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#openoligo.api.models.TaskQueueIn.construct">construct</a></li>
+    <li class="mono"><a href="#openoligo.api.models.TaskQueueIn.from_orm">from_orm</a></li>
+    <li class="mono"><a href="#openoligo.api.models.TaskQueueIn.from_queryset">from_queryset</a></li>
+    <li class="mono"><a href="#openoligo.api.models.TaskQueueIn.from_queryset_single">from_queryset_single</a></li>
+    <li class="mono"><a href="#openoligo.api.models.TaskQueueIn.from_tortoise_orm">from_tortoise_orm</a></li>
+    <li class="mono"><a href="#openoligo.api.models.TaskQueueIn.parse_file">parse_file</a></li>
+    <li class="mono"><a href="#openoligo.api.models.TaskQueueIn.parse_obj">parse_obj</a></li>
+    <li class="mono"><a href="#openoligo.api.models.TaskQueueIn.parse_raw">parse_raw</a></li>
+    <li class="mono"><a href="#openoligo.api.models.TaskQueueIn.schema">schema</a></li>
+    <li class="mono"><a href="#openoligo.api.models.TaskQueueIn.schema_json">schema_json</a></li>
+    <li class="mono"><a href="#openoligo.api.models.TaskQueueIn.update_forward_refs">update_forward_refs</a></li>
+    <li class="mono"><a href="#openoligo.api.models.TaskQueueIn.validate">validate</a></li>
+    <li class="mono"><a href="#openoligo.api.models.TaskQueueIn.copy">copy</a></li>
+    <li class="mono"><a href="#openoligo.api.models.TaskQueueIn.dict">dict</a></li>
+    <li class="mono"><a href="#openoligo.api.models.TaskQueueIn.json">json</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#openoligo.api.models.SynthesisQueue">TaskQueueModel</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.construct">construct</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.from_orm">from_orm</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.from_queryset">from_queryset</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.from_queryset_single">from_queryset_single</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.from_tortoise_orm">from_tortoise_orm</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.parse_file">parse_file</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.parse_obj">parse_obj</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.parse_raw">parse_raw</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.schema">schema</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.schema_json">schema_json</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.update_forward_refs">update_forward_refs</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.validate">validate</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.copy">copy</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.dict">dict</a></li>
+    <li class="mono"><a href="#openoligo.api.models.SynthesisQueue.json">json</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#openoligo.api.models.TaskStatus">TaskStatus</a></span>
+        
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#openoligo.api.models.ValidSeq">ValidSeq</a></span>
+        
+        </li>
+      </ul>
+    </li>
+
+    </ul>
+  </div>
+
+<article id="content">
+  
+
+  
+
+
+  <header id="section-intro">
+  <h1 class="title"><span class="name">openoligo.api.models</span> module</h1>
+  <p>Tortoise ORM Models for the OpenOligo API</p>
+  
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models" class="source">
+    <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Tortoise ORM Models for the OpenOligo API</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="kn">from</span> <span class="nn">tortoise</span> <span class="kn">import</span> <span class="n">fields</span>
+<span class="kn">from</span> <span class="nn">tortoise.contrib.pydantic</span> <span class="kn">import</span> <span class="n">pydantic_model_creator</span>
+<span class="kn">from</span> <span class="nn">tortoise.exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span>
+<span class="kn">from</span> <span class="nn">tortoise.models</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">tortoise.validators</span> <span class="kn">import</span> <span class="n">MaxLengthValidator</span><span class="p">,</span> <span class="n">MinLengthValidator</span><span class="p">,</span> <span class="n">RegexValidator</span><span class="p">,</span> <span class="n">Validator</span>
+
+<span class="kn">from</span> <span class="nn">openoligo.seq</span> <span class="kn">import</span> <span class="n">Seq</span><span class="p">,</span> <span class="n">SeqCategory</span>
+
+
+<span class="k">class</span> <span class="nc">TaskStatus</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Status of a synthesis task.&quot;&quot;&quot;</span>
+
+    <span class="n">QUEUED</span> <span class="o">=</span> <span class="s2">&quot;queued&quot;</span>
+    <span class="n">IN_PROGRESS</span> <span class="o">=</span> <span class="s2">&quot;in_progress&quot;</span>
+    <span class="n">COMPLETE</span> <span class="o">=</span> <span class="s2">&quot;complete&quot;</span>
+    <span class="n">FAILED</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span>
+
+
+<span class="k">class</span> <span class="nc">ValidSeq</span><span class="p">(</span><span class="n">Validator</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate that the value is a valid NA sequence&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate the value.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">Seq</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">exc</span>
+
+
+<span class="k">class</span> <span class="nc">SynthesisQueue</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A synthesis task in the queue.&quot;&quot;&quot;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">autoincrement</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Synthesis ID&quot;</span><span class="p">)</span>
+
+    <span class="n">sequence</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
+        <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">ValidSeq</span><span class="p">(),</span> <span class="n">MinLengthValidator</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">MaxLengthValidator</span><span class="p">(</span><span class="mi">100</span><span class="p">)],</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Sequence of the Nucliec Acid to synthesize&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">CharEnumField</span><span class="p">(</span>
+        <span class="n">SeqCategory</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">SeqCategory</span><span class="o">.</span><span class="n">DNA</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Category of the sequence, eg. DNA, RNA, or MIXED&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">CharEnumField</span><span class="p">(</span><span class="n">TaskStatus</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">TaskStatus</span><span class="o">.</span><span class="n">QUEUED</span><span class="p">)</span>
+
+    <span class="n">rank</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Rank of the synthesis task in the queue.</span>
+<span class="s2">        0 is for chronologically first.</span>
+<span class="s2">        Other numbers are prioritised over 0 in the increasing order&quot;&quot;&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DatetimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">started_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DatetimeField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">completed_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DatetimeField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">log_file</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
+        <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">validate</span><span class="o">=</span><span class="p">[</span><span class="n">MinLengthValidator</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">RegexValidator</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\.log$&quot;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)],</span>
+    <span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">PydanticMeta</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pydantic configuration&quot;&quot;&quot;</span>
+
+        <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;log_file&quot;</span><span class="p">]</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;-rank&quot;</span><span class="p">,</span> <span class="s2">&quot;-created_at&quot;</span><span class="p">]</span>
+
+
+<span class="n">TaskQueueModel</span> <span class="o">=</span> <span class="n">pydantic_model_creator</span><span class="p">(</span><span class="n">SynthesisQueue</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;SynthesisQueue&quot;</span><span class="p">)</span>
+<span class="n">TaskQueueInModel</span> <span class="o">=</span> <span class="n">pydantic_model_creator</span><span class="p">(</span>
+    <span class="n">SynthesisQueue</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;TaskQueueIn&quot;</span><span class="p">,</span>
+    <span class="n">exclude_readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">exclude</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;created_at&quot;</span><span class="p">,</span> <span class="s2">&quot;started_at&quot;</span><span class="p">,</span> <span class="s2">&quot;completed_at&quot;</span><span class="p">),</span>
+<span class="p">)</span>
+</pre></div>
+
+  </div>
+
+  </header>
+
+  <section id="section-items">
+
+
+    <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="openoligo.api.models.SynthesisQueue" class="name">class <span class="ident">SynthesisQueue</span></p>
+      
+  
+    <div class="desc"><p>A synthesis task in the queue.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">SynthesisQueue</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A synthesis task in the queue.&quot;&quot;&quot;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">autoincrement</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Synthesis ID&quot;</span><span class="p">)</span>
+
+    <span class="n">sequence</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
+        <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">ValidSeq</span><span class="p">(),</span> <span class="n">MinLengthValidator</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">MaxLengthValidator</span><span class="p">(</span><span class="mi">100</span><span class="p">)],</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Sequence of the Nucliec Acid to synthesize&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">CharEnumField</span><span class="p">(</span>
+        <span class="n">SeqCategory</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">SeqCategory</span><span class="o">.</span><span class="n">DNA</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Category of the sequence, eg. DNA, RNA, or MIXED&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">CharEnumField</span><span class="p">(</span><span class="n">TaskStatus</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">TaskStatus</span><span class="o">.</span><span class="n">QUEUED</span><span class="p">)</span>
+
+    <span class="n">rank</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Rank of the synthesis task in the queue.</span>
+<span class="s2">        0 is for chronologically first.</span>
+<span class="s2">        Other numbers are prioritised over 0 in the increasing order&quot;&quot;&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">created_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DatetimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">started_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DatetimeField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">completed_at</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">DatetimeField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">log_file</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
+        <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">validate</span><span class="o">=</span><span class="p">[</span><span class="n">MinLengthValidator</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="n">RegexValidator</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\.log$&quot;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)],</span>
+    <span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">PydanticMeta</span><span class="p">:</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pydantic configuration&quot;&quot;&quot;</span>
+
+        <span class="n">exclude</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;log_file&quot;</span><span class="p">]</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;-rank&quot;</span><span class="p">,</span> <span class="s2">&quot;-created_at&quot;</span><span class="p">]</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="/tortoise.models.Model.ext">tortoise.models.Model</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="openoligo.api.models.SynthesisQueue.Meta" class="name">var <span class="ident">Meta</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.api.models.SynthesisQueue.PydanticMeta" class="name">var <span class="ident">PydanticMeta</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.api.models.SynthesisQueue.category" class="name">var <span class="ident">category</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.api.models.SynthesisQueue.completed_at" class="name">var <span class="ident">completed_at</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.api.models.SynthesisQueue.created_at" class="name">var <span class="ident">created_at</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.api.models.SynthesisQueue.id" class="name">var <span class="ident">id</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.api.models.SynthesisQueue.log_file" class="name">var <span class="ident">log_file</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.api.models.SynthesisQueue.rank" class="name">var <span class="ident">rank</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.api.models.SynthesisQueue.sequence" class="name">var <span class="ident">sequence</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.api.models.SynthesisQueue.started_at" class="name">var <span class="ident">started_at</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.api.models.SynthesisQueue.status" class="name">var <span class="ident">status</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.all">
+    <p>def <span class="ident">all</span>(</p><p>using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Returns the complete QuerySet.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.all', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.all" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span> <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuerySet</span><span class="p">[</span><span class="n">MODEL</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the complete QuerySet.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">using_db</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.annotate">
+    <p>def <span class="ident">annotate</span>(</p><p>**kwargs: Union[tortoise.expressions.Function, pypika.terms.Term])</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Annotates the result set with extra Functions/Aggregations/Expressions.</p>
+<p>:param kwargs: Parameter name and the Function/Aggregation to annotate with.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.annotate', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.annotate" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">annotate</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Function</span><span class="p">,</span> <span class="n">Term</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">QuerySet</span><span class="p">[</span><span class="n">MODEL</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Annotates the result set with extra Functions/Aggregations/Expressions.</span>
+<span class="sd">    :param kwargs: Parameter name and the Function/Aggregation to annotate with.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.bulk_create">
+    <p>def <span class="ident">bulk_create</span>(</p><p>objects: Iterable[~MODEL], batch_size: Optional[int] = None, ignore_conflicts: bool = False, update_fields: Optional[Iterable[str]] = None, on_conflict: Optional[Iterable[str]] = None, using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Bulk insert operation:</p>
+<p>.. note::
+    The bulk insert operation will do the minimum to ensure that the object
+    created in the DB has all the defaults and generated fields set,
+    but may be incomplete reference in Python.</p>
+<pre><code>e.g. ``IntField`` primary keys will not be populated.
+</code></pre>
+<p>This is recommended only for throw away inserts where you want to ensure optimal
+insert performance.</p>
+<p>.. code-block:: python3</p>
+<pre><code>User.bulk_create([
+    User(name="...", email="..."),
+    User(name="...", email="...")
+])
+</code></pre>
+<p>:param on_conflict: On conflict index name
+:param update_fields: Update fields when conflicts
+:param ignore_conflicts: Ignore conflicts when inserting
+:param objects: List of objects to bulk create
+:param batch_size: How many objects are created in a single query
+:param using_db: Specific DB connection to use instead of default bound</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.bulk_create', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.bulk_create" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">bulk_create</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span>
+    <span class="n">objects</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span>
+    <span class="n">batch_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">ignore_conflicts</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">update_fields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">on_conflict</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BulkCreateQuery&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bulk insert operation:</span>
+<span class="sd">    .. note::</span>
+<span class="sd">        The bulk insert operation will do the minimum to ensure that the object</span>
+<span class="sd">        created in the DB has all the defaults and generated fields set,</span>
+<span class="sd">        but may be incomplete reference in Python.</span>
+<span class="sd">        e.g. ``IntField`` primary keys will not be populated.</span>
+<span class="sd">    This is recommended only for throw away inserts where you want to ensure optimal</span>
+<span class="sd">    insert performance.</span>
+<span class="sd">    .. code-block:: python3</span>
+<span class="sd">        User.bulk_create([</span>
+<span class="sd">            User(name=&quot;...&quot;, email=&quot;...&quot;),</span>
+<span class="sd">            User(name=&quot;...&quot;, email=&quot;...&quot;)</span>
+<span class="sd">        ])</span>
+<span class="sd">    :param on_conflict: On conflict index name</span>
+<span class="sd">    :param update_fields: Update fields when conflicts</span>
+<span class="sd">    :param ignore_conflicts: Ignore conflicts when inserting</span>
+<span class="sd">    :param objects: List of objects to bulk create</span>
+<span class="sd">    :param batch_size: How many objects are created in a single query</span>
+<span class="sd">    :param using_db: Specific DB connection to use instead of default bound</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">using_db</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">bulk_create</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">ignore_conflicts</span><span class="p">,</span> <span class="n">update_fields</span><span class="p">,</span> <span class="n">on_conflict</span><span class="p">)</span>
+    <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.bulk_update">
+    <p>def <span class="ident">bulk_update</span>(</p><p>objects: Iterable[~MODEL], fields: Iterable[str], batch_size: Optional[int] = None, using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Update the given fields in each of the given objects in the database.
+This method efficiently updates the given fields on the provided model instances, generally with one query.</p>
+<p>.. code-block:: python3</p>
+<pre><code>users = [
+    await User.create(name="...", email="..."),
+    await User.create(name="...", email="...")
+]
+users[0].name = 'name1'
+users[1].name = 'name2'
+
+await User.bulk_update(users, fields=['name'])
+</code></pre>
+<p>:param objects: List of objects to bulk create
+:param fields: The fields to update
+:param batch_size: How many objects are created in a single query
+:param using_db: Specific DB connection to use instead of default bound</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.bulk_update', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.bulk_update" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">bulk_update</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span>
+    <span class="n">objects</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span>
+    <span class="n">fields</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">batch_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;BulkUpdateQuery&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update the given fields in each of the given objects in the database.</span>
+<span class="sd">    This method efficiently updates the given fields on the provided model instances, generally with one query.</span>
+<span class="sd">    .. code-block:: python3</span>
+<span class="sd">        users = [</span>
+<span class="sd">            await User.create(name=&quot;...&quot;, email=&quot;...&quot;),</span>
+<span class="sd">            await User.create(name=&quot;...&quot;, email=&quot;...&quot;)</span>
+<span class="sd">        ]</span>
+<span class="sd">        users[0].name = &#39;name1&#39;</span>
+<span class="sd">        users[1].name = &#39;name2&#39;</span>
+<span class="sd">        await User.bulk_update(users, fields=[&#39;name&#39;])</span>
+<span class="sd">    :param objects: List of objects to bulk create</span>
+<span class="sd">    :param fields: The fields to update</span>
+<span class="sd">    :param batch_size: How many objects are created in a single query</span>
+<span class="sd">    :param using_db: Specific DB connection to use instead of default bound</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">using_db</span><span class="p">(</span><span class="n">db</span><span class="p">)</span><span class="o">.</span><span class="n">bulk_update</span><span class="p">(</span><span class="n">objects</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">)</span>
+    <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.check">
+    <p>def <span class="ident">check</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Calls various checks to validate the model.</p>
+<p>:raises ConfigurationError: If the model has not been configured correctly.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.check', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.check" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calls various checks to validate the model.</span>
+<span class="sd">    :raises ConfigurationError: If the model has not been configured correctly.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">cls</span><span class="o">.</span><span class="n">_check_together</span><span class="p">(</span><span class="s2">&quot;unique_together&quot;</span><span class="p">)</span>
+    <span class="bp">cls</span><span class="o">.</span><span class="n">_check_together</span><span class="p">(</span><span class="s2">&quot;indexes&quot;</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.create">
+    <p>async def <span class="ident">create</span>(</p><p>using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None, **kwargs: Any)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Create a record in the DB and returns the object.</p>
+<p>.. code-block:: python3</p>
+<pre><code>user = await User.create(name="...", email="...")
+</code></pre>
+<p>Equivalent to:</p>
+<p>.. code-block:: python3</p>
+<pre><code>user = User(name="...", email="...")
+await user.save()
+</code></pre>
+<p>:param using_db: Specific DB connection to use instead of default bound
+:param kwargs: Model parameters.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.create', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.create" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">create</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span> <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MODEL</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a record in the DB and returns the object.</span>
+<span class="sd">    .. code-block:: python3</span>
+<span class="sd">        user = await User.create(name=&quot;...&quot;, email=&quot;...&quot;)</span>
+<span class="sd">    Equivalent to:</span>
+<span class="sd">    .. code-block:: python3</span>
+<span class="sd">        user = User(name=&quot;...&quot;, email=&quot;...&quot;)</span>
+<span class="sd">        await user.save()</span>
+<span class="sd">    :param using_db: Specific DB connection to use instead of default bound</span>
+<span class="sd">    :param kwargs: Model parameters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">instance</span><span class="o">.</span><span class="n">_saved_in_db</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">instance</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">using_db</span><span class="o">=</span><span class="n">db</span><span class="p">,</span> <span class="n">force_create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">instance</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.describe">
+    <p>def <span class="ident">describe</span>(</p><p>serializable: bool = True)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Describes the given list of models or ALL registered models.</p>
+<p>:param serializable:
+    <code>False</code> if you want raw python objects,
+    <code>True</code> for JSON-serializable data. (Defaults to <code>True</code>)</p>
+<p>:return:
+    A dictionary containing the model description.</p>
+<pre><code>The base dict has a fixed set of keys that reference a list of fields
+(or a single field in the case of the primary key):
+
+.. code-block:: python3
+
+    {
+        "name":                 str     # Qualified model name
+        "app":                  str     # 'App' namespace
+        "table":                str     # DB table name
+        "abstract":             bool    # Is the model Abstract?
+        "description":          str     # Description of table (nullable)
+        "docstring":            str     # Model docstring (nullable)
+        "unique_together":      [...]   # List of List containing field names that
+                                        #  are unique together
+        "pk_field":             {...}   # Primary key field
+        "data_fields":          [...]   # Data fields
+        "fk_fields":            [...]   # Foreign Key fields FROM this model
+        "backward_fk_fields":   [...]   # Foreign Key fields TO this model
+        "o2o_fields":           [...]   # OneToOne fields FROM this model
+        "backward_o2o_fields":  [...]   # OneToOne fields TO this model
+        "m2m_fields":           [...]   # Many-to-Many fields
+    }
+
+Each field is specified as defined in :meth:`tortoise.fields.base.Field.describe`
+</code></pre></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.describe', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.describe" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">serializable</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Describes the given list of models or ALL registered models.</span>
+<span class="sd">    :param serializable:</span>
+<span class="sd">        ``False`` if you want raw python objects,</span>
+<span class="sd">        ``True`` for JSON-serializable data. (Defaults to ``True``)</span>
+<span class="sd">    :return:</span>
+<span class="sd">        A dictionary containing the model description.</span>
+<span class="sd">        The base dict has a fixed set of keys that reference a list of fields</span>
+<span class="sd">        (or a single field in the case of the primary key):</span>
+<span class="sd">        .. code-block:: python3</span>
+<span class="sd">            {</span>
+<span class="sd">                &quot;name&quot;:                 str     # Qualified model name</span>
+<span class="sd">                &quot;app&quot;:                  str     # &#39;App&#39; namespace</span>
+<span class="sd">                &quot;table&quot;:                str     # DB table name</span>
+<span class="sd">                &quot;abstract&quot;:             bool    # Is the model Abstract?</span>
+<span class="sd">                &quot;description&quot;:          str     # Description of table (nullable)</span>
+<span class="sd">                &quot;docstring&quot;:            str     # Model docstring (nullable)</span>
+<span class="sd">                &quot;unique_together&quot;:      [...]   # List of List containing field names that</span>
+<span class="sd">                                                #  are unique together</span>
+<span class="sd">                &quot;pk_field&quot;:             {...}   # Primary key field</span>
+<span class="sd">                &quot;data_fields&quot;:          [...]   # Data fields</span>
+<span class="sd">                &quot;fk_fields&quot;:            [...]   # Foreign Key fields FROM this model</span>
+<span class="sd">                &quot;backward_fk_fields&quot;:   [...]   # Foreign Key fields TO this model</span>
+<span class="sd">                &quot;o2o_fields&quot;:           [...]   # OneToOne fields FROM this model</span>
+<span class="sd">                &quot;backward_o2o_fields&quot;:  [...]   # OneToOne fields TO this model</span>
+<span class="sd">                &quot;m2m_fields&quot;:           [...]   # Many-to-Many fields</span>
+<span class="sd">            }</span>
+<span class="sd">        Each field is specified as defined in :meth:`tortoise.fields.base.Field.describe`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">full_name</span><span class="p">,</span>
+        <span class="s2">&quot;app&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">app</span><span class="p">,</span>
+        <span class="s2">&quot;table&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">db_table</span><span class="p">,</span>
+        <span class="s2">&quot;abstract&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">abstract</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">table_description</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;docstring&quot;</span><span class="p">:</span> <span class="n">inspect</span><span class="o">.</span><span class="n">cleandoc</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="s2">&quot;unique_together&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">unique_together</span> <span class="ow">or</span> <span class="p">[],</span>
+        <span class="s2">&quot;indexes&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">indexes</span> <span class="ow">or</span> <span class="p">[],</span>
+        <span class="s2">&quot;pk_field&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields_map</span><span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">pk_attr</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">serializable</span><span class="p">),</span>
+        <span class="s2">&quot;data_fields&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">field</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">serializable</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields_map</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">pk_attr</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields</span> <span class="o">-</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fetch_fields</span><span class="p">)</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;fk_fields&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">field</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">serializable</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields_map</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fk_fields</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;backward_fk_fields&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">field</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">serializable</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields_map</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">backward_fk_fields</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;o2o_fields&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">field</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">serializable</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields_map</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">o2o_fields</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;backward_o2o_fields&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">field</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">serializable</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields_map</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">backward_o2o_fields</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;m2m_fields&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="n">field</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">serializable</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">fields_map</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">m2m_fields</span>
+        <span class="p">],</span>
+    <span class="p">}</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.exclude">
+    <p>def <span class="ident">exclude</span>(</p><p>*args: tortoise.expressions.Q, **kwargs: Any)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Generates a QuerySet with the exclude applied.</p>
+<p>:param args: Q functions containing constraints. Will be AND'ed.
+:param kwargs: Simple filter constraints.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.exclude', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.exclude" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">exclude</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Q</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuerySet</span><span class="p">[</span><span class="n">MODEL</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a QuerySet with the exclude applied.</span>
+<span class="sd">    :param args: Q functions containing constraints. Will be AND&#39;ed.</span>
+<span class="sd">    :param kwargs: Simple filter constraints.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.exists">
+    <p>def <span class="ident">exists</span>(</p><p>*args: tortoise.expressions.Q, using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None, **kwargs: Any)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Return True/False whether record exists with the provided filter parameters.</p>
+<p>.. code-block:: python3</p>
+<pre><code>result = await User.exists(username="foo")
+</code></pre>
+<p>:param using_db: The specific DB connection to use.
+:param args: Q functions containing constraints. Will be AND'ed.
+:param kwargs: Simple filter constraints.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.exists', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.exists" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">exists</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Q</span><span class="p">,</span> <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExistsQuery</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return True/False whether record exists with the provided filter parameters.</span>
+<span class="sd">    .. code-block:: python3</span>
+<span class="sd">        result = await User.exists(username=&quot;foo&quot;)</span>
+<span class="sd">    :param using_db: The specific DB connection to use.</span>
+<span class="sd">    :param args: Q functions containing constraints. Will be AND&#39;ed.</span>
+<span class="sd">    :param kwargs: Simple filter constraints.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">using_db</span><span class="p">(</span><span class="n">db</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.fetch_for_list">
+    <p>async def <span class="ident">fetch_for_list</span>(</p><p>instance_list: &#39;Iterable[Model]&#39;, *args: Any, using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Fetches related models for provided list of Model objects.</p>
+<p>:param instance_list: List of Model objects to fetch relations for.
+:param args: Relation names to fetch.
+:param using_db: DO NOT USE</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.fetch_for_list', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.fetch_for_list" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_for_list</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">,</span>
+    <span class="n">instance_list</span><span class="p">:</span> <span class="s2">&quot;Iterable[Model]&quot;</span><span class="p">,</span>
+    <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetches related models for provided list of Model objects.</span>
+<span class="sd">    :param instance_list: List of Model objects to fetch relations for.</span>
+<span class="sd">    :param args: Relation names to fetch.</span>
+<span class="sd">    :param using_db: DO NOT USE</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">db</span><span class="o">.</span><span class="n">executor_class</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span><span class="o">.</span><span class="n">fetch_for_list</span><span class="p">(</span><span class="n">instance_list</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.filter">
+    <p>def <span class="ident">filter</span>(</p><p>*args: tortoise.expressions.Q, **kwargs: Any)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Generates a QuerySet with the filter applied.</p>
+<p>:param args: Q functions containing constraints. Will be AND'ed.
+:param kwargs: Simple filter constraints.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.filter', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.filter" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Q</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuerySet</span><span class="p">[</span><span class="n">MODEL</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a QuerySet with the filter applied.</span>
+<span class="sd">    :param args: Q functions containing constraints. Will be AND&#39;ed.</span>
+<span class="sd">    :param kwargs: Simple filter constraints.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.first">
+    <p>def <span class="ident">first</span>(</p><p>using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Generates a QuerySet that returns the first record.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.first', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.first" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">first</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span> <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuerySetSingle</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">MODEL</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates a QuerySet that returns the first record.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">using_db</span><span class="p">(</span><span class="n">db</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.get">
+    <p>def <span class="ident">get</span>(</p><p>*args: tortoise.expressions.Q, using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None, **kwargs: Any)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Fetches a single record for a Model type using the provided filter parameters.</p>
+<p>.. code-block:: python3</p>
+<pre><code>user = await User.get(username="foo")
+</code></pre>
+<p>:param using_db: The DB connection to use
+:param args: Q functions containing constraints. Will be AND'ed.
+:param kwargs: Simple filter constraints.</p>
+<p>:raises MultipleObjectsReturned: If provided search returned more than one object.
+:raises DoesNotExist: If object can not be found.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.get', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.get" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">get</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Q</span><span class="p">,</span> <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuerySetSingle</span><span class="p">[</span><span class="n">MODEL</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetches a single record for a Model type using the provided filter parameters.</span>
+<span class="sd">    .. code-block:: python3</span>
+<span class="sd">        user = await User.get(username=&quot;foo&quot;)</span>
+<span class="sd">    :param using_db: The DB connection to use</span>
+<span class="sd">    :param args: Q functions containing constraints. Will be AND&#39;ed.</span>
+<span class="sd">    :param kwargs: Simple filter constraints.</span>
+<span class="sd">    :raises MultipleObjectsReturned: If provided search returned more than one object.</span>
+<span class="sd">    :raises DoesNotExist: If object can not be found.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">using_db</span><span class="p">(</span><span class="n">db</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.get_or_create">
+    <p>async def <span class="ident">get_or_create</span>(</p><p>defaults: Optional[dict] = None, using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None, **kwargs: Any)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Fetches the object if exists (filtering on the provided parameters),
+else creates an instance with any unspecified parameters as default values.</p>
+<p>:param defaults: Default values to be added to a created instance if it can't be fetched.
+:param using_db: Specific DB connection to use instead of default bound
+:param kwargs: Query parameters.
+:raises IntegrityError: If create failed
+:raises TransactionManagementError: If transaction error</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.get_or_create', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.get_or_create" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_or_create</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span>
+    <span class="n">defaults</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">MODEL</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetches the object if exists (filtering on the provided parameters),</span>
+<span class="sd">    else creates an instance with any unspecified parameters as default values.</span>
+<span class="sd">    :param defaults: Default values to be added to a created instance if it can&#39;t be fetched.</span>
+<span class="sd">    :param using_db: Specific DB connection to use instead of default bound</span>
+<span class="sd">    :param kwargs: Query parameters.</span>
+<span class="sd">    :raises IntegrityError: If create failed</span>
+<span class="sd">    :raises TransactionManagementError: If transaction error</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">defaults</span><span class="p">:</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">in_transaction</span><span class="p">(</span><span class="n">connection_name</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">connection_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="k">await</span> <span class="bp">cls</span><span class="o">.</span><span class="n">select_for_update</span><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">using_db</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span>
+                <span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">DoesNotExist</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="k">await</span> <span class="bp">cls</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">using_db</span><span class="o">=</span><span class="n">connection</span><span class="p">,</span> <span class="o">**</span><span class="n">defaults</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="kc">True</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">IntegrityError</span><span class="p">,</span> <span class="n">TransactionManagementError</span><span class="p">):</span>
+                <span class="k">return</span> <span class="k">await</span> <span class="bp">cls</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">using_db</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="kc">False</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.get_or_none">
+    <p>def <span class="ident">get_or_none</span>(</p><p>*args: tortoise.expressions.Q, using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None, **kwargs: Any)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Fetches a single record for a Model type using the provided filter parameters or None.</p>
+<p>.. code-block:: python3</p>
+<pre><code>user = await User.get_or_none(username="foo")
+</code></pre>
+<p>:param using_db: The specific DB connection to use.
+:param args: Q functions containing constraints. Will be AND'ed.
+:param kwargs: Simple filter constraints.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.get_or_none', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.get_or_none" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">get_or_none</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Q</span><span class="p">,</span> <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuerySetSingle</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">MODEL</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetches a single record for a Model type using the provided filter parameters or None.</span>
+<span class="sd">    .. code-block:: python3</span>
+<span class="sd">        user = await User.get_or_none(username=&quot;foo&quot;)</span>
+<span class="sd">    :param using_db: The specific DB connection to use.</span>
+<span class="sd">    :param args: Q functions containing constraints. Will be AND&#39;ed.</span>
+<span class="sd">    :param kwargs: Simple filter constraints.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">using_db</span><span class="p">(</span><span class="n">db</span><span class="p">)</span><span class="o">.</span><span class="n">get_or_none</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.in_bulk">
+    <p>async def <span class="ident">in_bulk</span>(</p><p>id_list: Iterable[Union[str, int]], field_name: str = &#39;pk&#39;, using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Return a dictionary mapping each of the given IDs to the object with
+that ID. If <code>id_list</code> isn't provided, evaluate the entire QuerySet.</p>
+<p>:param id_list: A list of field values
+:param field_name: Must be a unique field
+:param using_db: Specific DB connection to use instead of default bound</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.in_bulk', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.in_bulk" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">in_bulk</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span>
+    <span class="n">id_list</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span>
+    <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;pk&quot;</span><span class="p">,</span>
+    <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MODEL</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a dictionary mapping each of the given IDs to the object with</span>
+<span class="sd">    that ID. If `id_list` isn&#39;t provided, evaluate the entire QuerySet.</span>
+<span class="sd">    :param id_list: A list of field values</span>
+<span class="sd">    :param field_name: Must be a unique field</span>
+<span class="sd">    :param using_db: Specific DB connection to use instead of default bound</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">()</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">using_db</span><span class="p">(</span><span class="n">db</span><span class="p">)</span><span class="o">.</span><span class="n">in_bulk</span><span class="p">(</span><span class="n">id_list</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.raw">
+    <p>def <span class="ident">raw</span>(</p><p>sql: str, using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Executes a RAW SQL and returns the result</p>
+<p>.. code-block:: python3</p>
+<pre><code>result = await User.raw("select * from users where name like '%test%'")
+</code></pre>
+<p>:param using_db: The specific DB connection to use
+:param sql: The raw sql.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.raw', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.raw" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">raw</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">sql</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;RawSQLQuery&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Executes a RAW SQL and returns the result</span>
+<span class="sd">    .. code-block:: python3</span>
+<span class="sd">        result = await User.raw(&quot;select * from users where name like &#39;%test%&#39;&quot;)</span>
+<span class="sd">    :param using_db: The specific DB connection to use</span>
+<span class="sd">    :param sql: The raw sql.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">using_db</span><span class="p">(</span><span class="n">db</span><span class="p">)</span><span class="o">.</span><span class="n">raw</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.register_listener">
+    <p>def <span class="ident">register_listener</span>(</p><p>signal: tortoise.signals.Signals, listener: Callable)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Register listener to current model class for special Signal.</p>
+<p>:param signal: one of tortoise.signals.Signals
+:param listener: callable listener</p>
+<p>:raises ConfigurationError: When listener is not callable</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.register_listener', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.register_listener" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">register_listener</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">signal</span><span class="p">:</span> <span class="n">Signals</span><span class="p">,</span> <span class="n">listener</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Register listener to current model class for special Signal.</span>
+<span class="sd">    :param signal: one of tortoise.signals.Signals</span>
+<span class="sd">    :param listener: callable listener</span>
+<span class="sd">    :raises ConfigurationError: When listener is not callable</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">callable</span><span class="p">(</span><span class="n">listener</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ConfigurationError</span><span class="p">(</span><span class="s2">&quot;Signal listener must be callable!&quot;</span><span class="p">)</span>
+    <span class="n">cls_listeners</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_listeners</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="p">[])</span>  <span class="c1"># type:ignore</span>
+    <span class="k">if</span> <span class="n">listener</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cls_listeners</span><span class="p">:</span>
+        <span class="n">cls_listeners</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">listener</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.select_for_update">
+    <p>def <span class="ident">select_for_update</span>(</p><p>nowait: bool = False, skip_locked: bool = False, of: Tuple[str, ...] = (), using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Make QuerySet select for update.</p>
+<p>Returns a queryset that will lock rows until the end of the transaction,
+generating a SELECT &hellip; FOR UPDATE SQL statement on supported databases.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.select_for_update', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.select_for_update" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">select_for_update</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">,</span>
+    <span class="n">nowait</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">skip_locked</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">of</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QuerySet</span><span class="p">[</span><span class="n">MODEL</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make QuerySet select for update.</span>
+<span class="sd">    Returns a queryset that will lock rows until the end of the transaction,</span>
+<span class="sd">    generating a SELECT ... FOR UPDATE SQL statement on supported databases.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">manager</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">using_db</span><span class="p">(</span><span class="n">db</span><span class="p">)</span><span class="o">.</span><span class="n">select_for_update</span><span class="p">(</span><span class="n">nowait</span><span class="p">,</span> <span class="n">skip_locked</span><span class="p">,</span> <span class="n">of</span><span class="p">)</span>
+    <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.update_or_create">
+    <p>async def <span class="ident">update_or_create</span>(</p><p>defaults: Optional[dict] = None, using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None, **kwargs: Any)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>A convenience method for updating an object with the given kwargs, creating a new one if necessary.</p>
+<p>:param defaults: Default values used to update the object.
+:param using_db: Specific DB connection to use instead of default bound
+:param kwargs: Query parameters.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.update_or_create', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.update_or_create" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">update_or_create</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">MODEL</span><span class="p">],</span>
+    <span class="n">defaults</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">MODEL</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A convenience method for updating an object with the given kwargs, creating a new one if necessary.</span>
+<span class="sd">    :param defaults: Default values used to update the object.</span>
+<span class="sd">    :param using_db: Specific DB connection to use instead of default bound</span>
+<span class="sd">    :param kwargs: Query parameters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">defaults</span><span class="p">:</span>
+        <span class="n">defaults</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">in_transaction</span><span class="p">(</span><span class="n">connection_name</span><span class="o">=</span><span class="n">db</span><span class="o">.</span><span class="n">connection_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">connection</span><span class="p">:</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="k">await</span> <span class="bp">cls</span><span class="o">.</span><span class="n">select_for_update</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">using_db</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">get_or_none</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type:ignore</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">instance</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">instance</span><span class="o">.</span><span class="n">update_from_dict</span><span class="p">(</span><span class="n">defaults</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">using_db</span><span class="o">=</span><span class="n">connection</span><span class="p">)</span>  <span class="c1"># type:ignore</span>
+            <span class="k">return</span> <span class="n">instance</span><span class="p">,</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_or_create</span><span class="p">(</span><span class="n">defaults</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="openoligo.api.models.SynthesisQueue.pk" class="name">var <span class="ident">pk</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.clone">
+    <p>def <span class="ident">clone</span>(</p><p>self: ~MODEL, pk: Any = &lt;object object at 0x117c60310&gt;)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Create a new clone of the object that when you do a <code>.save()</code> will create a new record.</p>
+<p>:param pk: An optionally required value if the model doesn't generate its own primary key.
+    Any value you specify here will always be used.
+:return: A copy of the current object without primary key information.
+:raises ParamsError: If pk is required but not provided.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.clone', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.clone" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">MODEL</span><span class="p">,</span> <span class="n">pk</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">EMPTY</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MODEL</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a new clone of the object that when you do a ``.save()`` will create a new record.</span>
+<span class="sd">    :param pk: An optionally required value if the model doesn&#39;t generate its own primary key.</span>
+<span class="sd">        Any value you specify here will always be used.</span>
+<span class="sd">    :return: A copy of the current object without primary key information.</span>
+<span class="sd">    :raises ParamsError: If pk is required but not provided.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">pk</span> <span class="ow">is</span> <span class="n">EMPTY</span><span class="p">:</span>
+        <span class="n">pk_field</span><span class="p">:</span> <span class="n">Field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">pk</span>
+        <span class="k">if</span> <span class="n">pk_field</span><span class="o">.</span><span class="n">generated</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="n">pk_field</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ParamsError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">full_name</span><span class="si">}</span><span class="s2"> requires explicit primary key. Please use .clone(pk=&lt;value&gt;)&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">pk</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">pk</span> <span class="o">=</span> <span class="n">pk</span>
+    <span class="n">obj</span><span class="o">.</span><span class="n">_saved_in_db</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">obj</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.delete">
+    <p>async def <span class="ident">delete</span>(</p><p>self, using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Deletes the current model object.</p>
+<p>:param using_db: Specific DB connection to use instead of default bound</p>
+<p>:raises OperationalError: If object has never been persisted.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.delete', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.delete" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Deletes the current model object.</span>
+<span class="sd">    :param using_db: Specific DB connection to use instead of default bound</span>
+<span class="sd">    :raises OperationalError: If object has never been persisted.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_saved_in_db</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">OperationalError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t delete unpersisted record&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pre_delete</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">db</span><span class="o">.</span><span class="n">executor_class</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span><span class="o">.</span><span class="n">execute_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post_delete</span><span class="p">(</span><span class="n">db</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.fetch_related">
+    <p>async def <span class="ident">fetch_related</span>(</p><p>self, *args: Any, using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Fetch related fields.</p>
+<p>.. code-block:: python3</p>
+<pre><code>User.fetch_related("emails", "manager")
+</code></pre>
+<p>:param args: The related fields that should be fetched.
+:param using_db: Specific DB connection to use instead of default bound</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.fetch_related', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.fetch_related" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_related</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fetch related fields.</span>
+<span class="sd">    .. code-block:: python3</span>
+<span class="sd">        User.fetch_related(&quot;emails&quot;, &quot;manager&quot;)</span>
+<span class="sd">    :param args: The related fields that should be fetched.</span>
+<span class="sd">    :param using_db: Specific DB connection to use instead of default bound</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">db</span><span class="o">.</span><span class="n">executor_class</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span><span class="o">.</span><span class="n">fetch_for_list</span><span class="p">([</span><span class="bp">self</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.refresh_from_db">
+    <p>async def <span class="ident">refresh_from_db</span>(</p><p>self, fields: Optional[Iterable[str]] = None, using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Refresh latest data from db. When this method is called without arguments
+all db fields of the model are updated to the values currently present in the database.</p>
+<p>.. code-block:: python3</p>
+<pre><code>user.refresh_from_db(fields=['name'])
+</code></pre>
+<p>:param fields: The special fields that to be refreshed.
+:param using_db: Specific DB connection to use instead of default bound.</p>
+<p>:raises OperationalError: If object has never been persisted.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.refresh_from_db', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.refresh_from_db" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">refresh_from_db</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">fields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Refresh latest data from db. When this method is called without arguments</span>
+<span class="sd">    all db fields of the model are updated to the values currently present in the database.</span>
+<span class="sd">    .. code-block:: python3</span>
+<span class="sd">        user.refresh_from_db(fields=[&#39;name&#39;])</span>
+<span class="sd">    :param fields: The special fields that to be refreshed.</span>
+<span class="sd">    :param using_db: Specific DB connection to use instead of default bound.</span>
+<span class="sd">    :raises OperationalError: If object has never been persisted.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_saved_in_db</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">OperationalError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t refresh unpersisted record&quot;</span><span class="p">)</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">()</span>
+    <span class="n">qs</span> <span class="o">=</span> <span class="n">QuerySet</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span><span class="o">.</span><span class="n">using_db</span><span class="p">(</span><span class="n">db</span><span class="p">)</span><span class="o">.</span><span class="n">only</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">fields</span> <span class="ow">or</span> <span class="p">[]))</span>
+    <span class="n">obj</span> <span class="o">=</span> <span class="k">await</span> <span class="n">qs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">db_fields</span><span class="p">:</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.save">
+    <p>async def <span class="ident">save</span>(</p><p>self, using_db: Optional[tortoise.backends.base.client.BaseDBAsyncClient] = None, update_fields: Optional[Iterable[str]] = None, force_create: bool = False, force_update: bool = False)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Creates/Updates the current model object.</p>
+<p>:param update_fields: If provided, it should be a tuple/list of fields by name.</p>
+<pre><code>This is the subset of fields that should be updated.
+If the object needs to be created ``update_fields`` will be ignored.
+</code></pre>
+<p>:param using_db: Specific DB connection to use instead of default bound
+:param force_create: Forces creation of the record
+:param force_update: Forces updating of the record</p>
+<p>:raises IncompleteInstanceError: If the model is partial and the fields are not available for persistence.
+:raises IntegrityError: If the model can't be created or updated (specifically if force_create or force_update has been set)</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.save', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.save" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">save</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">using_db</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BaseDBAsyncClient</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">update_fields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">force_create</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">force_update</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates/Updates the current model object.</span>
+<span class="sd">    :param update_fields: If provided, it should be a tuple/list of fields by name.</span>
+<span class="sd">        This is the subset of fields that should be updated.</span>
+<span class="sd">        If the object needs to be created ``update_fields`` will be ignored.</span>
+<span class="sd">    :param using_db: Specific DB connection to use instead of default bound</span>
+<span class="sd">    :param force_create: Forces creation of the record</span>
+<span class="sd">    :param force_update: Forces updating of the record</span>
+<span class="sd">    :raises IncompleteInstanceError: If the model is partial and the fields are not available for persistence.</span>
+<span class="sd">    :raises IntegrityError: If the model can&#39;t be created or updated (specifically if force_create or force_update has been set)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">using_db</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_choose_db</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">executor</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">executor_class</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_partial</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">update_fields</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">update_fields</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">pk_attr</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="n">IncompleteInstanceError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is a partial model without primary key fetchd. Partial update not available&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="n">IncompleteInstanceError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is a partial model, field &#39;</span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">&#39; is not available&quot;</span>
+                    <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">IncompleteInstanceError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is a partial model, can only be saved with the relevant update_field provided&quot;</span>
+            <span class="p">)</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pre_save</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">update_fields</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">force_create</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">executor</span><span class="o">.</span><span class="n">execute_insert</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">created</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="n">force_update</span><span class="p">:</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="k">await</span> <span class="n">executor</span><span class="o">.</span><span class="n">execute_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">update_fields</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rows</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">IntegrityError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Can&#39;t update object that doesn&#39;t exist. PK: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pk</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">created</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_saved_in_db</span> <span class="ow">or</span> <span class="n">update_fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pk</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">executor</span><span class="o">.</span><span class="n">execute_insert</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                <span class="n">created</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">executor</span><span class="o">.</span><span class="n">execute_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">update_fields</span><span class="p">)</span>
+                <span class="n">created</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># TODO: Do a merge/upsert operation here instead. Let the executor determine an optimal strategy for each DB engine.</span>
+            <span class="k">await</span> <span class="n">executor</span><span class="o">.</span><span class="n">execute_insert</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">created</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_saved_in_db</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post_save</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="n">update_fields</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.update_from_dict">
+    <p>def <span class="ident">update_from_dict</span>(</p><p>self: ~MODEL, data: dict)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Updates the current model with the provided dict.
+This can allow mass-updating a model from a dict, also ensuring that datatype conversions happen.</p>
+<p>This will ignore any extra fields, and NOT update the model with them,
+but will raise errors on bad types or updating Many-instance relations.</p>
+<p>:param data: The parameters you want to update in a dict format
+:return: The current model instance</p>
+<p>:raises ConfigurationError: When attempting to update a remote instance
+    (e.g. a reverse ForeignKey or ManyToMany relation)
+:raises ValueError: When a passed parameter is not type compatible</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.update_from_dict', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.update_from_dict" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">update_from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">MODEL</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MODEL</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Updates the current model with the provided dict.</span>
+<span class="sd">    This can allow mass-updating a model from a dict, also ensuring that datatype conversions happen.</span>
+<span class="sd">    This will ignore any extra fields, and NOT update the model with them,</span>
+<span class="sd">    but will raise errors on bad types or updating Many-instance relations.</span>
+<span class="sd">    :param data: The parameters you want to update in a dict format</span>
+<span class="sd">    :return: The current model instance</span>
+<span class="sd">    :raises ConfigurationError: When attempting to update a remote instance</span>
+<span class="sd">        (e.g. a reverse ForeignKey or ManyToMany relation)</span>
+<span class="sd">    :raises ValueError: When a passed parameter is not type compatible</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_set_kwargs</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="openoligo.api.models.TaskQueueIn" class="name">class <span class="ident">TaskQueueInModel</span></p>
+      
+  
+    <div class="desc"><p>A synthesis task in the queue.</p></div>
+  <div class="source_cont">
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="/tortoise.contrib.pydantic.base.PydanticModel.ext">tortoise.contrib.pydantic.base.PydanticModel</a></li>
+          <li><a href="/pydantic.main.BaseModel.ext">pydantic.main.BaseModel</a></li>
+          <li><a href="/pydantic.utils.Representation.ext">pydantic.utils.Representation</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="openoligo.api.models.TaskQueueIn.Config" class="name">var <span class="ident">Config</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.TaskQueueIn.construct">
+    <p>def <span class="ident">construct</span>(</p><p>_fields_set: Optional[ForwardRef(&#39;SetStr&#39;)] = None, **values: Any)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Creates a new model setting <strong>dict</strong> and <strong>fields_set</strong> from trusted or pre-validated data.
+Default values are respected, but no other validation is performed.
+Behaves as if <code>Config.extra = 'allow'</code> was set since it adds all passed values</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.TaskQueueIn.from_orm">
+    <p>def <span class="ident">from_orm</span>(</p><p>obj: Any)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.TaskQueueIn.from_queryset">
+    <p>async def <span class="ident">from_queryset</span>(</p><p>queryset: &#39;QuerySet&#39;)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Returns a serializable pydantic model instance that contains a list of models,
+from the provided queryset.</p>
+<p>This will prefetch all the relations automatically.</p>
+<p>:param queryset: a queryset on the model this PydanticModel is based on.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.TaskQueueIn.from_queryset', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.TaskQueueIn.from_queryset" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">from_queryset</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">queryset</span><span class="p">:</span> <span class="s2">&quot;QuerySet&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;List[PydanticModel]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a serializable pydantic model instance that contains a list of models,</span>
+<span class="sd">    from the provided queryset.</span>
+<span class="sd">    This will prefetch all the relations automatically.</span>
+<span class="sd">    :param queryset: a queryset on the model this PydanticModel is based on.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fetch_fields</span> <span class="o">=</span> <span class="n">_get_fetch_fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__config__</span><span class="p">,</span> <span class="s2">&quot;orig_model&quot;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">from_orm</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="k">await</span> <span class="n">queryset</span><span class="o">.</span><span class="n">prefetch_related</span><span class="p">(</span><span class="o">*</span><span class="n">fetch_fields</span><span class="p">)]</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.TaskQueueIn.from_queryset_single">
+    <p>async def <span class="ident">from_queryset_single</span>(</p><p>queryset: &#39;QuerySetSingle&#39;)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Returns a serializable pydantic model instance for a single model
+from the provided queryset.</p>
+<p>This will prefetch all the relations automatically.</p>
+<p>:param queryset: a queryset on the model this PydanticModel is based on.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.TaskQueueIn.from_queryset_single', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.TaskQueueIn.from_queryset_single" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">from_queryset_single</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">queryset</span><span class="p">:</span> <span class="s2">&quot;QuerySetSingle&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PydanticModel&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a serializable pydantic model instance for a single model</span>
+<span class="sd">    from the provided queryset.</span>
+<span class="sd">    This will prefetch all the relations automatically.</span>
+<span class="sd">    :param queryset: a queryset on the model this PydanticModel is based on.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fetch_fields</span> <span class="o">=</span> <span class="n">_get_fetch_fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__config__</span><span class="p">,</span> <span class="s2">&quot;orig_model&quot;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_orm</span><span class="p">(</span><span class="k">await</span> <span class="n">queryset</span><span class="o">.</span><span class="n">prefetch_related</span><span class="p">(</span><span class="o">*</span><span class="n">fetch_fields</span><span class="p">))</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.TaskQueueIn.from_tortoise_orm">
+    <p>async def <span class="ident">from_tortoise_orm</span>(</p><p>obj: &#39;Model&#39;)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Returns a serializable pydantic model instance built from the provided model instance.</p>
+<p>.. note::</p>
+<pre><code>This will prefetch all the relations automatically. It is probably what you want.
+
+If you don't want this, or require a ``sync`` method, look to using ``.from_orm()``.
+
+In that case you'd have to manage  prefetching yourself,
+or exclude relational fields from being part of the model using
+:class:`tortoise.contrib.pydantic.creator.PydanticMeta`, or you would be
+getting ``OperationalError`` exceptions.
+
+This is due to how the ``asyncio`` framework forces I/O to happen in explicit ``await``
+statements. Hence we can only do lazy-fetching during an awaited method.
+</code></pre>
+<p>:param obj: The Model instance you want serialized.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.TaskQueueIn.from_tortoise_orm', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.TaskQueueIn.from_tortoise_orm" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">from_tortoise_orm</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="s2">&quot;Model&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PydanticModel&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a serializable pydantic model instance built from the provided model instance.</span>
+<span class="sd">    .. note::</span>
+<span class="sd">        This will prefetch all the relations automatically. It is probably what you want.</span>
+<span class="sd">        If you don&#39;t want this, or require a ``sync`` method, look to using ``.from_orm()``.</span>
+<span class="sd">        In that case you&#39;d have to manage  prefetching yourself,</span>
+<span class="sd">        or exclude relational fields from being part of the model using</span>
+<span class="sd">        :class:`tortoise.contrib.pydantic.creator.PydanticMeta`, or you would be</span>
+<span class="sd">        getting ``OperationalError`` exceptions.</span>
+<span class="sd">        This is due to how the ``asyncio`` framework forces I/O to happen in explicit ``await``</span>
+<span class="sd">        statements. Hence we can only do lazy-fetching during an awaited method.</span>
+<span class="sd">    :param obj: The Model instance you want serialized.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get fields needed to fetch</span>
+    <span class="n">fetch_fields</span> <span class="o">=</span> <span class="n">_get_fetch_fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__config__</span><span class="p">,</span> <span class="s2">&quot;orig_model&quot;</span><span class="p">))</span>
+    <span class="c1"># Fetch fields</span>
+    <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">fetch_related</span><span class="p">(</span><span class="o">*</span><span class="n">fetch_fields</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">from_orm</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.TaskQueueIn.parse_file">
+    <p>def <span class="ident">parse_file</span>(</p><p>path: Union[str, pathlib.Path], *, content_type: &#39;unicode&#39; = None, encoding: &#39;unicode&#39; = &#39;utf8&#39;, proto: pydantic.parse.Protocol = None, allow_pickle: bool = False)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.TaskQueueIn.parse_obj">
+    <p>def <span class="ident">parse_obj</span>(</p><p>obj: Any)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.TaskQueueIn.parse_raw">
+    <p>def <span class="ident">parse_raw</span>(</p><p>b: Union[str, bytes], *, content_type: &#39;unicode&#39; = None, encoding: &#39;unicode&#39; = &#39;utf8&#39;, proto: pydantic.parse.Protocol = None, allow_pickle: bool = False)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.TaskQueueIn.schema">
+    <p>def <span class="ident">schema</span>(</p><p>by_alias: bool = True, ref_template: &#39;unicode&#39; = &#39;#/definitions/{model}&#39;)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.TaskQueueIn.schema_json">
+    <p>def <span class="ident">schema_json</span>(</p><p>*, by_alias: bool = True, ref_template: &#39;unicode&#39; = &#39;#/definitions/{model}&#39;, **dumps_kwargs: Any)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.TaskQueueIn.update_forward_refs">
+    <p>def <span class="ident">update_forward_refs</span>(</p><p>**localns: Any)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Try to update ForwardRefs on fields based on this Model, globalns and localns.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.TaskQueueIn.validate">
+    <p>def <span class="ident">validate</span>(</p><p>value: Any)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.TaskQueueIn.copy">
+    <p>def <span class="ident">copy</span>(</p><p>self: &#39;Model&#39;, *, include: Union[ForwardRef(&#39;AbstractSetIntStr&#39;), ForwardRef(&#39;MappingIntStrAny&#39;), NoneType] = None, exclude: Union[ForwardRef(&#39;AbstractSetIntStr&#39;), ForwardRef(&#39;MappingIntStrAny&#39;), NoneType] = None, update: Optional[ForwardRef(&#39;DictStrAny&#39;)] = None, deep: bool = False)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Duplicate a model, optionally choose which fields to include, exclude and change.</p>
+<p>:param include: fields to include in new model
+:param exclude: fields to exclude from new model, as with values this takes precedence over include
+:param update: values to change/add in the new model. Note: the data is not validated before creating
+    the new model: you should trust this data
+:param deep: set to <code>True</code> to make a deep copy of the model
+:return: new model instance</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.TaskQueueIn.dict">
+    <p>def <span class="ident">dict</span>(</p><p>self, *, include: Union[ForwardRef(&#39;AbstractSetIntStr&#39;), ForwardRef(&#39;MappingIntStrAny&#39;), NoneType] = None, exclude: Union[ForwardRef(&#39;AbstractSetIntStr&#39;), ForwardRef(&#39;MappingIntStrAny&#39;), NoneType] = None, by_alias: bool = False, skip_defaults: Optional[bool] = None, exclude_unset: bool = False, exclude_defaults: bool = False, exclude_none: bool = False)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Generate a dictionary representation of the model, optionally specifying which fields to include or exclude.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.TaskQueueIn.json">
+    <p>def <span class="ident">json</span>(</p><p>self, *, include: Union[ForwardRef(&#39;AbstractSetIntStr&#39;), ForwardRef(&#39;MappingIntStrAny&#39;), NoneType] = None, exclude: Union[ForwardRef(&#39;AbstractSetIntStr&#39;), ForwardRef(&#39;MappingIntStrAny&#39;), NoneType] = None, by_alias: bool = False, skip_defaults: Optional[bool] = None, exclude_unset: bool = False, exclude_defaults: bool = False, exclude_none: bool = False, encoder: Optional[Callable[[Any], Any]] = None, models_as_dict: bool = True, **dumps_kwargs: Any)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Generate a JSON representation of the model, <code>include</code> and <code>exclude</code> arguments as per <code>dict()</code>.</p>
+<p><code>encoder</code> is an optional function to supply as <code>default</code> to json.dumps(), other arguments as per <code>json.dumps()</code>.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="openoligo.api.models.SynthesisQueue" class="name">class <span class="ident">TaskQueueModel</span></p>
+      
+  
+    <div class="desc"><p>A synthesis task in the queue.</p></div>
+  <div class="source_cont">
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="/tortoise.contrib.pydantic.base.PydanticModel.ext">tortoise.contrib.pydantic.base.PydanticModel</a></li>
+          <li><a href="/pydantic.main.BaseModel.ext">pydantic.main.BaseModel</a></li>
+          <li><a href="/pydantic.utils.Representation.ext">pydantic.utils.Representation</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="openoligo.api.models.SynthesisQueue.Config" class="name">var <span class="ident">Config</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.construct">
+    <p>def <span class="ident">construct</span>(</p><p>_fields_set: Optional[ForwardRef(&#39;SetStr&#39;)] = None, **values: Any)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Creates a new model setting <strong>dict</strong> and <strong>fields_set</strong> from trusted or pre-validated data.
+Default values are respected, but no other validation is performed.
+Behaves as if <code>Config.extra = 'allow'</code> was set since it adds all passed values</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.from_orm">
+    <p>def <span class="ident">from_orm</span>(</p><p>obj: Any)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.from_queryset">
+    <p>async def <span class="ident">from_queryset</span>(</p><p>queryset: &#39;QuerySet&#39;)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Returns a serializable pydantic model instance that contains a list of models,
+from the provided queryset.</p>
+<p>This will prefetch all the relations automatically.</p>
+<p>:param queryset: a queryset on the model this PydanticModel is based on.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.from_queryset', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.from_queryset" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">from_queryset</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">queryset</span><span class="p">:</span> <span class="s2">&quot;QuerySet&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;List[PydanticModel]&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a serializable pydantic model instance that contains a list of models,</span>
+<span class="sd">    from the provided queryset.</span>
+<span class="sd">    This will prefetch all the relations automatically.</span>
+<span class="sd">    :param queryset: a queryset on the model this PydanticModel is based on.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fetch_fields</span> <span class="o">=</span> <span class="n">_get_fetch_fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__config__</span><span class="p">,</span> <span class="s2">&quot;orig_model&quot;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">[</span><span class="bp">cls</span><span class="o">.</span><span class="n">from_orm</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="k">await</span> <span class="n">queryset</span><span class="o">.</span><span class="n">prefetch_related</span><span class="p">(</span><span class="o">*</span><span class="n">fetch_fields</span><span class="p">)]</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.from_queryset_single">
+    <p>async def <span class="ident">from_queryset_single</span>(</p><p>queryset: &#39;QuerySetSingle&#39;)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Returns a serializable pydantic model instance for a single model
+from the provided queryset.</p>
+<p>This will prefetch all the relations automatically.</p>
+<p>:param queryset: a queryset on the model this PydanticModel is based on.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.from_queryset_single', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.from_queryset_single" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">from_queryset_single</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">queryset</span><span class="p">:</span> <span class="s2">&quot;QuerySetSingle&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PydanticModel&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a serializable pydantic model instance for a single model</span>
+<span class="sd">    from the provided queryset.</span>
+<span class="sd">    This will prefetch all the relations automatically.</span>
+<span class="sd">    :param queryset: a queryset on the model this PydanticModel is based on.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fetch_fields</span> <span class="o">=</span> <span class="n">_get_fetch_fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__config__</span><span class="p">,</span> <span class="s2">&quot;orig_model&quot;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">from_orm</span><span class="p">(</span><span class="k">await</span> <span class="n">queryset</span><span class="o">.</span><span class="n">prefetch_related</span><span class="p">(</span><span class="o">*</span><span class="n">fetch_fields</span><span class="p">))</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.from_tortoise_orm">
+    <p>async def <span class="ident">from_tortoise_orm</span>(</p><p>obj: &#39;Model&#39;)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Returns a serializable pydantic model instance built from the provided model instance.</p>
+<p>.. note::</p>
+<pre><code>This will prefetch all the relations automatically. It is probably what you want.
+
+If you don't want this, or require a ``sync`` method, look to using ``.from_orm()``.
+
+In that case you'd have to manage  prefetching yourself,
+or exclude relational fields from being part of the model using
+:class:`tortoise.contrib.pydantic.creator.PydanticMeta`, or you would be
+getting ``OperationalError`` exceptions.
+
+This is due to how the ``asyncio`` framework forces I/O to happen in explicit ``await``
+statements. Hence we can only do lazy-fetching during an awaited method.
+</code></pre>
+<p>:param obj: The Model instance you want serialized.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.SynthesisQueue.from_tortoise_orm', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.SynthesisQueue.from_tortoise_orm" class="source">
+    <div class="codehilite"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">from_tortoise_orm</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj</span><span class="p">:</span> <span class="s2">&quot;Model&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;PydanticModel&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a serializable pydantic model instance built from the provided model instance.</span>
+<span class="sd">    .. note::</span>
+<span class="sd">        This will prefetch all the relations automatically. It is probably what you want.</span>
+<span class="sd">        If you don&#39;t want this, or require a ``sync`` method, look to using ``.from_orm()``.</span>
+<span class="sd">        In that case you&#39;d have to manage  prefetching yourself,</span>
+<span class="sd">        or exclude relational fields from being part of the model using</span>
+<span class="sd">        :class:`tortoise.contrib.pydantic.creator.PydanticMeta`, or you would be</span>
+<span class="sd">        getting ``OperationalError`` exceptions.</span>
+<span class="sd">        This is due to how the ``asyncio`` framework forces I/O to happen in explicit ``await``</span>
+<span class="sd">        statements. Hence we can only do lazy-fetching during an awaited method.</span>
+<span class="sd">    :param obj: The Model instance you want serialized.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get fields needed to fetch</span>
+    <span class="n">fetch_fields</span> <span class="o">=</span> <span class="n">_get_fetch_fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__config__</span><span class="p">,</span> <span class="s2">&quot;orig_model&quot;</span><span class="p">))</span>
+    <span class="c1"># Fetch fields</span>
+    <span class="k">await</span> <span class="n">obj</span><span class="o">.</span><span class="n">fetch_related</span><span class="p">(</span><span class="o">*</span><span class="n">fetch_fields</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">from_orm</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.parse_file">
+    <p>def <span class="ident">parse_file</span>(</p><p>path: Union[str, pathlib.Path], *, content_type: &#39;unicode&#39; = None, encoding: &#39;unicode&#39; = &#39;utf8&#39;, proto: pydantic.parse.Protocol = None, allow_pickle: bool = False)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.parse_obj">
+    <p>def <span class="ident">parse_obj</span>(</p><p>obj: Any)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.parse_raw">
+    <p>def <span class="ident">parse_raw</span>(</p><p>b: Union[str, bytes], *, content_type: &#39;unicode&#39; = None, encoding: &#39;unicode&#39; = &#39;utf8&#39;, proto: pydantic.parse.Protocol = None, allow_pickle: bool = False)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.schema">
+    <p>def <span class="ident">schema</span>(</p><p>by_alias: bool = True, ref_template: &#39;unicode&#39; = &#39;#/definitions/{model}&#39;)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.schema_json">
+    <p>def <span class="ident">schema_json</span>(</p><p>*, by_alias: bool = True, ref_template: &#39;unicode&#39; = &#39;#/definitions/{model}&#39;, **dumps_kwargs: Any)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.update_forward_refs">
+    <p>def <span class="ident">update_forward_refs</span>(</p><p>**localns: Any)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Try to update ForwardRefs on fields based on this Model, globalns and localns.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.validate">
+    <p>def <span class="ident">validate</span>(</p><p>value: Any)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.copy">
+    <p>def <span class="ident">copy</span>(</p><p>self: &#39;Model&#39;, *, include: Union[ForwardRef(&#39;AbstractSetIntStr&#39;), ForwardRef(&#39;MappingIntStrAny&#39;), NoneType] = None, exclude: Union[ForwardRef(&#39;AbstractSetIntStr&#39;), ForwardRef(&#39;MappingIntStrAny&#39;), NoneType] = None, update: Optional[ForwardRef(&#39;DictStrAny&#39;)] = None, deep: bool = False)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Duplicate a model, optionally choose which fields to include, exclude and change.</p>
+<p>:param include: fields to include in new model
+:param exclude: fields to exclude from new model, as with values this takes precedence over include
+:param update: values to change/add in the new model. Note: the data is not validated before creating
+    the new model: you should trust this data
+:param deep: set to <code>True</code> to make a deep copy of the model
+:return: new model instance</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.dict">
+    <p>def <span class="ident">dict</span>(</p><p>self, *, include: Union[ForwardRef(&#39;AbstractSetIntStr&#39;), ForwardRef(&#39;MappingIntStrAny&#39;), NoneType] = None, exclude: Union[ForwardRef(&#39;AbstractSetIntStr&#39;), ForwardRef(&#39;MappingIntStrAny&#39;), NoneType] = None, by_alias: bool = False, skip_defaults: Optional[bool] = None, exclude_unset: bool = False, exclude_defaults: bool = False, exclude_none: bool = False)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Generate a dictionary representation of the model, optionally specifying which fields to include or exclude.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.api.models.SynthesisQueue.json">
+    <p>def <span class="ident">json</span>(</p><p>self, *, include: Union[ForwardRef(&#39;AbstractSetIntStr&#39;), ForwardRef(&#39;MappingIntStrAny&#39;), NoneType] = None, exclude: Union[ForwardRef(&#39;AbstractSetIntStr&#39;), ForwardRef(&#39;MappingIntStrAny&#39;), NoneType] = None, by_alias: bool = False, skip_defaults: Optional[bool] = None, exclude_unset: bool = False, exclude_defaults: bool = False, exclude_none: bool = False, encoder: Optional[Callable[[Any], Any]] = None, models_as_dict: bool = True, **dumps_kwargs: Any)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Generate a JSON representation of the model, <code>include</code> and <code>exclude</code> arguments as per <code>dict()</code>.</p>
+<p><code>encoder</code> is an optional function to supply as <code>default</code> to json.dumps(), other arguments as per <code>json.dumps()</code>.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="openoligo.api.models.TaskStatus" class="name">class <span class="ident">TaskStatus</span></p>
+      
+  
+    <div class="desc"><p>Status of a synthesis task.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.TaskStatus', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.TaskStatus" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">TaskStatus</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Status of a synthesis task.&quot;&quot;&quot;</span>
+
+    <span class="n">QUEUED</span> <span class="o">=</span> <span class="s2">&quot;queued&quot;</span>
+    <span class="n">IN_PROGRESS</span> <span class="o">=</span> <span class="s2">&quot;in_progress&quot;</span>
+    <span class="n">COMPLETE</span> <span class="o">=</span> <span class="s2">&quot;complete&quot;</span>
+    <span class="n">FAILED</span> <span class="o">=</span> <span class="s2">&quot;failed&quot;</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="/builtins.str.ext">builtins.str</a></li>
+          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="openoligo.api.models.TaskStatus.COMPLETE" class="name">var <span class="ident">COMPLETE</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.api.models.TaskStatus.FAILED" class="name">var <span class="ident">FAILED</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.api.models.TaskStatus.IN_PROGRESS" class="name">var <span class="ident">IN_PROGRESS</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.api.models.TaskStatus.QUEUED" class="name">var <span class="ident">QUEUED</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.api.models.TaskStatus.name" class="name">var <span class="ident">name</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.api.models.TaskStatus.value" class="name">var <span class="ident">value</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="openoligo.api.models.ValidSeq" class="name">class <span class="ident">ValidSeq</span></p>
+      
+  
+    <div class="desc"><p>Validate that the value is a valid NA sequence</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.models.ValidSeq', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.models.ValidSeq" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">ValidSeq</span><span class="p">(</span><span class="n">Validator</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate that the value is a valid NA sequence&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate the value.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">Seq</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">exc</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="/tortoise.validators.Validator.ext">tortoise.validators.Validator</a></li>
+          </ul>
+      </div>
+      </div>
+
+  </section>
+</article>
+  <div class="clear"> </div>
+  <footer id="footer">
+    <p>
+      Generated by <a href="https://github.com/timothycrosley/pdocs">pdocs 1.2.0</a>
+    </p>
+  </footer>
+</div>
+</body>
+</html>
