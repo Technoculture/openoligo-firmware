@@ -8,7 +8,7 @@ from tortoise import fields
 from tortoise.contrib.pydantic import pydantic_model_creator
 from tortoise.exceptions import ValidationError
 from tortoise.models import Model
-from tortoise.validators import MaxLengthValidator, MinLengthValidator, RegexValidator, Validator
+from tortoise.validators import MinLengthValidator, RegexValidator, Validator
 
 from openoligo.seq import Seq, SeqCategory
 
@@ -29,7 +29,11 @@ class ValidSeq(Validator):  # pylint: disable=too-few-public-methods
         """Validate the value."""
         try:
             Seq(value)
+            assert len(value) >= 3, "Sequence must be at least 3 bases long"
+            assert len(value) <= 100, "Sequence must be at most 100 bases long"
         except ValueError as exc:
+            raise ValidationError(str(exc)) from exc
+        except AssertionError as exc:
             raise ValidationError(str(exc)) from exc
 
 
@@ -39,7 +43,7 @@ class SynthesisQueue(Model):
     id = fields.IntField(pk=True, autoincrement=True, description="Synthesis ID")
 
     sequence = fields.TextField(
-        validators=[ValidSeq(), MinLengthValidator(3), MaxLengthValidator(100)],
+        validators=[ValidSeq()],
         description="Sequence of the Nucliec Acid to synthesize",
     )
     category = fields.CharEnumField(

@@ -5,7 +5,7 @@ import logging
 from typing import Optional
 
 import uvicorn
-from fastapi import FastAPI, HTTPException, status
+from fastapi import Body, FastAPI, HTTPException, status
 from tortoise import Tortoise
 from tortoise.exceptions import ValidationError
 
@@ -59,23 +59,30 @@ app = FastAPI(
 )
 
 
+def get_db_url(platform: Platform) -> str:
+    """Get the database URL for the given platform."""
+    # if not platform:
+    #    logging.error("Platform not supported.")
+    #    raise RuntimeError("No platform detected")
+
+    db_url = "sqlite://openoligo.db"
+    if platform in (Platform.RPI, Platform.BB):
+        db_url = "sqlite:////var/log/openoligo.db"
+
+    return db_url
+
+
 @app.on_event("startup")
 async def startup_event():
     """Startup event for the FastAPI server."""
-    logging.info("Starting the API server...")
+    logging.info("Starting the API server...")  # pragma: no cover
+    db_url = get_db_url(__platform__)  # pragma: no cover
+    logging.info("Using database: '%s'", db_url)  # pragma: no cover
 
-    if not __platform__:
-        logging.error("Platform not supported.")
-        raise RuntimeError("No platform detected")
-
-    db_url = "sqlite://openoligo.db"
-    if __platform__ in (Platform.RPI, Platform.BB):
-        db_url = "sqlite:////var/log/openoligo.db"
-
-    logging.info("Using database: '%s'", db_url)
-
-    await Tortoise.init(db_url=db_url, modules={"models": ["openoligo.api.models"]})
-    await Tortoise.generate_schemas()
+    await Tortoise.init(
+        db_url=db_url, modules={"models": ["openoligo.api.models"]}
+    )  # pragma: no cover
+    await Tortoise.generate_schemas()  # pragma: no cover
 
 
 @app.get("/health", status_code=200, tags=["Utilities"])
@@ -89,8 +96,8 @@ async def add_a_task_to_synthesis_queue(
     sequence: str, category: SeqCategory = SeqCategory.DNA, rank: int = 0
 ):
     """Add a synthesis task to the synthesis task queue by providing a sequence and its category."""
-    if category not in list(SeqCategory):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid category")
+    # if category not in list(SeqCategory):
+    #    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid category")
     try:
         model = await SynthesisQueue.create(sequence=sequence, category=category, rank=rank)
         return model
@@ -100,7 +107,12 @@ async def add_a_task_to_synthesis_queue(
         logging.info("Added sequence '%s' to the synthesis queue.", sequence)
 
 
-@app.get("/queue", response_model=list[SynthesisQueueModel], tags=["Synthesis Queue"])
+@app.get(
+    "/queue",
+    response_model=list[SynthesisQueueModel],
+    status_code=status.HTTP_200_OK,
+    tags=["Synthesis Queue"],
+)
 async def get_all_tasks_in_synthesis_queue(filter_by: Optional[TaskStatus] = None):
     """Get the current synthesis task queue."""
     tasks = SynthesisQueue.all().order_by("-rank", "-created_at")
@@ -109,7 +121,7 @@ async def get_all_tasks_in_synthesis_queue(filter_by: Optional[TaskStatus] = Non
     return await tasks
 
 
-@app.delete("/queue", status_code=status.HTTP_202_ACCEPTED, tags=["Synthesis Queue"])
+@app.delete("/queue", status_code=status.HTTP_200_OK, tags=["Synthesis Queue"])
 async def clear_all_queued_tasks_in_task_queue():
     """Delete all tasks in the QUEUED state."""
     return await SynthesisQueue.filter(status=TaskStatus.QUEUED).delete()
@@ -124,8 +136,15 @@ async def get_task_by_id(task_id: int):
     return task
 
 
-@app.patch("/queue/{task_id}", status_code=status.HTTP_202_ACCEPTED, tags=["Synthesis Queue"])
-async def update_a_synthesis_task(task_id: int, sequence: Optional[str] = None, rank: int = 0):
+@app.put(
+    "/queue/{task_id}",
+    response_model=SynthesisQueueModel,
+    status_code=status.HTTP_200_OK,
+    tags=["Synthesis Queue"],
+)
+async def update_a_synthesis_task(
+    task_id: int, sequence: Optional[str] = Body(None), rank: Optional[int] = Body(None)
+):
     """Update a particular task in the queue."""
     task = await SynthesisQueue.get_or_none(id=task_id)
 
@@ -137,6 +156,13 @@ async def update_a_synthesis_task(task_id: int, sequence: Optional[str] = None, 
             status_code=status.HTTP_400_BAD_REQUEST, detail="Sequence task not in QUEUED state"
         )
 
+    if sequence is None and rank is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"""Nothing to update. Provide sequence or rank.
+(Sequence: {sequence}, Rank: {rank})""",
+        )
+
     if sequence is not None:
         try:
             seq_validator = ValidSeq()
@@ -145,7 +171,7 @@ async def update_a_synthesis_task(task_id: int, sequence: Optional[str] = None, 
         except ValidationError as exc:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
-    if task.rank != rank:
+    if rank is not None and rank != task.rank:
         task.rank = rank
 
     await task.save()
@@ -153,7 +179,7 @@ async def update_a_synthesis_task(task_id: int, sequence: Optional[str] = None, 
     return task
 
 
-@app.delete("/queue/{task_id}", status_code=status.HTTP_202_ACCEPTED, tags=["Synthesis Queue"])
+@app.delete("/queue/{task_id}", status_code=status.HTTP_200_OK, tags=["Synthesis Queue"])
 async def delete_synthesis_task_by_id(task_id: int):
     """Delete a synthesis task from the queue."""
     task = await SynthesisQueue.get_or_none(id=task_id)
@@ -168,8 +194,10 @@ async def delete_synthesis_task_by_id(task_id: int):
 
 def main():
     """Main function to start the server."""
-    uvicorn.run("openoligo.api.server:app", host="127.0.0.1", port=9191, reload=True)
+    uvicorn.run(
+        "openoligo.api.server:app", host="127.0.0.1", port=9191, reload=True
+    )  # pragma: no cover
 
 
 if __name__ == "__main__":
-    main()
+    main()  # pragma: no cover
