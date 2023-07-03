@@ -29,3 +29,9 @@ try:
 except KeyboardInterrupt:
     print("Keyboard interrupt received, exiting...")
 ```
+
+## Firmware
+The firmware for OpenOligo is composed of 
+- OpenOligo Library
+- API server (part of OpenOligo Library)
+- In a minimal linux image ([OligoOS](https://github.com/Technoculture/OligoOs/tree/dev))
