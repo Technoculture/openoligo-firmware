@@ -4,26 +4,21 @@ Convinience functions for code interaction with the database.
 from openoligo.api.models import SynthesisQueue, TaskStatus
 
 
-def update_task_status(task_id: int, status: TaskStatus):
+async def update_task_status(task_id: int, status: TaskStatus):
     """Update the status of a synthesis task."""
-    SynthesisQueue.filter(id=task_id).update(status=status)
+    await SynthesisQueue.filter(id=task_id).update(status=status)
 
 
-def set_active_task(task_id: int):
+async def set_task_status(task_id: int):
     """Set the status of a synthesis task."""
-    SynthesisQueue.filter(id=task_id).update(status=TaskStatus.IN_PROGRESS)
+    await SynthesisQueue.filter(id=task_id).update(status=TaskStatus.IN_PROGRESS)
 
 
-def set_concluding_remark(task_id: int, remark: str):
-    """Set the concluding remark of a synthesis task."""
-    SynthesisQueue.filter(id=task_id).update(concluding_remark=remark)
-
-
-def set_log_file(task_id: int, log_file: str):
+async def set_log_file(task_id: int, log_file: str):
     """Set the log file of a synthesis task."""
-    SynthesisQueue.filter(id=task_id).update(log_file=log_file)
+    await SynthesisQueue.filter(id=task_id).update(log_file=log_file)
 
 
-def get_log_file(task_id: int) -> str:
+async def get_log_file(task_id: int) -> str:
     """Get the log file name of a synthesis task."""
-    return SynthesisQueue.get(id=task_id).log_file
+    return await SynthesisQueue.get(id=task_id).values_list("log_file", flat=True)

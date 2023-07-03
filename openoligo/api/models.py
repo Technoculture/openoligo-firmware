@@ -71,10 +71,4 @@ class SynthesisQueue(Model):
         ordering = ["-rank", "-created_at"]
 
 
-TaskQueueModel = pydantic_model_creator(SynthesisQueue, name="SynthesisQueue")
-TaskQueueInModel = pydantic_model_creator(
-    SynthesisQueue,
-    name="TaskQueueIn",
-    exclude_readonly=True,
-    exclude=("id", "status", "created_at", "started_at", "completed_at"),
-)
+SynthesisQueueModel = pydantic_model_creator(SynthesisQueue, name="SynthesisQueue")

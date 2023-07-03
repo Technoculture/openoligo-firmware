@@ -1065,9 +1065,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <ul>
     <li class="mono"><a href="#openoligo.api.helpers.get_log_file">get_log_file</a></li>
-    <li class="mono"><a href="#openoligo.api.helpers.set_active_task">set_active_task</a></li>
-    <li class="mono"><a href="#openoligo.api.helpers.set_concluding_remark">set_concluding_remark</a></li>
     <li class="mono"><a href="#openoligo.api.helpers.set_log_file">set_log_file</a></li>
+    <li class="mono"><a href="#openoligo.api.helpers.set_task_status">set_task_status</a></li>
     <li class="mono"><a href="#openoligo.api.helpers.update_task_status">update_task_status</a></li>
   </ul>
 
@@ -1092,42 +1091,27 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Convinience functions for code interaction with the database.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">openoligo.api.models</span> <span class="kn">import</span> <span class="n">TaskQueue</span><span class="p">,</span> <span class="n">TaskStatus</span>
+<span class="kn">from</span> <span class="nn">openoligo.api.models</span> <span class="kn">import</span> <span class="n">SynthesisQueue</span><span class="p">,</span> <span class="n">TaskStatus</span>
 
 
-<span class="k">def</span> <span class="nf">update_task_status</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">TaskStatus</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Update the status of a task.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">TaskQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">update_task_status</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">TaskStatus</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the status of a synthesis task.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">set_active_task</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Set the status of a task.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">TaskQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">TaskStatus</span><span class="o">.</span><span class="n">IN_PROGRESS</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">set_task_status</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the status of a synthesis task.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">TaskStatus</span><span class="o">.</span><span class="n">IN_PROGRESS</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">set_concluding_remark</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">remark</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Set the concluding remark of a task.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">TaskQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">concluding_remark</span><span class="o">=</span><span class="n">remark</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">set_log_file</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">log_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the log file of a synthesis task.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">log_file</span><span class="o">=</span><span class="n">log_file</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">set_log_file</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">log_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Set the log file of a task.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">TaskQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">log_file</span><span class="o">=</span><span class="n">log_file</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">get_log_file</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get the log file name of a task.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">TaskQueue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">log_file</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_log_file</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the log file name of a synthesis task.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s2">&quot;log_file&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1140,71 +1124,19 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <div class="item">
     <div class="name def" id="openoligo.api.helpers.get_log_file">
-    <p>def <span class="ident">get_log_file</span>(</p><p>task_id: int)</p>
+    <p>async def <span class="ident">get_log_file</span>(</p><p>task_id: int)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Get the log file name of a task.</p></div>
+    <div class="desc"><p>Get the log file name of a synthesis task.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.helpers.get_log_file', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.api.helpers.get_log_file" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_log_file</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Get the log file name of a task.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">TaskQueue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">log_file</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-      
-  <div class="item">
-    <div class="name def" id="openoligo.api.helpers.set_active_task">
-    <p>def <span class="ident">set_active_task</span>(</p><p>task_id: int)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Set the status of a task.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.helpers.set_active_task', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.api.helpers.set_active_task" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">set_active_task</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Set the status of a task.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">TaskQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">TaskStatus</span><span class="o">.</span><span class="n">IN_PROGRESS</span><span class="p">)</span>
-</pre></div>
-
-  </div>
-</div>
-
-  </div>
-  
-      
-  <div class="item">
-    <div class="name def" id="openoligo.api.helpers.set_concluding_remark">
-    <p>def <span class="ident">set_concluding_remark</span>(</p><p>task_id: int, remark: str)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Set the concluding remark of a task.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.helpers.set_concluding_remark', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.api.helpers.set_concluding_remark" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">set_concluding_remark</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">remark</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Set the concluding remark of a task.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">TaskQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">concluding_remark</span><span class="o">=</span><span class="n">remark</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">get_log_file</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the log file name of a synthesis task.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s2">&quot;log_file&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1215,21 +1147,42 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <div class="item">
     <div class="name def" id="openoligo.api.helpers.set_log_file">
-    <p>def <span class="ident">set_log_file</span>(</p><p>task_id: int, log_file: str)</p>
+    <p>async def <span class="ident">set_log_file</span>(</p><p>task_id: int, log_file: str)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Set the log file of a task.</p></div>
+    <div class="desc"><p>Set the log file of a synthesis task.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.helpers.set_log_file', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.api.helpers.set_log_file" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">set_log_file</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">log_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Set the log file of a task.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">TaskQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">log_file</span><span class="o">=</span><span class="n">log_file</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">set_log_file</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">log_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the log file of a synthesis task.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">log_file</span><span class="o">=</span><span class="n">log_file</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.api.helpers.set_task_status">
+    <p>async def <span class="ident">set_task_status</span>(</p><p>task_id: int)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Set the status of a synthesis task.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.helpers.set_task_status', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.helpers.set_task_status" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">set_task_status</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the status of a synthesis task.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">TaskStatus</span><span class="o">.</span><span class="n">IN_PROGRESS</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1240,21 +1193,19 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <div class="item">
     <div class="name def" id="openoligo.api.helpers.update_task_status">
-    <p>def <span class="ident">update_task_status</span>(</p><p>task_id: int, status: openoligo.api.models.TaskStatus)</p>
+    <p>async def <span class="ident">update_task_status</span>(</p><p>task_id: int, status: openoligo.api.models.TaskStatus)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Update the status of a task.</p></div>
+    <div class="desc"><p>Update the status of a synthesis task.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.helpers.update_task_status', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.api.helpers.update_task_status" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">update_task_status</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">TaskStatus</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Update the status of a task.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">TaskQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">update_task_status</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">TaskStatus</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the status of a synthesis task.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
 </pre></div>
 
   </div>

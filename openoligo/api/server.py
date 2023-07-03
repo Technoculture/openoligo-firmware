@@ -9,13 +9,7 @@ from fastapi import FastAPI, HTTPException, status
 from tortoise import Tortoise
 from tortoise.exceptions import ValidationError
 
-from openoligo.api.models import (
-    SynthesisQueue,
-    TaskQueueInModel,
-    TaskQueueModel,
-    TaskStatus,
-    ValidSeq,
-)
+from openoligo.api.models import SynthesisQueue, SynthesisQueueModel, TaskStatus, ValidSeq
 from openoligo.hal.platform import Platform, __platform__
 from openoligo.seq import SeqCategory
 
@@ -47,7 +41,7 @@ You will be able to:
 """
 
 
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
+# logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
 
 app = FastAPI(
     title="OpenOligo API",
@@ -84,7 +78,7 @@ async def startup_event():
     await Tortoise.generate_schemas()
 
 
-@app.get("/health", status_code=200, tags=["Uitlities"])
+@app.get("/health", status_code=200, tags=["Utilities"])
 def get_health_status():
     """Health check."""
     return {"status": "ok"}
@@ -96,17 +90,17 @@ async def add_a_task_to_synthesis_queue(
 ):
     """Add a synthesis task to the synthesis task queue by providing a sequence and its category."""
     if category not in list(SeqCategory):
-        raise HTTPException(status_code=400, detail="Invalid category")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid category")
     try:
         model = await SynthesisQueue.create(sequence=sequence, category=category, rank=rank)
         return model
     except ValidationError as exc:
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     finally:
         logging.info("Added sequence '%s' to the synthesis queue.", sequence)
 
 
-@app.get("/queue", response_model=list[TaskQueueModel], tags=["Synthesis Queue"])
+@app.get("/queue", response_model=list[SynthesisQueueModel], tags=["Synthesis Queue"])
 async def get_all_tasks_in_synthesis_queue(filter_by: Optional[TaskStatus] = None):
     """Get the current synthesis task queue."""
     tasks = SynthesisQueue.all().order_by("-rank", "-created_at")
@@ -121,7 +115,7 @@ async def clear_all_queued_tasks_in_task_queue():
     return await SynthesisQueue.filter(status=TaskStatus.QUEUED).delete()
 
 
-@app.get("/queue/{task_id}", response_model=TaskQueueInModel, tags=["Synthesis Queue"])
+@app.get("/queue/{task_id}", response_model=SynthesisQueueModel, tags=["Synthesis Queue"])
 async def get_task_by_id(task_id: int):
     """Get a synthesis task from the queue."""
     task = await SynthesisQueue.get_or_none(id=task_id)
