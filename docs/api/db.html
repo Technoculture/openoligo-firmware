@@ -4,8 +4,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
   
-  <title>openoligo.steps.types API documentation</title>
-  <meta name="description" content="Types for steps" />
+  <title>openoligo.api.db API documentation</title>
+  <meta name="description" content="Conviniences for initializing the database." />
 
 
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -1057,63 +1057,19 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <ul id="index">
     <li class="set"><h3>Super-module</h3>
       <ul>
-        <li class="mono"><a href="index.html">openoligo.steps</a></li>
+        <li class="mono"><a href="index.html">openoligo.api</a></li>
       </ul>
-    </li>
-    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
-      
-  <ul>
-    <li class="mono"><a href="#openoligo.steps.types.logger">logger</a></li>
-  </ul>
-
     </li>
 
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
-    <li class="mono"><a href="#openoligo.steps.types.step">step</a></li>
-    <li class="mono"><a href="#openoligo.steps.types.substep">substep</a></li>
+    <li class="mono"><a href="#openoligo.api.db.db_init">db_init</a></li>
+    <li class="mono"><a href="#openoligo.api.db.get_db_url">get_db_url</a></li>
   </ul>
 
     </li>
 
-    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
-      <ul>
-        <li class="mono">
-        <span class="class_name"><a href="#openoligo.steps.types.FlowBranch">FlowBranch</a></span>
-        
-        </li>
-        <li class="mono">
-        <span class="class_name"><a href="#openoligo.steps.types.tuple">FlowWaitPair</a></span>
-        
-          
-  <ul>
-    <li class="mono"><a href="#openoligo.steps.types.tuple.count">count</a></li>
-    <li class="mono"><a href="#openoligo.steps.types.tuple.index">index</a></li>
-  </ul>
-
-        </li>
-        <li class="mono">
-        <span class="class_name"><a href="#openoligo.steps.types.list">FlowWaitPairs</a></span>
-        
-          
-  <ul>
-    <li class="mono"><a href="#openoligo.steps.types.list.append">append</a></li>
-    <li class="mono"><a href="#openoligo.steps.types.list.clear">clear</a></li>
-    <li class="mono"><a href="#openoligo.steps.types.list.copy">copy</a></li>
-    <li class="mono"><a href="#openoligo.steps.types.list.count">count</a></li>
-    <li class="mono"><a href="#openoligo.steps.types.list.extend">extend</a></li>
-    <li class="mono"><a href="#openoligo.steps.types.list.index">index</a></li>
-    <li class="mono"><a href="#openoligo.steps.types.list.insert">insert</a></li>
-    <li class="mono"><a href="#openoligo.steps.types.list.pop">pop</a></li>
-    <li class="mono"><a href="#openoligo.steps.types.list.remove">remove</a></li>
-    <li class="mono"><a href="#openoligo.steps.types.list.reverse">reverse</a></li>
-    <li class="mono"><a href="#openoligo.steps.types.list.sort">sort</a></li>
-  </ul>
-
-        </li>
-      </ul>
-    </li>
 
     </ul>
   </div>
@@ -1125,68 +1081,39 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">openoligo.steps.types</span> module</h1>
-  <p>Types for steps</p>
+  <h1 class="title"><span class="name">openoligo.api.db</span> module</h1>
+  <p>Conviniences for initializing the database.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.steps.types', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.steps.types" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.db', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.db" class="source">
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Types for steps</span>
+<span class="sd">Conviniences for initializing the database.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">tortoise</span> <span class="kn">import</span> <span class="n">Tortoise</span>
 
-<span class="kn">from</span> <span class="nn">openoligo.utils.logger</span> <span class="kn">import</span> <span class="n">configure_logger</span>
-
-<span class="n">logger</span> <span class="o">=</span> <span class="n">configure_logger</span><span class="p">()</span>
-
-<span class="n">FlowWaitPair</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
-<span class="n">FlowWaitPairs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">[</span><span class="n">FlowWaitPair</span><span class="p">]</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.platform</span> <span class="kn">import</span> <span class="n">Platform</span>
 
 
-<span class="k">class</span> <span class="nc">FlowBranch</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Flow branch enumeration.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">get_db_url</span><span class="p">(</span><span class="n">platform</span><span class="p">:</span> <span class="n">Platform</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the database URL for the given platform.&quot;&quot;&quot;</span>
+    <span class="c1"># if not platform:</span>
+    <span class="c1">#    logging.error(&quot;Platform not supported.&quot;)</span>
+    <span class="c1">#    raise RuntimeError(&quot;No platform detected&quot;)</span>
 
-    <span class="n">REACTION</span> <span class="o">=</span> <span class="s2">&quot;reaction&quot;</span>
-    <span class="n">REAGENTS</span> <span class="o">=</span> <span class="s2">&quot;reagents&quot;</span>
+    <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite://openoligo.db&quot;</span>
+    <span class="k">if</span> <span class="n">platform</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Platform</span><span class="o">.</span><span class="n">RPI</span><span class="p">,</span> <span class="n">Platform</span><span class="o">.</span><span class="n">BB</span><span class="p">):</span>
+        <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite:////var/log/openoligo.db&quot;</span>
 
-
-<span class="k">def</span> <span class="nf">_step_decorator</span><span class="p">(</span><span class="n">coroutine</span><span class="p">,</span> <span class="n">is_substep</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Decorator for a step function (which carries out a reaction step).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="nd">@wraps</span><span class="p">(</span><span class="n">coroutine</span><span class="p">)</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">wrapper_coroutine</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="c1"># instrument = Instrument()</span>
-
-        <span class="n">name</span><span class="p">,</span> <span class="n">doc</span> <span class="o">=</span> <span class="n">coroutine</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">coroutine</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span> <span class="k">if</span> <span class="n">is_substep</span> <span class="k">else</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span>
-        <span class="n">repr_args</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>  <span class="c1"># Remove instrument from args</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
-            <span class="n">level</span><span class="p">,</span> <span class="s2">&quot;Starting step [bold]</span><span class="si">%s</span><span class="s2">[/]</span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">repr_args</span><span class="p">,</span> <span class="n">doc</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
-        <span class="p">)</span>
-
-        <span class="k">return</span> <span class="k">await</span> <span class="n">coroutine</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">wrapper_coroutine</span>
+    <span class="k">return</span> <span class="n">db_url</span>
 
 
-<span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="n">coroutine</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Decorator for a step function (which carries out a reaction step).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">_step_decorator</span><span class="p">(</span><span class="n">coroutine</span><span class="p">,</span> <span class="n">is_substep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">db_init</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the database.&quot;&quot;&quot;</span>
 
-
-<span class="k">def</span> <span class="nf">substep</span><span class="p">(</span><span class="n">coroutine</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Decorator for a substep function (which carries out a sub-reaction step).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">_step_decorator</span><span class="p">(</span><span class="n">coroutine</span><span class="p">,</span> <span class="n">is_substep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">Tortoise</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+        <span class="n">db_url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;openoligo.api.models&quot;</span><span class="p">]}</span>
+    <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
+    <span class="k">await</span> <span class="n">Tortoise</span><span class="o">.</span><span class="n">generate_schemas</span><span class="p">()</span>  <span class="c1"># pragma: no cover</span>
 </pre></div>
 
   </div>
@@ -1194,35 +1121,28 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   </header>
 
   <section id="section-items">
-    <h2 class="section-title" id="header-variables">Module variables</h2>
-      <div class="item">
-      <p id="openoligo.steps.types.logger" class="name">var <span class="ident">logger</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
 
     <h2 class="section-title" id="header-functions">Functions</h2>
       
   <div class="item">
-    <div class="name def" id="openoligo.steps.types.step">
-    <p>def <span class="ident">step</span>(</p><p>coroutine)</p>
+    <div class="name def" id="openoligo.api.db.db_init">
+    <p>async def <span class="ident">db_init</span>(</p><p>url: str)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Decorator for a step function (which carries out a reaction step).</p></div>
+    <div class="desc"><p>Initialize the database.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.steps.types.step', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.steps.types.step" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="n">coroutine</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Decorator for a step function (which carries out a reaction step).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">_step_decorator</span><span class="p">(</span><span class="n">coroutine</span><span class="p">,</span> <span class="n">is_substep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.db.db_init', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.db.db_init" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">db_init</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the database.&quot;&quot;&quot;</span>
+
+    <span class="k">await</span> <span class="n">Tortoise</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+        <span class="n">db_url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;openoligo.api.models&quot;</span><span class="p">]}</span>
+    <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
+    <span class="k">await</span> <span class="n">Tortoise</span><span class="o">.</span><span class="n">generate_schemas</span><span class="p">()</span>  <span class="c1"># pragma: no cover</span>
 </pre></div>
 
   </div>
@@ -1232,22 +1152,28 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
       
   <div class="item">
-    <div class="name def" id="openoligo.steps.types.substep">
-    <p>def <span class="ident">substep</span>(</p><p>coroutine)</p>
+    <div class="name def" id="openoligo.api.db.get_db_url">
+    <p>def <span class="ident">get_db_url</span>(</p><p>platform: openoligo.hal.platform.Platform)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Decorator for a substep function (which carries out a sub-reaction step).</p></div>
+    <div class="desc"><p>Get the database URL for the given platform.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.steps.types.substep', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.steps.types.substep" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">substep</span><span class="p">(</span><span class="n">coroutine</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Decorator for a substep function (which carries out a sub-reaction step).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">_step_decorator</span><span class="p">(</span><span class="n">coroutine</span><span class="p">,</span> <span class="n">is_substep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.db.get_db_url', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.db.get_db_url" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_db_url</span><span class="p">(</span><span class="n">platform</span><span class="p">:</span> <span class="n">Platform</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the database URL for the given platform.&quot;&quot;&quot;</span>
+    <span class="c1"># if not platform:</span>
+    <span class="c1">#    logging.error(&quot;Platform not supported.&quot;)</span>
+    <span class="c1">#    raise RuntimeError(&quot;No platform detected&quot;)</span>
+
+    <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite://openoligo.db&quot;</span>
+    <span class="k">if</span> <span class="n">platform</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Platform</span><span class="o">.</span><span class="n">RPI</span><span class="p">,</span> <span class="n">Platform</span><span class="o">.</span><span class="n">BB</span><span class="p">):</span>
+        <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite:////var/log/openoligo.db&quot;</span>
+
+    <span class="k">return</span> <span class="n">db_url</span>
 </pre></div>
 
   </div>
@@ -1256,322 +1182,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   </div>
   
 
-    <h2 class="section-title" id="header-classes">Classes</h2>
-      
-      <div class="item">
-      <p id="openoligo.steps.types.FlowBranch" class="name">class <span class="ident">FlowBranch</span></p>
-      
-  
-    <div class="desc"><p>Flow branch enumeration.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.steps.types.FlowBranch', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.steps.types.FlowBranch" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">FlowBranch</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Flow branch enumeration.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">REACTION</span> <span class="o">=</span> <span class="s2">&quot;reaction&quot;</span>
-    <span class="n">REAGENTS</span> <span class="o">=</span> <span class="s2">&quot;reagents&quot;</span>
-</pre></div>
-
-  </div>
-</div>
-
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
-          </ul>
-          <h3>Class variables</h3>
-            <div class="item">
-            <p id="openoligo.steps.types.FlowBranch.REACTION" class="name">var <span class="ident">REACTION</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.steps.types.FlowBranch.REAGENTS" class="name">var <span class="ident">REAGENTS</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.steps.types.FlowBranch.name" class="name">var <span class="ident">name</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.steps.types.FlowBranch.value" class="name">var <span class="ident">value</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-      </div>
-      </div>
-      
-      <div class="item">
-      <p id="openoligo.steps.types.tuple" class="name">class <span class="ident">FlowWaitPair</span></p>
-      
-  
-    <div class="desc"><p>Built-in immutable sequence.</p>
-<p>If no argument is given, the constructor returns an empty tuple.
-If iterable is specified the tuple is initialized from iterable's items.</p>
-<p>If the argument is a tuple, the return value is the same object.</p></div>
-  <div class="source_cont">
-</div>
-
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="/builtins.tuple.ext">builtins.tuple</a></li>
-          </ul>
-          <h3>Methods</h3>
-            
-  <div class="item">
-    <div class="name def" id="openoligo.steps.types.tuple.count">
-    <p>def <span class="ident">count</span>(</p><p>self, value, /)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Return number of occurrences of value.</p></div>
-  <div class="source_cont">
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="openoligo.steps.types.tuple.index">
-    <p>def <span class="ident">index</span>(</p><p>self, value, start=0, stop=9223372036854775807, /)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Return first index of value.</p>
-<p>Raises ValueError if the value is not present.</p></div>
-  <div class="source_cont">
-</div>
-
-  </div>
-  
-      </div>
-      </div>
-      
-      <div class="item">
-      <p id="openoligo.steps.types.list" class="name">class <span class="ident">FlowWaitPairs</span></p>
-      
-  
-    <div class="desc"><p>Built-in mutable sequence.</p>
-<p>If no argument is given, the constructor creates a new empty list.
-The argument must be an iterable if specified.</p></div>
-  <div class="source_cont">
-</div>
-
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="/builtins.list.ext">builtins.list</a></li>
-          </ul>
-          <h3>Methods</h3>
-            
-  <div class="item">
-    <div class="name def" id="openoligo.steps.types.list.append">
-    <p>def <span class="ident">append</span>(</p><p>self, object, /)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Append object to the end of the list.</p></div>
-  <div class="source_cont">
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="openoligo.steps.types.list.clear">
-    <p>def <span class="ident">clear</span>(</p><p>self, /)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Remove all items from list.</p></div>
-  <div class="source_cont">
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="openoligo.steps.types.list.copy">
-    <p>def <span class="ident">copy</span>(</p><p>self, /)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Return a shallow copy of the list.</p></div>
-  <div class="source_cont">
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="openoligo.steps.types.list.count">
-    <p>def <span class="ident">count</span>(</p><p>self, value, /)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Return number of occurrences of value.</p></div>
-  <div class="source_cont">
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="openoligo.steps.types.list.extend">
-    <p>def <span class="ident">extend</span>(</p><p>self, iterable, /)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Extend list by appending elements from the iterable.</p></div>
-  <div class="source_cont">
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="openoligo.steps.types.list.index">
-    <p>def <span class="ident">index</span>(</p><p>self, value, start=0, stop=9223372036854775807, /)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Return first index of value.</p>
-<p>Raises ValueError if the value is not present.</p></div>
-  <div class="source_cont">
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="openoligo.steps.types.list.insert">
-    <p>def <span class="ident">insert</span>(</p><p>self, index, object, /)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Insert object before index.</p></div>
-  <div class="source_cont">
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="openoligo.steps.types.list.pop">
-    <p>def <span class="ident">pop</span>(</p><p>self, index=-1, /)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Remove and return item at index (default last).</p>
-<p>Raises IndexError if list is empty or index is out of range.</p></div>
-  <div class="source_cont">
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="openoligo.steps.types.list.remove">
-    <p>def <span class="ident">remove</span>(</p><p>self, value, /)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Remove first occurrence of value.</p>
-<p>Raises ValueError if the value is not present.</p></div>
-  <div class="source_cont">
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="openoligo.steps.types.list.reverse">
-    <p>def <span class="ident">reverse</span>(</p><p>self, /)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Reverse <em>IN PLACE</em>.</p></div>
-  <div class="source_cont">
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="openoligo.steps.types.list.sort">
-    <p>def <span class="ident">sort</span>(</p><p>self, /, *, key=None, reverse=False)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Sort the list in ascending order and return None.</p>
-<p>The sort is in-place (i.e. the list itself is modified) and stable (i.e. the
-order of two equal elements is maintained).</p>
-<p>If a key function is given, apply it once to each list item and sort them,
-ascending or descending, according to their function values.</p>
-<p>The reverse flag can be set to sort in descending order.</p></div>
-  <div class="source_cont">
-</div>
-
-  </div>
-  
-      </div>
-      </div>
 
   </section>
 </article>

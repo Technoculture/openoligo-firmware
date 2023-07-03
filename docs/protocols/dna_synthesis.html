@@ -1060,6 +1060,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <li class="mono"><a href="index.html">openoligo.protocols</a></li>
       </ul>
     </li>
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#openoligo.protocols.dna_synthesis.logger">logger</a></li>
+  </ul>
+
+    </li>
 
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
@@ -1094,17 +1101,19 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">DNA Snthesis Protocol</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
 <span class="kn">from</span> <span class="nn">openoligo</span> <span class="kn">import</span> <span class="n">utils</span>
-<span class="kn">from</span> <span class="nn">openoligo.instrument</span> <span class="kn">import</span> <span class="n">Instrument</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.instrument</span> <span class="kn">import</span> <span class="n">Instrument</span>
 <span class="kn">from</span> <span class="nn">openoligo.seq</span> <span class="kn">import</span> <span class="n">Seq</span>
 <span class="kn">from</span> <span class="nn">openoligo.steps.flow</span> <span class="kn">import</span> <span class="n">dry_all</span><span class="p">,</span> <span class="n">send_to_waste_rxn</span><span class="p">,</span> <span class="n">solvent_wash_all</span>
 <span class="kn">from</span> <span class="nn">openoligo.steps.types</span> <span class="kn">import</span> <span class="n">step</span>
 <span class="kn">from</span> <span class="nn">openoligo.utils</span> <span class="kn">import</span> <span class="n">wait_async</span>
+<span class="kn">from</span> <span class="nn">openoligo.utils.logger</span> <span class="kn">import</span> <span class="n">configure_logger</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">configure_logger</span><span class="p">()</span>
 
 
 <span class="nd">@step</span>
@@ -1169,7 +1178,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">    args:</span>
 <span class="sd">        seq: DNA sequence to synthesize.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initiating synthesis of DNA sequence: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initiating synthesis of DNA sequence: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>  <span class="c1"># start timer</span>
     <span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="k">as</span> <span class="n">pbar</span><span class="p">:</span>
         <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
@@ -1178,7 +1187,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">base_index</span><span class="p">,</span> <span class="n">base</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Adding </span><span class="si">%s</span><span class="s2">th base &#39;</span><span class="si">%s</span><span class="s2">&#39; to growing DNA strand&quot;</span><span class="p">,</span> <span class="n">base_index</span><span class="p">,</span> <span class="n">base</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Adding </span><span class="si">%s</span><span class="s2">th base &#39;</span><span class="si">%s</span><span class="s2">&#39; to growing DNA strand&quot;</span><span class="p">,</span> <span class="n">base_index</span><span class="p">,</span> <span class="n">base</span><span class="p">)</span>
 
             <span class="k">await</span> <span class="n">detritylate</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
@@ -1209,7 +1218,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>  <span class="c1"># end timer</span>
     <span class="n">elapsed_time_in_minutes</span> <span class="o">=</span> <span class="p">((</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span> <span class="o">*</span> <span class="n">utils</span><span class="o">.</span><span class="n">SIMULATION_SPEEDUP_FACTOR</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
         <span class="s2">&quot;Synthesis complete for DNA sequence: &#39;</span><span class="si">%s</span><span class="s2">&#39; in </span><span class="si">%s</span><span class="s2"> minutes&quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">elapsed_time_in_minutes</span>
     <span class="p">)</span>
 </pre></div>
@@ -1219,12 +1228,21 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   </header>
 
   <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="openoligo.protocols.dna_synthesis.logger" class="name">var <span class="ident">logger</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
 
     <h2 class="section-title" id="header-functions">Functions</h2>
       
   <div class="item">
     <div class="name def" id="openoligo.protocols.dna_synthesis.activate">
-    <p>async def <span class="ident">activate</span>(</p><p>instrument: openoligo.instrument.Instrument)</p>
+    <p>async def <span class="ident">activate</span>(</p><p>instrument: openoligo.hal.instrument.Instrument)</p>
     </div>
     
 
@@ -1251,7 +1269,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <div class="item">
     <div class="name def" id="openoligo.protocols.dna_synthesis.cap">
-    <p>async def <span class="ident">cap</span>(</p><p>instrument: openoligo.instrument.Instrument)</p>
+    <p>async def <span class="ident">cap</span>(</p><p>instrument: openoligo.hal.instrument.Instrument)</p>
     </div>
     
 
@@ -1279,7 +1297,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <div class="item">
     <div class="name def" id="openoligo.protocols.dna_synthesis.cleave">
-    <p>async def <span class="ident">cleave</span>(</p><p>instrument: openoligo.instrument.Instrument)</p>
+    <p>async def <span class="ident">cleave</span>(</p><p>instrument: openoligo.hal.instrument.Instrument)</p>
     </div>
     
 
@@ -1306,7 +1324,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <div class="item">
     <div class="name def" id="openoligo.protocols.dna_synthesis.deprotect">
-    <p>async def <span class="ident">deprotect</span>(</p><p>instrument: openoligo.instrument.Instrument)</p>
+    <p>async def <span class="ident">deprotect</span>(</p><p>instrument: openoligo.hal.instrument.Instrument)</p>
     </div>
     
 
@@ -1333,7 +1351,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <div class="item">
     <div class="name def" id="openoligo.protocols.dna_synthesis.detritylate">
-    <p>async def <span class="ident">detritylate</span>(</p><p>instrument: openoligo.instrument.Instrument)</p>
+    <p>async def <span class="ident">detritylate</span>(</p><p>instrument: openoligo.hal.instrument.Instrument)</p>
     </div>
     
 
@@ -1360,7 +1378,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <div class="item">
     <div class="name def" id="openoligo.protocols.dna_synthesis.oxidize">
-    <p>async def <span class="ident">oxidize</span>(</p><p>instrument: openoligo.instrument.Instrument)</p>
+    <p>async def <span class="ident">oxidize</span>(</p><p>instrument: openoligo.hal.instrument.Instrument)</p>
     </div>
     
 
@@ -1387,7 +1405,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <div class="item">
     <div class="name def" id="openoligo.protocols.dna_synthesis.synthesize">
-    <p>async def <span class="ident">synthesize</span>(</p><p>instrument: openoligo.instrument.Instrument, seq: openoligo.seq.Seq)</p>
+    <p>async def <span class="ident">synthesize</span>(</p><p>instrument: openoligo.hal.instrument.Instrument, seq: openoligo.seq.Seq)</p>
     </div>
     
 
@@ -1406,7 +1424,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">    args:</span>
 <span class="sd">        seq: DNA sequence to synthesize.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initiating synthesis of DNA sequence: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initiating synthesis of DNA sequence: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>  <span class="c1"># start timer</span>
     <span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="k">as</span> <span class="n">pbar</span><span class="p">:</span>
         <span class="k">await</span> <span class="n">solvent_wash_all</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
@@ -1415,7 +1433,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">base_index</span><span class="p">,</span> <span class="n">base</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">seq</span><span class="p">):</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Adding </span><span class="si">%s</span><span class="s2">th base &#39;</span><span class="si">%s</span><span class="s2">&#39; to growing DNA strand&quot;</span><span class="p">,</span> <span class="n">base_index</span><span class="p">,</span> <span class="n">base</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Adding </span><span class="si">%s</span><span class="s2">th base &#39;</span><span class="si">%s</span><span class="s2">&#39; to growing DNA strand&quot;</span><span class="p">,</span> <span class="n">base_index</span><span class="p">,</span> <span class="n">base</span><span class="p">)</span>
 
             <span class="k">await</span> <span class="n">detritylate</span><span class="p">(</span><span class="n">instrument</span><span class="p">)</span>
 
@@ -1446,7 +1464,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="n">pbar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>  <span class="c1"># end timer</span>
     <span class="n">elapsed_time_in_minutes</span> <span class="o">=</span> <span class="p">((</span><span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span> <span class="o">*</span> <span class="n">utils</span><span class="o">.</span><span class="n">SIMULATION_SPEEDUP_FACTOR</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
         <span class="s2">&quot;Synthesis complete for DNA sequence: &#39;</span><span class="si">%s</span><span class="s2">&#39; in </span><span class="si">%s</span><span class="s2"> minutes&quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">elapsed_time_in_minutes</span>
     <span class="p">)</span>
 </pre></div>

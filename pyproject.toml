@@ -8,7 +8,8 @@ readme = "README.md"
 keywords = ["DNA", "synthesis", "genetics", "open-source"]
 
 [tool.poetry.scripts]
-oligo-server = 'openoligo.api.server:main'
+oligo-server = 'scripts.server:main'
+oligo-runner = 'scripts.runner:main'
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -24,6 +25,8 @@ aerich = "^0.7.1"
 types-tqdm = "^4.65.0.1"
 tortoise-orm = "^0.18.1"
 httpx = "^0.24.1"
+sh = "^2.0.4"
+anyio = "^3.7.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.3.2"

@@ -1,13 +1,14 @@
 """
 Unified access to configuring and using the instrument.
 """
-import logging
-
 from openoligo.hal.board import Pinout
 from openoligo.hal.devices import Valve
 from openoligo.hal.gpio import get_gpio
 from openoligo.hal.types import OneDestinationException, OneSourceException, ValveRole, board
+from openoligo.utils.logger import configure_logger
 from openoligo.utils.singleton import Singleton
+
+logger = configure_logger()
 
 default_pinout = Pinout(
     phosphoramidites={
@@ -37,7 +38,7 @@ class Instrument(metaclass=Singleton):
         Initialize the instrument.
         """
         self.pinout = pinout
-        logging.info("Initializing instrument with pinout: %s", self.pinout)
+        logger.info("Initializing instrument with pinout: %s", self.pinout)
         self.controller = get_gpio()
 
     def __get_valve(self, name: str) -> Valve:
@@ -90,7 +91,7 @@ class Instrument(metaclass=Singleton):
             raise OneDestinationException("There must be exactly one destination valve")
 
         if len(valve_types[ValveRole.TRANSIT]) > 0:
-            logging.debug(
+            logger.debug(
                 "Make sure that the transit valve(s) are in the route you expect"
             )  # pragma: no cover
 
@@ -114,7 +115,7 @@ class Instrument(metaclass=Singleton):
                 all_valves_in_pinout[_name].open()
             else:
                 all_valves_in_pinout[_name].close()
-        logging.debug(
+        logger.debug(
             "Set %s to [bold]open[/] and all others to close.", name, extra={"markup": True}
         )
 

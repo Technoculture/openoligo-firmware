@@ -3,8 +3,10 @@ from openoligo.hal.board import Pinout, list_configurable_pins
 from openoligo.hal.devices import Valve
 from openoligo.hal.instrument import Instrument
 from openoligo.hal.types import board
-from openoligo.utils import log_config
+from openoligo.utils.logger import configure_logger
 from openoligo.utils.wait import wait
+
+logger = configure_logger(rotates=True)
 
 print(list_configurable_pins())
 

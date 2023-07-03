@@ -1,7 +1,6 @@
 """
 Script to start the REST API server for OpenOligo.
 """
-import logging
 from typing import Optional
 
 import uvicorn
@@ -9,9 +8,13 @@ from fastapi import Body, FastAPI, HTTPException, status
 from tortoise.exceptions import ValidationError
 
 from openoligo.api.db import db_init, get_db_url
-from openoligo.api.models import SynthesisQueue, SynthesisQueueModel, TaskStatus, ValidSeq
+from openoligo.api.models import (SynthesisQueue, SynthesisQueueModel,
+                                  TaskStatus, ValidSeq)
 from openoligo.hal.platform import __platform__
 from openoligo.seq import SeqCategory
+from openoligo.utils.logger import configure_logger
+
+logger = configure_logger("server.log", rotates=True)
 
 DESCRIPTION = """
 OpenOligo API for the synthesis of oligonucleotides.
@@ -41,8 +44,6 @@ You will be able to:
 """
 
 
-# logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
-
 app = FastAPI(
     title="OpenOligo API",
     summary="REST API for OpenOligo",
@@ -62,9 +63,9 @@ app = FastAPI(
 @app.on_event("startup")
 async def startup_event():
     """Startup event for the FastAPI server."""
-    logging.info("Starting the API server...")  # pragma: no cover
+    logger .info("Starting the API server...")  # pragma: no cover
     db_url = get_db_url(__platform__)  # pragma: no cover
-    logging.info("Using database: '%s'", db_url)  # pragma: no cover
+    logger .info("Using database: '%s'", db_url)  # pragma: no cover
     await db_init(db_url)
 
 
@@ -87,7 +88,7 @@ async def add_a_task_to_synthesis_queue(
     except ValidationError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     finally:
-        logging.info("Added sequence '%s' to the synthesis queue.", sequence)
+        logger .info("Added sequence '%s' to the synthesis queue.", sequence)
 
 
 @app.get(
@@ -178,7 +179,7 @@ async def delete_synthesis_task_by_id(task_id: int):
 def main():
     """Main function to start the server."""
     uvicorn.run(
-        "openoligo.api.server:app", host="127.0.0.1", port=9191, reload=True
+        "scripts.server:app", host="127.0.0.1", port=9191, reload=True
     )  # pragma: no cover
 
 

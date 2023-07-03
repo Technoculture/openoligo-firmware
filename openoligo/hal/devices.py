@@ -1,11 +1,13 @@
 """
 Switches can be used to control devices that can be turned on and off.
 """
-import logging
 from dataclasses import dataclass, field
 
 from openoligo.hal.gpio import GpioMode, get_gpio
 from openoligo.hal.types import Switchable, Valvable, ValveRole, ValveState, ValveType
+from openoligo.utils.logger import configure_logger
+
+logger = configure_logger()
 
 
 @dataclass
@@ -34,14 +36,14 @@ class Switch(Switchable):
         __new_state = state
 
         if __old_state == __new_state:
-            logging.warning("Switch %s is already %s", self.gpio_pin, __old_state)
+            logger.warning("Switch %s is already %s", self.gpio_pin, __old_state)
             return
 
         self._state = __new_state
         self.controller.set(self.gpio_pin, state)
         self._switch_count += 1
 
-        logging.debug(
+        logger.debug(
             "Switch (%s) set from %s to [bold]%s[/]",
             self.gpio_pin,
             __old_state,
@@ -131,14 +133,14 @@ class Valve(Valvable):
 
         if __old_state == __new_state:
             if __old_state == ValveState.OPEN_FLOW:
-                logging.debug("Valve (%s) is already %s", self.gpio_pin, __old_state)
+                logger.debug("Valve (%s) is already %s", self.gpio_pin, __old_state)
             return
 
         self.controller.set(self.gpio_pin, state)
         self._state = __new_state
 
         self._switch_count += 1
-        logging.debug(
+        logger.debug(
             "Valve (%s) set from %s to [bold]%s[/]",
             self.gpio_pin,
             __old_state,

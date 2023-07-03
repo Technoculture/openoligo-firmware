@@ -3,12 +3,13 @@
 A minimal example of using the DNA synthesis API.
 """
 import asyncio
-import logging
 
 from openoligo.hal.instrument import Instrument
 from openoligo.protocols.dna_synthesis import synthesize
 from openoligo.seq import Seq
-from openoligo.utils import log_config
+from openoligo.utils.logger import configure_logger
+
+logger = configure_logger(rotates=True)
 
 
 def main():
@@ -16,11 +17,11 @@ def main():
 
     try:
         asyncio.run(synthesize(inst, Seq("ATCGAAATTTTT")))
-        logging.info("Synthesis Complete! Exiting...")
+        logger.info("Synthesis Complete! Exiting...")
     except KeyboardInterrupt:
-        logging.warning("Keyboard interrupt received, exiting...")
+        logger.warning("Keyboard interrupt received, exiting...")
     except Exception as e:
-        logging.error(e)
+        logger.error(e)
 
 
 if __name__ == "__main__":

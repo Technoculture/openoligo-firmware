@@ -1081,6 +1081,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
     <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
       <ul>
+        <li class="mono"><a href="logger.html">openoligo.utils.logger</a></li>
         <li class="mono"><a href="sim.html">openoligo.utils.sim</a></li>
         <li class="mono"><a href="singleton.html">openoligo.utils.singleton</a></li>
         <li class="mono"><a href="#openoligo.utils.wait">wait</a></li>
@@ -1164,9 +1165,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div id="source-openoligo.utils.wait" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">wait</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wait for a given number of seconds.&quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span> <span class="o">/</span> <span class="n">SIMULATION_SPEEDUP_FACTOR</span><span class="p">)</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Done waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Done waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1189,9 +1190,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div id="source-openoligo.utils.wait_async" class="source">
     <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">wait_async</span><span class="p">(</span><span class="n">seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wait for a given number of seconds.&quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Start waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
     <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">seconds</span> <span class="o">/</span> <span class="n">SIMULATION_SPEEDUP_FACTOR</span><span class="p">)</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Done waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Done waiting for </span><span class="si">%.2f</span><span class="s2"> seconds&quot;</span><span class="p">,</span> <span class="n">seconds</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 </pre></div>
 
   </div>
@@ -1202,6 +1203,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
     <h2 class="section-title" id="header-submodules">Sub-modules</h2>
+      <div class="item">
+      <p class="name"><a href="logger.html">openoligo.utils.logger</a></p>
+      
+  
+    <div class="desc"><p>Logging configuration for OpenOligo</p></div>
+
+      </div>
       <div class="item">
       <p class="name"><a href="sim.html">openoligo.utils.sim</a></p>
       

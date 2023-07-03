@@ -1,7 +1,6 @@
 """
 DNA Snthesis Protocol
 """
-import logging
 from time import time
 
 from tqdm import tqdm
@@ -12,6 +11,9 @@ from openoligo.seq import Seq
 from openoligo.steps.flow import dry_all, send_to_waste_rxn, solvent_wash_all
 from openoligo.steps.types import step
 from openoligo.utils import wait_async
+from openoligo.utils.logger import configure_logger
+
+logger = configure_logger()
 
 
 @step
@@ -76,7 +78,7 @@ async def synthesize(instrument: Instrument, seq: Seq) -> None:
     args:
         seq: DNA sequence to synthesize.
     """
-    logging.info("Initiating synthesis of DNA sequence: '%s'", seq)
+    logger.info("Initiating synthesis of DNA sequence: '%s'", seq)
     start_time = time()  # start timer
     with tqdm(total=len(seq) + 2) as pbar:
         await solvent_wash_all(instrument)
@@ -85,7 +87,7 @@ async def synthesize(instrument: Instrument, seq: Seq) -> None:
         pbar.update(1)
 
         for base_index, base in enumerate(seq):
-            logging.info("Adding %sth base '%s' to growing DNA strand", base_index, base)
+            logger.info("Adding %sth base '%s' to growing DNA strand", base_index, base)
 
             await detritylate(instrument)
 
@@ -116,6 +118,6 @@ async def synthesize(instrument: Instrument, seq: Seq) -> None:
         pbar.update(1)
     end_time = time()  # end timer
     elapsed_time_in_minutes = ((end_time - start_time) / 60) * utils.SIMULATION_SPEEDUP_FACTOR
-    logging.info(
+    logger.info(
         "Synthesis complete for DNA sequence: '%s' in %s minutes", seq, elapsed_time_in_minutes
     )

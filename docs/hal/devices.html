@@ -1060,6 +1060,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <li class="mono"><a href="index.html">openoligo.hal</a></li>
       </ul>
     </li>
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#openoligo.hal.devices.logger">logger</a></li>
+  </ul>
+
+    </li>
 
 
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
@@ -1116,11 +1123,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Switches can be used to control devices that can be turned on and off.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 
 <span class="kn">from</span> <span class="nn">openoligo.hal.gpio</span> <span class="kn">import</span> <span class="n">GpioMode</span><span class="p">,</span> <span class="n">get_gpio</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.types</span> <span class="kn">import</span> <span class="n">Switchable</span><span class="p">,</span> <span class="n">Valvable</span><span class="p">,</span> <span class="n">ValveRole</span><span class="p">,</span> <span class="n">ValveState</span><span class="p">,</span> <span class="n">ValveType</span>
+<span class="kn">from</span> <span class="nn">openoligo.utils.logger</span> <span class="kn">import</span> <span class="n">configure_logger</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">configure_logger</span><span class="p">()</span>
 
 
 <span class="nd">@dataclass</span>
@@ -1149,14 +1158,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="n">__new_state</span> <span class="o">=</span> <span class="n">state</span>
 
         <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Switch </span><span class="si">%s</span><span class="s2"> is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Switch </span><span class="si">%s</span><span class="s2"> is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s2">&quot;Switch (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
             <span class="n">__old_state</span><span class="p">,</span>
@@ -1246,14 +1255,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
         <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span><span class="p">:</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
             <span class="n">__old_state</span><span class="p">,</span>
@@ -1285,6 +1294,15 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   </header>
 
   <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="openoligo.hal.devices.logger" class="name">var <span class="ident">logger</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
 
 
     <h2 class="section-title" id="header-classes">Classes</h2>
@@ -1439,14 +1457,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="n">__new_state</span> <span class="o">=</span> <span class="n">state</span>
 
         <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Switch </span><span class="si">%s</span><span class="s2"> is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Switch </span><span class="si">%s</span><span class="s2"> is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s2">&quot;Switch (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
             <span class="n">__old_state</span><span class="p">,</span>
@@ -1509,12 +1527,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">__old_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
     <span class="n">__new_state</span> <span class="o">=</span> <span class="n">state</span>
     <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Switch </span><span class="si">%s</span><span class="s2"> is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Switch </span><span class="si">%s</span><span class="s2"> is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
         <span class="k">return</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
         <span class="s2">&quot;Switch (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
         <span class="n">__old_state</span><span class="p">,</span>
@@ -1600,14 +1618,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
         <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span><span class="p">:</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
             <span class="n">__old_state</span><span class="p">,</span>
@@ -1756,12 +1774,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">__new_state</span><span class="p">:</span> <span class="n">ValveState</span> <span class="o">=</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span> <span class="k">if</span> <span class="n">state</span> <span class="k">else</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">CLOSED_FLOW</span>
     <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
         <span class="k">return</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
         <span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
         <span class="n">__old_state</span><span class="p">,</span>

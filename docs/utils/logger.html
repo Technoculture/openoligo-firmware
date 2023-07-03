@@ -4,7 +4,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
   
-  <title>openoligo.log_config API documentation</title>
+  <title>openoligo.utils.logger API documentation</title>
   <meta name="description" content="Logging configuration for OpenOligo" />
 
 
@@ -1057,22 +1057,26 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <ul id="index">
     <li class="set"><h3>Super-module</h3>
       <ul>
-        <li class="mono"><a href="index.html">openoligo</a></li>
+        <li class="mono"><a href="index.html">openoligo.utils</a></li>
       </ul>
     </li>
     <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
       
   <ul>
-    <li class="mono"><a href="#openoligo.log_config.CONSOLE_FORMAT">CONSOLE_FORMAT</a></li>
-    <li class="mono"><a href="#openoligo.log_config.FILE_FORMAT">FILE_FORMAT</a></li>
-    <li class="mono"><a href="#openoligo.log_config.LOG_LEVEL">LOG_LEVEL</a></li>
-    <li class="mono"><a href="#openoligo.log_config.logger">logger</a></li>
-    <li class="mono"><a href="#openoligo.log_config.rich">rich</a></li>
-    <li class="mono"><a href="#openoligo.log_config.rot">rot</a></li>
+    <li class="mono"><a href="#openoligo.utils.logger.CONSOLE_FORMAT">CONSOLE_FORMAT</a></li>
+    <li class="mono"><a href="#openoligo.utils.logger.FILE_FORMAT">FILE_FORMAT</a></li>
+    <li class="mono"><a href="#openoligo.utils.logger.LOG_LEVEL">LOG_LEVEL</a></li>
   </ul>
 
     </li>
 
+    <li class="set"><h3><a href="#header-functions">Functions</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#openoligo.utils.logger.configure_logger">configure_logger</a></li>
+  </ul>
+
+    </li>
 
 
     </ul>
@@ -1085,11 +1089,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">openoligo.log_config</span> module</h1>
+  <h1 class="title"><span class="name">openoligo.utils.logger</span> module</h1>
   <p>Logging configuration for OpenOligo</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.log_config', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.log_config" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.utils.logger', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.utils.logger" class="source">
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Logging configuration for OpenOligo</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -1106,23 +1110,32 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="c1"># Configure the logger</span>
 <span class="n">CONSOLE_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;&lt;</span><span class="si">%(filename)s</span><span class="s2">:</span><span class="si">%(lineno)d</span><span class="s2">&gt; </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
 <span class="n">FILE_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> &lt;</span><span class="si">%(filename)s</span><span class="s2">:</span><span class="si">%(lineno)d</span><span class="s2">&gt; [</span><span class="si">%(levelname)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
-<span class="c1"># DATE_FORMAT = &quot;%Y-%m-%d %H:%M:%S&quot;</span>
-<span class="c1"># DATE_FORMAT = &quot;%H:%M:%S&quot;</span>
 <span class="n">LOG_LEVEL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OO_LOG_LEVEL&quot;</span><span class="p">,</span> <span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
-<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">)</span>
 
-<span class="n">rot</span> <span class="o">=</span> <span class="n">RotatingFileHandler</span><span class="p">(</span><span class="s2">&quot;openoligo.log&quot;</span><span class="p">,</span> <span class="n">maxBytes</span><span class="o">=</span><span class="mi">1000000</span><span class="p">,</span> <span class="n">backupCount</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">rot</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">FILE_FORMAT</span><span class="p">))</span>
-<span class="n">rot</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">configure_logger</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;openoligo.log&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rotates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configure the logger for OpenOligo&quot;&quot;&quot;</span>
 
-<span class="n">rich</span> <span class="o">=</span> <span class="n">RichHandler</span><span class="p">()</span>
-<span class="n">rich</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">CONSOLE_FORMAT</span><span class="p">))</span>
-<span class="n">rich</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">getLevelName</span><span class="p">(</span><span class="n">LOG_LEVEL</span><span class="p">))</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">)</span>
 
-<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">rot</span><span class="p">)</span>
-<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">rich</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rotates</span><span class="p">:</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">RotatingFileHandler</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">maxBytes</span><span class="o">=</span><span class="mi">1000000</span><span class="p">,</span> <span class="n">backupCount</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="n">file_logger</span> <span class="o">=</span> <span class="n">handler</span>
+    <span class="n">file_logger</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">FILE_FORMAT</span><span class="p">))</span>
+    <span class="n">file_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+    <span class="n">console_logger</span> <span class="o">=</span> <span class="n">RichHandler</span><span class="p">()</span>
+    <span class="n">console_logger</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">CONSOLE_FORMAT</span><span class="p">))</span>
+    <span class="n">console_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">getLevelName</span><span class="p">(</span><span class="n">LOG_LEVEL</span><span class="p">))</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_logger</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">console_logger</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">logger</span>
 </pre></div>
 
   </div>
@@ -1132,7 +1145,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <section id="section-items">
     <h2 class="section-title" id="header-variables">Module variables</h2>
       <div class="item">
-      <p id="openoligo.log_config.CONSOLE_FORMAT" class="name">var <span class="ident">CONSOLE_FORMAT</span></p>
+      <p id="openoligo.utils.logger.CONSOLE_FORMAT" class="name">var <span class="ident">CONSOLE_FORMAT</span></p>
       
   
   <div class="source_cont">
@@ -1140,7 +1153,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
       </div>
       <div class="item">
-      <p id="openoligo.log_config.FILE_FORMAT" class="name">var <span class="ident">FILE_FORMAT</span></p>
+      <p id="openoligo.utils.logger.FILE_FORMAT" class="name">var <span class="ident">FILE_FORMAT</span></p>
       
   
   <div class="source_cont">
@@ -1148,31 +1161,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
       </div>
       <div class="item">
-      <p id="openoligo.log_config.LOG_LEVEL" class="name">var <span class="ident">LOG_LEVEL</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="openoligo.log_config.logger" class="name">var <span class="ident">logger</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="openoligo.log_config.rich" class="name">var <span class="ident">rich</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="openoligo.log_config.rot" class="name">var <span class="ident">rot</span></p>
+      <p id="openoligo.utils.logger.LOG_LEVEL" class="name">var <span class="ident">LOG_LEVEL</span></p>
       
   
   <div class="source_cont">
@@ -1180,6 +1169,50 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
       </div>
 
+    <h2 class="section-title" id="header-functions">Functions</h2>
+      
+  <div class="item">
+    <div class="name def" id="openoligo.utils.logger.configure_logger">
+    <p>def <span class="ident">configure_logger</span>(</p><p>filename: str = &#39;openoligo.log&#39;, *, rotates: bool = True)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Configure the logger for OpenOligo</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.utils.logger.configure_logger', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.utils.logger.configure_logger" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">configure_logger</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;openoligo.log&quot;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">rotates</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configure the logger for OpenOligo&quot;&quot;&quot;</span>
+
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">rotates</span><span class="p">:</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">RotatingFileHandler</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">maxBytes</span><span class="o">=</span><span class="mi">1000000</span><span class="p">,</span> <span class="n">backupCount</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="n">file_logger</span> <span class="o">=</span> <span class="n">handler</span>
+    <span class="n">file_logger</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">FILE_FORMAT</span><span class="p">))</span>
+    <span class="n">file_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+    <span class="n">console_logger</span> <span class="o">=</span> <span class="n">RichHandler</span><span class="p">()</span>
+    <span class="n">console_logger</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="n">CONSOLE_FORMAT</span><span class="p">))</span>
+    <span class="n">console_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">getLevelName</span><span class="p">(</span><span class="n">LOG_LEVEL</span><span class="p">))</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_logger</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">console_logger</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">logger</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
 
 
   </section>

@@ -5,6 +5,10 @@ import logging
 from enum import Enum
 from functools import wraps
 
+from openoligo.utils.logger import configure_logger
+
+logger = configure_logger()
+
 FlowWaitPair = tuple[int, float]
 FlowWaitPairs = list[FlowWaitPair]
 
@@ -30,7 +34,7 @@ def _step_decorator(coroutine, is_substep: bool = False):
         name, doc = coroutine.__name__, coroutine.__doc__.strip().split("\n")[0]
         level = logging.DEBUG if is_substep else logging.INFO
         repr_args = args[1:]  # Remove instrument from args
-        logging.log(
+        logger.log(
             level, "Starting step [bold]%s[/]%s: %s", name, repr_args, doc, extra={"markup": True}
         )
 

@@ -1,6 +1,8 @@
 from openoligo.hal.gpio import MockGPIO
 from openoligo.hal.types import board
-from openoligo.utils import log_config
+from openoligo.utils.logger import configure_logger
+
+logger = configure_logger(rotates=True)
 
 gpio = MockGPIO()
 

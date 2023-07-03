@@ -1187,6 +1187,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <li class="mono"><a href="#openoligo.hal.board">board</a></li>
         <li class="mono"><a href="devices.html">openoligo.hal.devices</a></li>
         <li class="mono"><a href="gpio.html">openoligo.hal.gpio</a></li>
+        <li class="mono"><a href="instrument.html">openoligo.hal.instrument</a></li>
         <li class="mono"><a href="platform.html">openoligo.hal.platform</a></li>
         <li class="mono"><a href="types.html">openoligo.hal.types</a></li>
       </ul>
@@ -1954,14 +1955,14 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
         <span class="n">__new_state</span> <span class="o">=</span> <span class="n">state</span>
 
         <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Switch </span><span class="si">%s</span><span class="s2"> is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Switch </span><span class="si">%s</span><span class="s2"> is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s2">&quot;Switch (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
             <span class="n">__old_state</span><span class="p">,</span>
@@ -2032,12 +2033,12 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
     <span class="n">__old_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
     <span class="n">__new_state</span> <span class="o">=</span> <span class="n">state</span>
     <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Switch </span><span class="si">%s</span><span class="s2"> is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Switch </span><span class="si">%s</span><span class="s2"> is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
         <span class="k">return</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
         <span class="s2">&quot;Switch (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
         <span class="n">__old_state</span><span class="p">,</span>
@@ -2407,14 +2408,14 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
 
         <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span><span class="p">:</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
             <span class="n">__old_state</span><span class="p">,</span>
@@ -2583,12 +2584,12 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
     <span class="n">__new_state</span><span class="p">:</span> <span class="n">ValveState</span> <span class="o">=</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span> <span class="k">if</span> <span class="n">state</span> <span class="k">else</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">CLOSED_FLOW</span>
     <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">__new_state</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">__old_state</span> <span class="o">==</span> <span class="n">ValveState</span><span class="o">.</span><span class="n">OPEN_FLOW</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) is already </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">__old_state</span><span class="p">)</span>
         <span class="k">return</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="n">__new_state</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_switch_count</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
         <span class="s2">&quot;Valve (</span><span class="si">%s</span><span class="s2">) set from </span><span class="si">%s</span><span class="s2"> to [bold]</span><span class="si">%s</span><span class="s2">[/]&quot;</span><span class="p">,</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span>
         <span class="n">__old_state</span><span class="p">,</span>
@@ -2761,6 +2762,13 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
       
   
     <div class="desc"><p>GPIO access abstraction: RPi.GPIO on Raspberry Pi, MockGPIO otherwise.</p></div>
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="instrument.html">openoligo.hal.instrument</a></p>
+      
+  
+    <div class="desc"><p>Unified access to configuring and using the instrument.</p></div>
 
       </div>
       <div class="item">
