@@ -7,7 +7,7 @@ from time import time
 from tqdm import tqdm
 
 from openoligo import utils
-from openoligo.instrument import Instrument
+from openoligo.hal.instrument import Instrument
 from openoligo.seq import Seq
 from openoligo.steps.flow import dry_all, send_to_waste_rxn, solvent_wash_all
 from openoligo.steps.types import step

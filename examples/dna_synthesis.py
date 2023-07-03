@@ -5,9 +5,10 @@ A minimal example of using the DNA synthesis API.
 import asyncio
 import logging
 
-from openoligo.instrument import Instrument
+from openoligo.hal.instrument import Instrument
 from openoligo.protocols.dna_synthesis import synthesize
 from openoligo.seq import Seq
+from openoligo.utils import log_config
 
 
 def main():

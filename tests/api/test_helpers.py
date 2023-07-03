@@ -1,6 +1,11 @@
 import pytest
 
-from openoligo.api.helpers import get_log_file, set_log_file, set_task_status, update_task_status
+from openoligo.api.helpers import (
+    get_log_file,
+    set_log_file,
+    set_task_in_progress,
+    update_task_status,
+)
 from openoligo.api.models import SynthesisQueue, TaskStatus
 from openoligo.seq import SeqCategory
 
@@ -20,7 +25,7 @@ async def test_set_active_task(db):
     synthesis_queue = await SynthesisQueue.create(
         sequence="ATCG", category=SeqCategory.DNA, status=TaskStatus.QUEUED, rank=0
     )
-    await set_task_status(synthesis_queue.id)
+    await set_task_in_progress(synthesis_queue.id)
     synthesis_queue_updated = await SynthesisQueue.get(id=synthesis_queue.id)
     assert synthesis_queue_updated.status == TaskStatus.IN_PROGRESS
 

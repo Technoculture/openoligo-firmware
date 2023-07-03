@@ -6,11 +6,11 @@ from typing import Optional
 
 import uvicorn
 from fastapi import Body, FastAPI, HTTPException, status
-from tortoise import Tortoise
 from tortoise.exceptions import ValidationError
 
+from openoligo.api.db import db_init, get_db_url
 from openoligo.api.models import SynthesisQueue, SynthesisQueueModel, TaskStatus, ValidSeq
-from openoligo.hal.platform import Platform, __platform__
+from openoligo.hal.platform import __platform__
 from openoligo.seq import SeqCategory
 
 DESCRIPTION = """
@@ -59,30 +59,13 @@ app = FastAPI(
 )
 
 
-def get_db_url(platform: Platform) -> str:
-    """Get the database URL for the given platform."""
-    # if not platform:
-    #    logging.error("Platform not supported.")
-    #    raise RuntimeError("No platform detected")
-
-    db_url = "sqlite://openoligo.db"
-    if platform in (Platform.RPI, Platform.BB):
-        db_url = "sqlite:////var/log/openoligo.db"
-
-    return db_url
-
-
 @app.on_event("startup")
 async def startup_event():
     """Startup event for the FastAPI server."""
     logging.info("Starting the API server...")  # pragma: no cover
     db_url = get_db_url(__platform__)  # pragma: no cover
     logging.info("Using database: '%s'", db_url)  # pragma: no cover
-
-    await Tortoise.init(
-        db_url=db_url, modules={"models": ["openoligo.api.models"]}
-    )  # pragma: no cover
-    await Tortoise.generate_schemas()  # pragma: no cover
+    await db_init(db_url)
 
 
 @app.get("/health", status_code=200, tags=["Utilities"])

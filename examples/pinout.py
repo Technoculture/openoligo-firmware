@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 from openoligo.hal.board import Pinout, list_configurable_pins
 from openoligo.hal.devices import Valve
+from openoligo.hal.instrument import Instrument
 from openoligo.hal.types import board
-from openoligo.instrument import Instrument
+from openoligo.utils import log_config
 from openoligo.utils.wait import wait
 
 print(list_configurable_pins())

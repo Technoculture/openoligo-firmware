@@ -1,7 +1,7 @@
 import asyncio
 from unittest.mock import AsyncMock, patch  # , call
 
-from openoligo.instrument import Instrument
+from openoligo.hal.instrument import Instrument
 from openoligo.protocols.dna_synthesis import synthesize
 from openoligo.seq import Seq
 from openoligo.steps.flow import send_to_waste_rxn
