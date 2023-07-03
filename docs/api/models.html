@@ -1157,7 +1157,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="kn">from</span> <span class="nn">tortoise.contrib.pydantic</span> <span class="kn">import</span> <span class="n">pydantic_model_creator</span>
 <span class="kn">from</span> <span class="nn">tortoise.exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span>
 <span class="kn">from</span> <span class="nn">tortoise.models</span> <span class="kn">import</span> <span class="n">Model</span>
-<span class="kn">from</span> <span class="nn">tortoise.validators</span> <span class="kn">import</span> <span class="n">MaxLengthValidator</span><span class="p">,</span> <span class="n">MinLengthValidator</span><span class="p">,</span> <span class="n">RegexValidator</span><span class="p">,</span> <span class="n">Validator</span>
+<span class="kn">from</span> <span class="nn">tortoise.validators</span> <span class="kn">import</span> <span class="n">MinLengthValidator</span><span class="p">,</span> <span class="n">RegexValidator</span><span class="p">,</span> <span class="n">Validator</span>
 
 <span class="kn">from</span> <span class="nn">openoligo.seq</span> <span class="kn">import</span> <span class="n">Seq</span><span class="p">,</span> <span class="n">SeqCategory</span>
 
@@ -1178,7 +1178,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate the value.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">Seq</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Sequence must be at least 3 bases long&quot;</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;Sequence must be at most 100 bases long&quot;</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">exc</span>
+        <span class="k">except</span> <span class="ne">AssertionError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">exc</span>
 
 
@@ -1188,7 +1192,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="nb">id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">autoincrement</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Synthesis ID&quot;</span><span class="p">)</span>
 
     <span class="n">sequence</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
-        <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">ValidSeq</span><span class="p">(),</span> <span class="n">MinLengthValidator</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">MaxLengthValidator</span><span class="p">(</span><span class="mi">100</span><span class="p">)],</span>
+        <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">ValidSeq</span><span class="p">()],</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Sequence of the Nucliec Acid to synthesize&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">category</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">CharEnumField</span><span class="p">(</span>
@@ -1246,7 +1250,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="nb">id</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">IntField</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">autoincrement</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Synthesis ID&quot;</span><span class="p">)</span>
 
     <span class="n">sequence</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
-        <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">ValidSeq</span><span class="p">(),</span> <span class="n">MinLengthValidator</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">MaxLengthValidator</span><span class="p">(</span><span class="mi">100</span><span class="p">)],</span>
+        <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">ValidSeq</span><span class="p">()],</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Sequence of the Nucliec Acid to synthesize&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">category</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">CharEnumField</span><span class="p">(</span>
@@ -2259,7 +2263,7 @@ generating a SELECT &hellip; FOR UPDATE SQL statement on supported databases.</p
             
   <div class="item">
     <div class="name def" id="openoligo.api.models.SynthesisQueue.clone">
-    <p>def <span class="ident">clone</span>(</p><p>self: ~MODEL, pk: Any = &lt;object object at 0x1233d4100&gt;)</p>
+    <p>def <span class="ident">clone</span>(</p><p>self: ~MODEL, pk: Any = &lt;object object at 0x1171d4100&gt;)</p>
     </div>
     
 
@@ -2990,7 +2994,11 @@ statements. Hence we can only do lazy-fetching during an awaited method.
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate the value.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">Seq</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Sequence must be at least 3 bases long&quot;</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">,</span> <span class="s2">&quot;Sequence must be at most 100 bases long&quot;</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">exc</span>
+        <span class="k">except</span> <span class="ne">AssertionError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">exc</span>
 </pre></div>
 

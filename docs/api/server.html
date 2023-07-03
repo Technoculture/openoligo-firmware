@@ -1076,6 +1076,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <li class="mono"><a href="#openoligo.api.server.clear_all_queued_tasks_in_task_queue">clear_all_queued_tasks_in_task_queue</a></li>
     <li class="mono"><a href="#openoligo.api.server.delete_synthesis_task_by_id">delete_synthesis_task_by_id</a></li>
     <li class="mono"><a href="#openoligo.api.server.get_all_tasks_in_synthesis_queue">get_all_tasks_in_synthesis_queue</a></li>
+    <li class="mono"><a href="#openoligo.api.server.get_db_url">get_db_url</a></li>
     <li class="mono"><a href="#openoligo.api.server.get_health_status">get_health_status</a></li>
     <li class="mono"><a href="#openoligo.api.server.get_task_by_id">get_task_by_id</a></li>
     <li class="mono"><a href="#openoligo.api.server.main">main</a></li>
@@ -1108,7 +1109,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">uvicorn</span>
-<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">HTTPException</span><span class="p">,</span> <span class="n">status</span>
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">Body</span><span class="p">,</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">HTTPException</span><span class="p">,</span> <span class="n">status</span>
 <span class="kn">from</span> <span class="nn">tortoise</span> <span class="kn">import</span> <span class="n">Tortoise</span>
 <span class="kn">from</span> <span class="nn">tortoise.exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span>
 
@@ -1162,23 +1163,30 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="p">)</span>
 
 
+<span class="k">def</span> <span class="nf">get_db_url</span><span class="p">(</span><span class="n">platform</span><span class="p">:</span> <span class="n">Platform</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the database URL for the given platform.&quot;&quot;&quot;</span>
+    <span class="c1"># if not platform:</span>
+    <span class="c1">#    logging.error(&quot;Platform not supported.&quot;)</span>
+    <span class="c1">#    raise RuntimeError(&quot;No platform detected&quot;)</span>
+
+    <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite://openoligo.db&quot;</span>
+    <span class="k">if</span> <span class="n">platform</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Platform</span><span class="o">.</span><span class="n">RPI</span><span class="p">,</span> <span class="n">Platform</span><span class="o">.</span><span class="n">BB</span><span class="p">):</span>
+        <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite:////var/log/openoligo.db&quot;</span>
+
+    <span class="k">return</span> <span class="n">db_url</span>
+
+
 <span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">startup_event</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Startup event for the FastAPI server.&quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting the API server...&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting the API server...&quot;</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
+    <span class="n">db_url</span> <span class="o">=</span> <span class="n">get_db_url</span><span class="p">(</span><span class="n">__platform__</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Using database: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">db_url</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">__platform__</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Platform not supported.&quot;</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No platform detected&quot;</span><span class="p">)</span>
-
-    <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite://openoligo.db&quot;</span>
-    <span class="k">if</span> <span class="n">__platform__</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Platform</span><span class="o">.</span><span class="n">RPI</span><span class="p">,</span> <span class="n">Platform</span><span class="o">.</span><span class="n">BB</span><span class="p">):</span>
-        <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite:////var/log/openoligo.db&quot;</span>
-
-    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Using database: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">db_url</span><span class="p">)</span>
-
-    <span class="k">await</span> <span class="n">Tortoise</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">db_url</span><span class="o">=</span><span class="n">db_url</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;openoligo.api.models&quot;</span><span class="p">]})</span>
-    <span class="k">await</span> <span class="n">Tortoise</span><span class="o">.</span><span class="n">generate_schemas</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">Tortoise</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+        <span class="n">db_url</span><span class="o">=</span><span class="n">db_url</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;openoligo.api.models&quot;</span><span class="p">]}</span>
+    <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
+    <span class="k">await</span> <span class="n">Tortoise</span><span class="o">.</span><span class="n">generate_schemas</span><span class="p">()</span>  <span class="c1"># pragma: no cover</span>
 
 
 <span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/health&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Utilities&quot;</span><span class="p">])</span>
@@ -1192,8 +1200,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">category</span><span class="p">:</span> <span class="n">SeqCategory</span> <span class="o">=</span> <span class="n">SeqCategory</span><span class="o">.</span><span class="n">DNA</span><span class="p">,</span> <span class="n">rank</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Add a synthesis task to the synthesis task queue by providing a sequence and its category.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">category</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">SeqCategory</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invalid category&quot;</span><span class="p">)</span>
+    <span class="c1"># if category not in list(SeqCategory):</span>
+    <span class="c1">#    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=&quot;Invalid category&quot;)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="n">sequence</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">model</span>
@@ -1203,7 +1211,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Added sequence &#39;</span><span class="si">%s</span><span class="s2">&#39; to the synthesis queue.&quot;</span><span class="p">,</span> <span class="n">sequence</span><span class="p">)</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/queue&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="nb">list</span><span class="p">[</span><span class="n">SynthesisQueueModel</span><span class="p">],</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">])</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+    <span class="s2">&quot;/queue&quot;</span><span class="p">,</span>
+    <span class="n">response_model</span><span class="o">=</span><span class="nb">list</span><span class="p">[</span><span class="n">SynthesisQueueModel</span><span class="p">],</span>
+    <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">],</span>
+<span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_all_tasks_in_synthesis_queue</span><span class="p">(</span><span class="n">filter_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TaskStatus</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the current synthesis task queue.&quot;&quot;&quot;</span>
     <span class="n">tasks</span> <span class="o">=</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-rank&quot;</span><span class="p">,</span> <span class="s2">&quot;-created_at&quot;</span><span class="p">)</span>
@@ -1212,7 +1225,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="k">return</span> <span class="k">await</span> <span class="n">tasks</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/queue&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_202_ACCEPTED</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">])</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/queue&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">])</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">clear_all_queued_tasks_in_task_queue</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Delete all tasks in the QUEUED state.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">TaskStatus</span><span class="o">.</span><span class="n">QUEUED</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
@@ -1227,8 +1240,15 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="k">return</span> <span class="n">task</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;/queue/</span><span class="si">{task_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_202_ACCEPTED</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">])</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">update_a_synthesis_task</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rank</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+    <span class="s2">&quot;/queue/</span><span class="si">{task_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">response_model</span><span class="o">=</span><span class="n">SynthesisQueueModel</span><span class="p">,</span>
+    <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">update_a_synthesis_task</span><span class="p">(</span>
+    <span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="n">rank</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update a particular task in the queue.&quot;&quot;&quot;</span>
     <span class="n">task</span> <span class="o">=</span> <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">get_or_none</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span>
 
@@ -1240,6 +1260,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Sequence task not in QUEUED state&quot;</span>
         <span class="p">)</span>
 
+    <span class="k">if</span> <span class="n">sequence</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rank</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
+            <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;Nothing to update. Provide sequence or rank.</span>
+<span class="s2">(Sequence: </span><span class="si">{</span><span class="n">sequence</span><span class="si">}</span><span class="s2">, Rank: </span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s2">)&quot;&quot;&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
     <span class="k">if</span> <span class="n">sequence</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">seq_validator</span> <span class="o">=</span> <span class="n">ValidSeq</span><span class="p">()</span>
@@ -1248,7 +1275,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">exc</span>
 
-    <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">rank</span> <span class="o">!=</span> <span class="n">rank</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">rank</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rank</span> <span class="o">!=</span> <span class="n">task</span><span class="o">.</span><span class="n">rank</span><span class="p">:</span>
         <span class="n">task</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="n">rank</span>
 
     <span class="k">await</span> <span class="n">task</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
@@ -1256,7 +1283,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="k">return</span> <span class="n">task</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/queue/</span><span class="si">{task_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_202_ACCEPTED</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">])</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/queue/</span><span class="si">{task_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">])</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">delete_synthesis_task_by_id</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Delete a synthesis task from the queue.&quot;&quot;&quot;</span>
     <span class="n">task</span> <span class="o">=</span> <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">get_or_none</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span>
@@ -1271,11 +1298,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Main function to start the server.&quot;&quot;&quot;</span>
-    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;openoligo.api.server:app&quot;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9191</span><span class="p">,</span> <span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+        <span class="s2">&quot;openoligo.api.server:app&quot;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9191</span><span class="p">,</span> <span class="n">reload</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
+    <span class="n">main</span><span class="p">()</span>  <span class="c1"># pragma: no cover</span>
 </pre></div>
 
   </div>
@@ -1320,8 +1349,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">category</span><span class="p">:</span> <span class="n">SeqCategory</span> <span class="o">=</span> <span class="n">SeqCategory</span><span class="o">.</span><span class="n">DNA</span><span class="p">,</span> <span class="n">rank</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Add a synthesis task to the synthesis task queue by providing a sequence and its category.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">category</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">SeqCategory</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Invalid category&quot;</span><span class="p">)</span>
+    <span class="c1"># if category not in list(SeqCategory):</span>
+    <span class="c1">#    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=&quot;Invalid category&quot;)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">model</span> <span class="o">=</span> <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="n">sequence</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">,</span> <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">model</span>
@@ -1349,7 +1378,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.server.clear_all_queued_tasks_in_task_queue', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.api.server.clear_all_queued_tasks_in_task_queue" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/queue&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_202_ACCEPTED</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">])</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/queue&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">])</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">clear_all_queued_tasks_in_task_queue</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Delete all tasks in the QUEUED state.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="n">TaskStatus</span><span class="o">.</span><span class="n">QUEUED</span><span class="p">)</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
@@ -1373,7 +1402,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.server.delete_synthesis_task_by_id', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.api.server.delete_synthesis_task_by_id" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/queue/</span><span class="si">{task_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_202_ACCEPTED</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">])</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/queue/</span><span class="si">{task_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">])</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">delete_synthesis_task_by_id</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Delete a synthesis task from the queue.&quot;&quot;&quot;</span>
     <span class="n">task</span> <span class="o">=</span> <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">get_or_none</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span>
@@ -1404,13 +1433,49 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.server.get_all_tasks_in_synthesis_queue', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.api.server.get_all_tasks_in_synthesis_queue" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/queue&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="nb">list</span><span class="p">[</span><span class="n">SynthesisQueueModel</span><span class="p">],</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">])</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+    <span class="s2">&quot;/queue&quot;</span><span class="p">,</span>
+    <span class="n">response_model</span><span class="o">=</span><span class="nb">list</span><span class="p">[</span><span class="n">SynthesisQueueModel</span><span class="p">],</span>
+    <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">],</span>
+<span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_all_tasks_in_synthesis_queue</span><span class="p">(</span><span class="n">filter_by</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TaskStatus</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the current synthesis task queue.&quot;&quot;&quot;</span>
     <span class="n">tasks</span> <span class="o">=</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-rank&quot;</span><span class="p">,</span> <span class="s2">&quot;-created_at&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">filter_by</span><span class="p">:</span>
         <span class="n">tasks</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="nb">filter</span><span class="p">)</span>
     <span class="k">return</span> <span class="k">await</span> <span class="n">tasks</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.api.server.get_db_url">
+    <p>def <span class="ident">get_db_url</span>(</p><p>platform: openoligo.hal.platform.Platform)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Get the database URL for the given platform.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.server.get_db_url', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.server.get_db_url" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_db_url</span><span class="p">(</span><span class="n">platform</span><span class="p">:</span> <span class="n">Platform</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the database URL for the given platform.&quot;&quot;&quot;</span>
+    <span class="c1"># if not platform:</span>
+    <span class="c1">#    logging.error(&quot;Platform not supported.&quot;)</span>
+    <span class="c1">#    raise RuntimeError(&quot;No platform detected&quot;)</span>
+
+    <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite://openoligo.db&quot;</span>
+    <span class="k">if</span> <span class="n">platform</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Platform</span><span class="o">.</span><span class="n">RPI</span><span class="p">,</span> <span class="n">Platform</span><span class="o">.</span><span class="n">BB</span><span class="p">):</span>
+        <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite:////var/log/openoligo.db&quot;</span>
+
+    <span class="k">return</span> <span class="n">db_url</span>
 </pre></div>
 
   </div>
@@ -1484,7 +1549,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div id="source-openoligo.api.server.main" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Main function to start the server.&quot;&quot;&quot;</span>
-    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;openoligo.api.server:app&quot;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9191</span><span class="p">,</span> <span class="n">reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+        <span class="s2">&quot;openoligo.api.server:app&quot;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">9191</span><span class="p">,</span> <span class="n">reload</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 </pre></div>
 
   </div>
@@ -1508,20 +1575,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <div class="codehilite"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">on_event</span><span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">)</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">startup_event</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Startup event for the FastAPI server.&quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting the API server...&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting the API server...&quot;</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
+    <span class="n">db_url</span> <span class="o">=</span> <span class="n">get_db_url</span><span class="p">(</span><span class="n">__platform__</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Using database: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">db_url</span><span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">__platform__</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Platform not supported.&quot;</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;No platform detected&quot;</span><span class="p">)</span>
-
-    <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite://openoligo.db&quot;</span>
-    <span class="k">if</span> <span class="n">__platform__</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Platform</span><span class="o">.</span><span class="n">RPI</span><span class="p">,</span> <span class="n">Platform</span><span class="o">.</span><span class="n">BB</span><span class="p">):</span>
-        <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite:////var/log/openoligo.db&quot;</span>
-
-    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Using database: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">db_url</span><span class="p">)</span>
-
-    <span class="k">await</span> <span class="n">Tortoise</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="n">db_url</span><span class="o">=</span><span class="n">db_url</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;openoligo.api.models&quot;</span><span class="p">]})</span>
-    <span class="k">await</span> <span class="n">Tortoise</span><span class="o">.</span><span class="n">generate_schemas</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">Tortoise</span><span class="o">.</span><span class="n">init</span><span class="p">(</span>
+        <span class="n">db_url</span><span class="o">=</span><span class="n">db_url</span><span class="p">,</span> <span class="n">modules</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;models&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;openoligo.api.models&quot;</span><span class="p">]}</span>
+    <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
+    <span class="k">await</span> <span class="n">Tortoise</span><span class="o">.</span><span class="n">generate_schemas</span><span class="p">()</span>  <span class="c1"># pragma: no cover</span>
 </pre></div>
 
   </div>
@@ -1532,7 +1593,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <div class="item">
     <div class="name def" id="openoligo.api.server.update_a_synthesis_task">
-    <p>async def <span class="ident">update_a_synthesis_task</span>(</p><p>task_id: int, sequence: Optional[str] = None, rank: int = 0)</p>
+    <p>async def <span class="ident">update_a_synthesis_task</span>(</p><p>task_id: int, sequence: Optional[str] = Body(None), rank: Optional[int] = Body(None))</p>
     </div>
     
 
@@ -1542,8 +1603,15 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.server.update_a_synthesis_task', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.api.server.update_a_synthesis_task" class="source">
-    <div class="codehilite"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;/queue/</span><span class="si">{task_id}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_202_ACCEPTED</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">])</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">update_a_synthesis_task</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">rank</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+    <div class="codehilite"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+    <span class="s2">&quot;/queue/</span><span class="si">{task_id}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">response_model</span><span class="o">=</span><span class="n">SynthesisQueueModel</span><span class="p">,</span>
+    <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_200_OK</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Synthesis Queue&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">update_a_synthesis_task</span><span class="p">(</span>
+    <span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="n">rank</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Update a particular task in the queue.&quot;&quot;&quot;</span>
     <span class="n">task</span> <span class="o">=</span> <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">get_or_none</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span>
 
@@ -1555,6 +1623,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s2">&quot;Sequence task not in QUEUED state&quot;</span>
         <span class="p">)</span>
 
+    <span class="k">if</span> <span class="n">sequence</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rank</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span>
+            <span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span>
+            <span class="n">detail</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;&quot;&quot;Nothing to update. Provide sequence or rank.</span>
+<span class="s2">(Sequence: </span><span class="si">{</span><span class="n">sequence</span><span class="si">}</span><span class="s2">, Rank: </span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s2">)&quot;&quot;&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
     <span class="k">if</span> <span class="n">sequence</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">seq_validator</span> <span class="o">=</span> <span class="n">ValidSeq</span><span class="p">()</span>
@@ -1563,7 +1638,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="n">status</span><span class="o">.</span><span class="n">HTTP_400_BAD_REQUEST</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span> <span class="kn">from</span> <span class="nn">exc</span>
 
-    <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">rank</span> <span class="o">!=</span> <span class="n">rank</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">rank</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">rank</span> <span class="o">!=</span> <span class="n">task</span><span class="o">.</span><span class="n">rank</span><span class="p">:</span>
         <span class="n">task</span><span class="o">.</span><span class="n">rank</span> <span class="o">=</span> <span class="n">rank</span>
 
     <span class="k">await</span> <span class="n">task</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
