@@ -7,8 +7,8 @@ from fastapi.testclient import TestClient
 from openoligo.api.helpers import update_task_status
 from openoligo.api.models import TaskStatus
 from openoligo.hal.platform import Platform
+from openoligo.scripts.server import app, get_db_url
 from openoligo.seq import SeqCategory
-from scripts.server import app, get_db_url
 
 client = TestClient(app)
 

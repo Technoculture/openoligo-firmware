@@ -8,8 +8,7 @@ from fastapi import Body, FastAPI, HTTPException, status
 from tortoise.exceptions import ValidationError
 
 from openoligo.api.db import db_init, get_db_url
-from openoligo.api.models import (SynthesisQueue, SynthesisQueueModel,
-                                  TaskStatus, ValidSeq)
+from openoligo.api.models import SynthesisQueue, SynthesisQueueModel, TaskStatus, ValidSeq
 from openoligo.hal.platform import __platform__
 from openoligo.seq import SeqCategory
 from openoligo.utils.logger import OligoLogger
@@ -95,7 +94,7 @@ async def add_a_task_to_synthesis_queue(
 
 @app.get(
     "/queue",
-    response_model=list[SynthesisQueueModel],
+    response_model=list[SynthesisQueueModel],  # type: ignore
     status_code=status.HTTP_200_OK,
     tags=["Synthesis Queue"],
 )
@@ -153,12 +152,12 @@ async def update_a_synthesis_task(
         try:
             seq_validator = ValidSeq()
             seq_validator(sequence)
-            task.sequence = sequence
+            task.sequence = sequence  # type: ignore
         except ValidationError as exc:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
     if rank is not None and rank != task.rank:
-        task.rank = rank
+        task.rank = rank  # type: ignore
 
     await task.save()
 
@@ -180,9 +179,7 @@ async def delete_synthesis_task_by_id(task_id: int):
 
 def main():
     """Main function to start the server."""
-    uvicorn.run(
-        "scripts.server:app", host="127.0.0.1", port=9191, reload=True
-    )  # pragma: no cover
+    uvicorn.run("scripts.server:app", host="127.0.0.1", port=9191, reload=True)  # pragma: no cover
 
 
 if __name__ == "__main__":

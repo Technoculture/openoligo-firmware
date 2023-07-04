@@ -4,12 +4,18 @@ Runner Script.
 This script runs the infinite loop that checks for new tasks and executes them.
 """
 import os
+
 import anyio
 
 from openoligo.api.db import db_init, get_db_url
-from openoligo.api.helpers import (get_next_task, set_log_file,
-                                   set_task_in_progress, update_task_status,
-                                   set_started_now, set_completed_now)
+from openoligo.api.helpers import (
+    get_next_task,
+    set_completed_now,
+    set_log_file,
+    set_started_now,
+    set_task_in_progress,
+    update_task_status,
+)
 from openoligo.api.models import TaskStatus
 from openoligo.hal.instrument import Instrument
 from openoligo.hal.platform import __platform__
@@ -41,9 +47,9 @@ async def worker():
             await anyio.sleep(5)
             continue  # This will loop forever until a task is available
 
-        logger.info(f"Got new task: {task}")
+        logger.info("Got new task: %d", task)
         await set_task_in_progress(task.id)
-        logger.info(f"Task {task.id} set to in progress")
+        logger.info("Task %d set to in progress", task.id)
 
         # Set the log file for this task
         name = f"task_{task.id}"
@@ -52,14 +58,14 @@ async def worker():
 
         await set_started_now(task.id)
         await update_task_status(task.id, TaskStatus.IN_PROGRESS)
-        logger.info(f"Starting task {task.id}")
+        logger.info("Starting task %d", task.id)
 
         # Execute the task
         await synthesize(inst, seq=Seq(task.sequence))
 
         await set_completed_now(task.id)
         await update_task_status(task.id, TaskStatus.COMPLETE)
-        logger.info(f"Task {task.id} complete")
+        logger.info("Task %d complete", task.id)
 
 
 def main():

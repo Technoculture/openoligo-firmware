@@ -8,8 +8,8 @@ readme = "README.md"
 keywords = ["DNA", "synthesis", "genetics", "open-source"]
 
 [tool.poetry.scripts]
-oligo-server = 'scripts.server:main'
-oligo-runner = 'scripts.runner:main'
+oligo-server = 'openoligo.scripts.server:main'
+oligo-runner = 'openoligo.scripts.runner:main'
 
 [tool.poetry.dependencies]
 python = "^3.9"
