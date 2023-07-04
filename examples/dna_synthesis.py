@@ -7,9 +7,10 @@ import asyncio
 from openoligo.hal.instrument import Instrument
 from openoligo.protocols.dna_synthesis import synthesize
 from openoligo.seq import Seq
-from openoligo.utils.logger import configure_logger
+from openoligo.utils.logger import OligoLogger
 
-logger = configure_logger(rotates=True)
+rl = OligoLogger(rotates=False)
+logger = rl.get_logger()
 
 
 def main():

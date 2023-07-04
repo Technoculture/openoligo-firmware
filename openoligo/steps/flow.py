@@ -2,12 +2,11 @@
 Functions to create various flows from reagents to columns,
 and to clean columns.
 """
+import logging
+
 from openoligo.hal.instrument import Instrument
 from openoligo.steps.types import FlowBranch, substep
-from openoligo.utils.logger import configure_logger
 from openoligo.utils.wait import wait_async
-
-logger = configure_logger()
 
 
 @substep
@@ -19,7 +18,7 @@ async def send_to_prod(instrument: Instrument, src: str) -> None:
         src: Slot to flow reagents from.
     """
     instrument.all_except([src, "prod", "branch", "rxn_out"])
-    logger.debug("Flowing %s to prod", src)
+    logging.debug("Flowing %s to prod", src)
 
 
 @substep
@@ -31,7 +30,7 @@ async def send_to_waste_rxn(instrument: Instrument, src: str) -> None:
         src: Slot to flow reagents from.
     """
     instrument.all_except([src, "branch", "rxn_out", "waste_rxn"])
-    logger.debug("Flowing %s to reaction waste", src)
+    logging.debug("Flowing %s to reaction waste", src)
 
 
 @substep
@@ -42,7 +41,7 @@ async def solvent_wash(instrument: Instrument, branch: FlowBranch, duration: flo
     args:
         branch: FlowBranch to wash.
     """
-    logger.debug("Initiating washing flow branch %s with solvent", branch)
+    logging.debug("Initiating washing flow branch %s with solvent", branch)
 
     if branch == FlowBranch.REACTION:
         instrument.all_except(["sol", "rxn_out", "branch", "waste_rxn"])
@@ -51,7 +50,7 @@ async def solvent_wash(instrument: Instrument, branch: FlowBranch, duration: flo
 
     await wait_async(duration)
 
-    logger.debug("Washing of branch %s complete", branch)
+    logging.debug("Washing of branch %s complete", branch)
 
 
 @substep
@@ -72,12 +71,12 @@ async def dry(instrument: Instrument, branch: FlowBranch) -> None:
     args:
         branch: FlowBranch to dry.
     """
-    logger.debug("Initiating drying of branch %s", branch)
+    logging.debug("Initiating drying of branch %s", branch)
     if branch == FlowBranch.REACTION:
         instrument.all_except(["gas", "rxn_out", "branch", "waste_rxn"])
     elif branch == FlowBranch.REAGENTS:
         instrument.all_except(["gas", "waste"])
-    logger.debug("Drying of branch %s complete", branch)
+    logging.debug("Drying of branch %s complete", branch)
 
 
 @substep

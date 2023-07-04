@@ -1064,7 +1064,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <ul>
     <li class="mono"><a href="#openoligo.hal.instrument.default_pinout">default_pinout</a></li>
-    <li class="mono"><a href="#openoligo.hal.instrument.logger">logger</a></li>
   </ul>
 
     </li>
@@ -1103,14 +1102,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Unified access to configuring and using the instrument.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
 <span class="kn">from</span> <span class="nn">openoligo.hal.board</span> <span class="kn">import</span> <span class="n">Pinout</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.devices</span> <span class="kn">import</span> <span class="n">Valve</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.gpio</span> <span class="kn">import</span> <span class="n">get_gpio</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.types</span> <span class="kn">import</span> <span class="n">OneDestinationException</span><span class="p">,</span> <span class="n">OneSourceException</span><span class="p">,</span> <span class="n">ValveRole</span><span class="p">,</span> <span class="n">board</span>
-<span class="kn">from</span> <span class="nn">openoligo.utils.logger</span> <span class="kn">import</span> <span class="n">configure_logger</span>
 <span class="kn">from</span> <span class="nn">openoligo.utils.singleton</span> <span class="kn">import</span> <span class="n">Singleton</span>
-
-<span class="n">logger</span> <span class="o">=</span> <span class="n">configure_logger</span><span class="p">()</span>
 
 <span class="n">default_pinout</span> <span class="o">=</span> <span class="n">Pinout</span><span class="p">(</span>
     <span class="n">phosphoramidites</span><span class="o">=</span><span class="p">{</span>
@@ -1140,7 +1138,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">        Initialize the instrument.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span> <span class="o">=</span> <span class="n">pinout</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initializing instrument with pinout: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initializing instrument with pinout: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controller</span> <span class="o">=</span> <span class="n">get_gpio</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__get_valve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Valve</span><span class="p">:</span>
@@ -1193,7 +1191,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             <span class="k">raise</span> <span class="n">OneDestinationException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one destination valve&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                 <span class="s2">&quot;Make sure that the transit valve(s) are in the route you expect&quot;</span>
             <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 
@@ -1217,7 +1215,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
                 <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s2">&quot;Set </span><span class="si">%s</span><span class="s2"> to [bold]open[/] and all others to close.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
         <span class="p">)</span>
 
@@ -1236,14 +1234,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <h2 class="section-title" id="header-variables">Module variables</h2>
       <div class="item">
       <p id="openoligo.hal.instrument.default_pinout" class="name">var <span class="ident">default_pinout</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="openoligo.hal.instrument.logger" class="name">var <span class="ident">logger</span></p>
       
   
   <div class="source_cont">
@@ -1272,7 +1262,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">        Initialize the instrument.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span> <span class="o">=</span> <span class="n">pinout</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initializing instrument with pinout: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initializing instrument with pinout: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">controller</span> <span class="o">=</span> <span class="n">get_gpio</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__get_valve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Valve</span><span class="p">:</span>
@@ -1325,7 +1315,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             <span class="k">raise</span> <span class="n">OneDestinationException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one destination valve&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
                 <span class="s2">&quot;Make sure that the transit valve(s) are in the route you expect&quot;</span>
             <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 
@@ -1349,7 +1339,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
                 <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s2">&quot;Set </span><span class="si">%s</span><span class="s2"> to [bold]open[/] and all others to close.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
         <span class="p">)</span>
 
@@ -1402,7 +1392,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">all_valves_in_pinout</span><span class="p">[</span><span class="n">_name</span><span class="p">]</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
         <span class="s2">&quot;Set </span><span class="si">%s</span><span class="s2"> to [bold]open[/] and all others to close.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
     <span class="p">)</span>
 </pre></div>
@@ -1469,7 +1459,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">OUTLET</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">OneDestinationException</span><span class="p">(</span><span class="s2">&quot;There must be exactly one destination valve&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valve_types</span><span class="p">[</span><span class="n">ValveRole</span><span class="o">.</span><span class="n">TRANSIT</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s2">&quot;Make sure that the transit valve(s) are in the route you expect&quot;</span>
         <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
 </pre></div>

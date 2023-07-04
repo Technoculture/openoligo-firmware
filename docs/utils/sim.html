@@ -1064,7 +1064,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <ul>
     <li class="mono"><a href="#openoligo.utils.sim.SIMULATION_SPEEDUP_FACTOR">SIMULATION_SPEEDUP_FACTOR</a></li>
-    <li class="mono"><a href="#openoligo.utils.sim.logger">logger</a></li>
   </ul>
 
     </li>
@@ -1089,12 +1088,10 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Sets some parameters for the simulation.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">from</span> <span class="nn">openoligo.hal.types</span> <span class="kn">import</span> <span class="n">Platform</span><span class="p">,</span> <span class="n">__platform__</span>
-<span class="kn">from</span> <span class="nn">openoligo.utils.logger</span> <span class="kn">import</span> <span class="n">configure_logger</span>
-
-<span class="n">logger</span> <span class="o">=</span> <span class="n">configure_logger</span><span class="p">()</span>
 
 <span class="c1"># Simulation parameters</span>
 <span class="c1"># Can be set using env variable OO_SIM_SPEED=1000</span>
@@ -1103,7 +1100,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="k">else</span><span class="p">:</span>
     <span class="n">SIMULATION_SPEEDUP_FACTOR</span> <span class="o">=</span> <span class="mi">1</span>
 
-<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
     <span class="s2">&quot;Using simulation speedup factor of </span><span class="si">%d</span><span class="s2"> (60min to </span><span class="si">%.2f</span><span class="s2">s)&quot;</span><span class="p">,</span>
     <span class="n">SIMULATION_SPEEDUP_FACTOR</span><span class="p">,</span>
     <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">/</span> <span class="n">SIMULATION_SPEEDUP_FACTOR</span><span class="p">,</span>
@@ -1118,14 +1115,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <h2 class="section-title" id="header-variables">Module variables</h2>
       <div class="item">
       <p id="openoligo.utils.sim.SIMULATION_SPEEDUP_FACTOR" class="name">var <span class="ident">SIMULATION_SPEEDUP_FACTOR</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="openoligo.utils.sim.logger" class="name">var <span class="ident">logger</span></p>
       
   
   <div class="source_cont">

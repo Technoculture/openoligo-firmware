@@ -12,9 +12,13 @@ from openoligo.api.models import (SynthesisQueue, SynthesisQueueModel,
                                   TaskStatus, ValidSeq)
 from openoligo.hal.platform import __platform__
 from openoligo.seq import SeqCategory
-from openoligo.utils.logger import configure_logger
+from openoligo.utils.logger import OligoLogger
 
-logger = configure_logger("server.log", rotates=True)
+ol = OligoLogger(name="server", rotates=True)
+logger = ol.get_logger()
+
+rl = OligoLogger(rotates=True)
+root_logger = rl.get_logger()
 
 DESCRIPTION = """
 OpenOligo API for the synthesis of oligonucleotides.
@@ -63,9 +67,9 @@ app = FastAPI(
 @app.on_event("startup")
 async def startup_event():
     """Startup event for the FastAPI server."""
-    logger .info("Starting the API server...")  # pragma: no cover
+    logger.info("Starting the API server...")  # pragma: no cover
     db_url = get_db_url(__platform__)  # pragma: no cover
-    logger .info("Using database: '%s'", db_url)  # pragma: no cover
+    logger.info("Using database: '%s'", db_url)  # pragma: no cover
     await db_init(db_url)
 
 
@@ -80,15 +84,13 @@ async def add_a_task_to_synthesis_queue(
     sequence: str, category: SeqCategory = SeqCategory.DNA, rank: int = 0
 ):
     """Add a synthesis task to the synthesis task queue by providing a sequence and its category."""
-    # if category not in list(SeqCategory):
-    #    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid category")
     try:
         model = await SynthesisQueue.create(sequence=sequence, category=category, rank=rank)
         return model
     except ValidationError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     finally:
-        logger .info("Added sequence '%s' to the synthesis queue.", sequence)
+        logger.info("Added sequence '%s' to the synthesis queue.", sequence)
 
 
 @app.get(
