@@ -2,12 +2,16 @@
 Unified access to configuring and using the instrument.
 """
 import logging
+from typing import Callable
 
 from openoligo.hal.board import Pinout
-from openoligo.hal.devices import Valve
+from openoligo.hal.devices import DigitalSensor, Valve
 from openoligo.hal.gpio import get_gpio
 from openoligo.hal.types import OneDestinationException, OneSourceException, ValveRole, board
 from openoligo.utils.singleton import Singleton
+
+# import anyio
+
 
 default_pinout = Pinout(
     phosphoramidites={
@@ -117,6 +121,47 @@ class Instrument(metaclass=Singleton):
         logging.debug(
             "Set %s to [bold]open[/] and all others to close.", name, extra={"markup": True}
         )
+
+    def register_error_handler(self, handler: Callable[[None], None]) -> None:
+        """
+        Register an error handler.
+
+        Args:
+            handler: A function that takes no arguments and returns nothing.
+        """
+        pressure_error_sensors: dict[str, DigitalSensor] = self.pinout.get_error_sensors()
+        for _, sensor in pressure_error_sensors.items():
+            sensor.register_callback(handler)
+
+    def pressure_on(self) -> None:
+        """
+        Switches the gas inlet ON by switching on the pressure regulator.
+        """
+        self.pinout.fixed["air_pressure"].set(True)
+        self.pinout.fixed["liquid_pressure"].set(True)
+
+    def pressure_off(self) -> None:
+        """
+        Switches the gas inlet ON by switching on the pressure regulator.
+        """
+        self.pinout.fixed["liquid_pressure"].set(False)
+        self.pinout.fixed["air_pressure"].set(False)
+
+    # async def monitor_pressure(self) -> None:
+    #    """
+    #    Monitor the pressure sensors.
+    #    """
+    #    pressure_error_sensors: dict[str, DigitalSensor] = self.pinout.get_error_sensors()
+    #    while True:
+    #        pressure_errors = {k: v.value() for k, v in pressure_error_sensors.items()}
+    #        logging.debug("Pressure errors: %s", pressure_errors)
+    #        if pressure_errors["liquid_pressure"] and pressure_errors["air_pressure"]:
+    #            raise RuntimeError("Both liquid and air pressure are low")
+    #        elif pressure_errors["liquid_pressure"]:
+    #            raise RuntimeError("Liquid pressure error")
+    #        elif pressure_errors["air_pressure"]:
+    #            raise RuntimeError("Air pressure error")
+    #        await anyio.sleep(1)
 
     def __repr__(self):
         """

@@ -1,5 +1,5 @@
 """
-Import convenience for steps.
+Steps provides building blocks for the OpenOligo protocols.
 """
 
 from openoligo.steps.types import FlowWaitPair, FlowWaitPairs

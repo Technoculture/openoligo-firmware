@@ -179,7 +179,9 @@ async def delete_synthesis_task_by_id(task_id: int):
 
 def main():
     """Main function to start the server."""
-    uvicorn.run("scripts.server:app", host="127.0.0.1", port=9191, reload=True)  # pragma: no cover
+    uvicorn.run(
+        "openoligo.scripts.server:app", host="127.0.0.1", port=9191, reload=True
+    )  # pragma: no cover
 
 
 if __name__ == "__main__":

@@ -5,7 +5,9 @@
 
   
   <title>openoligo.hal API documentation</title>
-  <meta name="description" content="Driver imports for convenience." />
+  <meta name="description" content="Hardware Abstraction Layer for OpenOligo.
+
+This includes multiple layers of abstractions on top of G..." />
 
 
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -1111,6 +1113,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
           
   <ul>
     <li class="mono"><a href="#openoligo.hal.Pinout.get">get</a></li>
+    <li class="mono"><a href="#openoligo.hal.Pinout.get_error_sensors">get_error_sensors</a></li>
     <li class="mono"><a href="#openoligo.hal.Pinout.init_pinout">init_pinout</a></li>
     <li class="mono"><a href="#openoligo.hal.Pinout.pins">pins</a></li>
     <li class="mono"><a href="#openoligo.hal.Pinout.valves">valves</a></li>
@@ -1203,12 +1206,17 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
   <header id="section-intro">
   <h1 class="title"><span class="name">openoligo.hal</span> module</h1>
-  <p>Driver imports for convenience.</p>
+  <p>Hardware Abstraction Layer for OpenOligo.</p>
+<p>This includes multiple layers of abstractions on top of GPIO pins.
+The GPIO pins themselves are abstracted to be generic for Raspberry Pi, BeagleBone, etc.</p>
   
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal', this);">Show source &equiv;</a></p>
   <div id="source-openoligo.hal" class="source">
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Driver imports for convenience.</span>
+<span class="sd">Hardware Abstraction Layer for OpenOligo.</span>
+
+<span class="sd">This includes multiple layers of abstractions on top of GPIO pins.</span>
+<span class="sd">The GPIO pins themselves are abstracted to be generic for Raspberry Pi, BeagleBone, etc.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">openoligo.hal.board</span> <span class="kn">import</span> <span class="n">Pinout</span><span class="p">,</span> <span class="n">list_configurable_pins</span>
@@ -1698,6 +1706,14 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
                 <span class="sa">f</span><span class="s2">&quot;Pin </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> not found in pinout. </span><span class="se">\n\n</span><span class="s2">Available pins are: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pinout</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
 
+    <span class="k">def</span> <span class="nf">get_error_sensors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DigitalSensor</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a dictionary of all error sensors with their names.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">name</span><span class="p">:</span> <span class="n">sensor</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">sensor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sensor</span><span class="p">,</span> <span class="n">DigitalSensor</span><span class="p">)</span>
+        <span class="p">}</span>
+
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a string representation of the pinout.</span>
@@ -1746,6 +1762,33 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
         <span class="k">raise</span> <span class="n">NoSuchPinInPinout</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;Pin </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> not found in pinout. </span><span class="se">\n\n</span><span class="s2">Available pins are: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__pinout</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.Pinout.get_error_sensors">
+    <p>def <span class="ident">get_error_sensors</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Return a dictionary of all error sensors with their names.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.Pinout.get_error_sensors', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.Pinout.get_error_sensors" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_error_sensors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DigitalSensor</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a dictionary of all error sensors with their names.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">sensor</span> <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">sensor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sensor</span><span class="p">,</span> <span class="n">DigitalSensor</span><span class="p">)</span>
+    <span class="p">}</span>
 </pre></div>
 
   </div>

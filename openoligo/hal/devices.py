@@ -3,8 +3,9 @@ Switches can be used to control devices that can be turned on and off.
 """
 import logging
 from dataclasses import dataclass, field
+from typing import Callable
 
-from openoligo.hal.gpio import GpioMode, get_gpio
+from openoligo.hal.gpio import GpioEdge, GpioMode, get_gpio
 from openoligo.hal.types import Switchable, Valvable, ValveRole, ValveState, ValveType
 
 
@@ -91,6 +92,12 @@ class DigitalSensor(Switchable):
         """
         self._state = self.controller.value(self.gpio_pin)
         return self._state
+
+    def register_callback(self, callback: Callable[[None], None], edge: GpioEdge = GpioEdge.RISING):
+        """
+        Register a callback function that will be called when the valve state changes.
+        """
+        self.controller.on_edge(pin=self.gpio_pin, edge=edge, callback=callback)
 
 
 @dataclass

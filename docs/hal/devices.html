@@ -1069,6 +1069,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         
           
   <ul>
+    <li class="mono"><a href="#openoligo.hal.devices.DigitalSensor.register_callback">register_callback</a></li>
     <li class="mono"><a href="#openoligo.hal.devices.DigitalSensor.set">set</a></li>
     <li class="mono"><a href="#openoligo.hal.devices.DigitalSensor.toggle">toggle</a></li>
   </ul>
@@ -1118,8 +1119,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
 
-<span class="kn">from</span> <span class="nn">openoligo.hal.gpio</span> <span class="kn">import</span> <span class="n">GpioMode</span><span class="p">,</span> <span class="n">get_gpio</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.gpio</span> <span class="kn">import</span> <span class="n">GpioEdge</span><span class="p">,</span> <span class="n">GpioMode</span><span class="p">,</span> <span class="n">get_gpio</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.types</span> <span class="kn">import</span> <span class="n">Switchable</span><span class="p">,</span> <span class="n">Valvable</span><span class="p">,</span> <span class="n">ValveRole</span><span class="p">,</span> <span class="n">ValveState</span><span class="p">,</span> <span class="n">ValveType</span>
 
 
@@ -1206,6 +1208,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
+
+    <span class="k">def</span> <span class="nf">register_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="kc">None</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span> <span class="o">=</span> <span class="n">GpioEdge</span><span class="o">.</span><span class="n">RISING</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Register a callback function that will be called when the valve state changes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">on_edge</span><span class="p">(</span><span class="n">pin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">edge</span><span class="o">=</span><span class="n">edge</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">)</span>
 
 
 <span class="nd">@dataclass</span>
@@ -1326,6 +1334,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_state</span>
+
+    <span class="k">def</span> <span class="nf">register_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="kc">None</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span> <span class="o">=</span> <span class="n">GpioEdge</span><span class="o">.</span><span class="n">RISING</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Register a callback function that will be called when the valve state changes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">on_edge</span><span class="p">(</span><span class="n">pin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">edge</span><span class="o">=</span><span class="n">edge</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1352,6 +1366,31 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
             </div>
           <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.devices.DigitalSensor.register_callback">
+    <p>def <span class="ident">register_callback</span>(</p><p>self, callback: Callable[[NoneType], NoneType], edge: openoligo.hal.types.GpioEdge = &lt;GpioEdge.RISING: 0&gt;)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Register a callback function that will be called when the valve state changes.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.devices.DigitalSensor.register_callback', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.devices.DigitalSensor.register_callback" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">register_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="kc">None</span><span class="p">],</span> <span class="kc">None</span><span class="p">],</span> <span class="n">edge</span><span class="p">:</span> <span class="n">GpioEdge</span> <span class="o">=</span> <span class="n">GpioEdge</span><span class="o">.</span><span class="n">RISING</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Register a callback function that will be called when the valve state changes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">on_edge</span><span class="p">(</span><span class="n">pin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gpio_pin</span><span class="p">,</span> <span class="n">edge</span><span class="o">=</span><span class="n">edge</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
             
   <div class="item">
     <div class="name def" id="openoligo.hal.devices.DigitalSensor.set">

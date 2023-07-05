@@ -15,6 +15,26 @@ def is_valid_dna(sequence):
     return False
 
 
+# phosphoramidite_dict = {
+#    "A": "Adenosine",
+#    "T": "Thymidine",
+#    "G": "Guanosine",
+#    "C": "Cytidine",
+#    "U": "Uridine",
+#    "5mC": "5-Methylcytidine",
+#    "GalNAc": "N-Acetylgalactosamine",
+# }
+#
+#
+# def is_valid_oligo(sequence: str) -> bool:
+#    """
+#    Given a sequence, check if it is a valid oligo sequence.
+#
+#    Example:
+#        AAT5mC5mCAT5mC-GalNAc -> valid
+#    """
+
+
 class Seq:
     """
     Representation of the sequence as a string.

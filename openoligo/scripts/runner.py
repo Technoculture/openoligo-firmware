@@ -5,11 +5,11 @@ This script runs the infinite loop that checks for new tasks and executes them.
 """
 import os
 
-import anyio
+from anyio import run, sleep
 
 from openoligo.api.db import db_init, get_db_url
+from openoligo.api.helpers import get_next_task  # set_failed_now,
 from openoligo.api.helpers import (
-    get_next_task,
     set_completed_now,
     set_log_file,
     set_started_now,
@@ -40,14 +40,15 @@ async def worker():
     logger.info("OpenOligo Runner: Worker process started")
     await db_init(get_db_url(__platform__))
     inst = Instrument()
+    inst.register_error_handler(logger.error)
 
     while True:
         task = await get_next_task()
         if task is None:
-            await anyio.sleep(5)
+            await sleep(5)
             continue  # This will loop forever until a task is available
 
-        logger.info("Got new task: %d", task)
+        logger.info("Got new task: %s", task)
         await set_task_in_progress(task.id)
         logger.info("Task %d set to in progress", task.id)
 
@@ -61,7 +62,9 @@ async def worker():
         logger.info("Starting task %d", task.id)
 
         # Execute the task
-        await synthesize(inst, seq=Seq(task.sequence))
+        inst.pressure_on()
+        await synthesize(inst, Seq(task.sequence))
+        inst.pressure_off()
 
         await set_completed_now(task.id)
         await update_task_status(task.id, TaskStatus.COMPLETE)
@@ -75,7 +78,7 @@ def main():
     logger.info("OpenOligo Runner: Starting")
 
     try:
-        anyio.run(worker)
+        run(worker)
     except KeyboardInterrupt:
         logger.error("Keyboard interrupt detected, shutting down")
         os._exit(0)  # A hard exit is required to kill the logging thread

@@ -5,7 +5,7 @@
 
   
   <title>openoligo API documentation</title>
-  <meta name="description" content="" />
+  <meta name="description" content="OpenOligo is a library for controlling the OpenOligo Combinatorial Synthesizer." />
 
 
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -1062,7 +1062,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       <ul>
         <li class="mono"><a href="api/index.html">openoligo.api</a></li>
         <li class="mono"><a href="hal/index.html">openoligo.hal</a></li>
+        <li class="mono"><a href="hil/index.html">openoligo.hil</a></li>
         <li class="mono"><a href="protocols/index.html">openoligo.protocols</a></li>
+        <li class="mono"><a href="scripts/index.html">openoligo.scripts</a></li>
         <li class="mono"><a href="seq.html">openoligo.seq</a></li>
         <li class="mono"><a href="steps/index.html">openoligo.steps</a></li>
         <li class="mono"><a href="utils/index.html">openoligo.utils</a></li>
@@ -1079,8 +1081,16 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
   <header id="section-intro">
   <h1 class="title"><span class="name">openoligo</span> module</h1>
+  <p>OpenOligo is a library for controlling the OpenOligo Combinatorial Synthesizer.</p>
   
-  
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo" class="source">
+    <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">OpenOligo is a library for controlling the OpenOligo Combinatorial Synthesizer.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+
+  </div>
 
   </header>
 
@@ -1093,20 +1103,36 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       <p class="name"><a href="api/index.html">openoligo.api</a></p>
       
   
+    <div class="desc"><p>API for the OpenOligo Server as well as DB access conviniences.</p></div>
 
       </div>
       <div class="item">
       <p class="name"><a href="hal/index.html">openoligo.hal</a></p>
       
   
-    <div class="desc"><p>Driver imports for convenience.</p></div>
+    <div class="desc"><p>Hardware Abstraction Layer for OpenOligo.</p>
+<p>This includes multiple layers of abstractions on top of GPIO pins.
+The GPIO pins themselves are abstracted to be generic for Raspberry Pi, BeagleBone, etc.</p></div>
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="hil/index.html">openoligo.hil</a></p>
+      
+  
 
       </div>
       <div class="item">
       <p class="name"><a href="protocols/index.html">openoligo.protocols</a></p>
       
   
-    <div class="desc"><p>Import convenience for the protocol module.</p></div>
+    <div class="desc"><p>Protocols provide built-in protocols for common synthesis workflows.</p></div>
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="scripts/index.html">openoligo.scripts</a></p>
+      
+  
+    <div class="desc"><p>Provides the top level executables: Runner and Server for OpenOligo Instrument.</p></div>
 
       </div>
       <div class="item">
@@ -1120,14 +1146,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       <p class="name"><a href="steps/index.html">openoligo.steps</a></p>
       
   
-    <div class="desc"><p>Import convenience for steps.</p></div>
+    <div class="desc"><p>Steps provides building blocks for the OpenOligo protocols.</p></div>
 
       </div>
       <div class="item">
       <p class="name"><a href="utils/index.html">openoligo.utils</a></p>
       
   
-    <div class="desc"><p>Imports all the modules in the utils directory.</p></div>
+    <div class="desc"><p>Various unrelated modules and functions for logging, simulation, busy waiting, etc.</p></div>
 
       </div>
   </section>

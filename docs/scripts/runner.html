@@ -4,8 +4,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
   
-  <title>openoligo.seq API documentation</title>
-  <meta name="description" content="Sequence class for DNA, RNA and modified Nucleic Acid sequences." />
+  <title>openoligo.scripts.runner API documentation</title>
+  <meta name="description" content="Runner Script.
+
+This script runs the infinite loop that checks for new tasks and executes them." />
 
 
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -1057,30 +1059,29 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <ul id="index">
     <li class="set"><h3>Super-module</h3>
       <ul>
-        <li class="mono"><a href="index.html">openoligo</a></li>
+        <li class="mono"><a href="index.html">openoligo.scripts</a></li>
       </ul>
+    </li>
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#openoligo.scripts.runner.logger">logger</a></li>
+    <li class="mono"><a href="#openoligo.scripts.runner.ol">ol</a></li>
+    <li class="mono"><a href="#openoligo.scripts.runner.rl">rl</a></li>
+    <li class="mono"><a href="#openoligo.scripts.runner.root_logger">root_logger</a></li>
+  </ul>
+
     </li>
 
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
-    <li class="mono"><a href="#openoligo.seq.is_valid_dna">is_valid_dna</a></li>
+    <li class="mono"><a href="#openoligo.scripts.runner.main">main</a></li>
+    <li class="mono"><a href="#openoligo.scripts.runner.worker">worker</a></li>
   </ul>
 
     </li>
 
-    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
-      <ul>
-        <li class="mono">
-        <span class="class_name"><a href="#openoligo.seq.Seq">Seq</a></span>
-        
-        </li>
-        <li class="mono">
-        <span class="class_name"><a href="#openoligo.seq.SeqCategory">SeqCategory</a></span>
-        
-        </li>
-      </ul>
-    </li>
 
     </ul>
   </div>
@@ -1092,108 +1093,101 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">openoligo.seq</span> module</h1>
-  <p>Sequence class for DNA, RNA and modified Nucleic Acid sequences.</p>
+  <h1 class="title"><span class="name">openoligo.scripts.runner</span> module</h1>
+  <p>Runner Script.</p>
+<p>This script runs the infinite loop that checks for new tasks and executes them.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.seq', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.seq" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.scripts.runner', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.scripts.runner" class="source">
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Sequence class for DNA, RNA and modified Nucleic Acid sequences.</span>
+<span class="sd">Runner Script.</span>
+
+<span class="sd">This script runs the infinite loop that checks for new tasks and executes them.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">anyio</span> <span class="kn">import</span> <span class="n">run</span><span class="p">,</span> <span class="n">sleep</span>
+
+<span class="kn">from</span> <span class="nn">openoligo.api.db</span> <span class="kn">import</span> <span class="n">db_init</span><span class="p">,</span> <span class="n">get_db_url</span>
+<span class="kn">from</span> <span class="nn">openoligo.api.helpers</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">get_next_task</span><span class="p">,</span>  <span class="c1"># set_failed_now,</span>
+    <span class="n">set_completed_now</span><span class="p">,</span>
+    <span class="n">set_log_file</span><span class="p">,</span>
+    <span class="n">set_started_now</span><span class="p">,</span>
+    <span class="n">set_task_in_progress</span><span class="p">,</span>
+    <span class="n">update_task_status</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">openoligo.api.models</span> <span class="kn">import</span> <span class="n">TaskStatus</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.instrument</span> <span class="kn">import</span> <span class="n">Instrument</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.platform</span> <span class="kn">import</span> <span class="n">__platform__</span>
+<span class="kn">from</span> <span class="nn">openoligo.protocols.dna_synthesis</span> <span class="kn">import</span> <span class="n">synthesize</span>
+<span class="kn">from</span> <span class="nn">openoligo.seq</span> <span class="kn">import</span> <span class="n">Seq</span>
+<span class="kn">from</span> <span class="nn">openoligo.utils.logger</span> <span class="kn">import</span> <span class="n">OligoLogger</span>
+
+<span class="n">ol</span> <span class="o">=</span> <span class="n">OligoLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;runner&quot;</span><span class="p">,</span> <span class="n">rotates</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">ol</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span>
 
 
-<span class="k">def</span> <span class="nf">is_valid_dna</span><span class="p">(</span><span class="n">sequence</span><span class="p">):</span>
+<span class="n">rl</span> <span class="o">=</span> <span class="n">OligoLogger</span><span class="p">(</span><span class="n">rotates</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">root_logger</span> <span class="o">=</span> <span class="n">rl</span><span class="o">.</span><span class="n">get_logger</span><span class="p">()</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">worker</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Check if a sequence is a valid DNA sequence.</span>
+<span class="sd">    This is the actual worker.</span>
+
+<span class="sd">    Essentially, it will loop forever, checking for new tasks in the database and executing them.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^[ATCGatcg]*$&quot;</span>
-    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">sequence</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;OpenOligo Runner: Worker process started&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">db_init</span><span class="p">(</span><span class="n">get_db_url</span><span class="p">(</span><span class="n">__platform__</span><span class="p">))</span>
+    <span class="n">inst</span> <span class="o">=</span> <span class="n">Instrument</span><span class="p">()</span>
+    <span class="n">inst</span><span class="o">.</span><span class="n">register_error_handler</span><span class="p">(</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_next_task</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">task</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="k">continue</span>  <span class="c1"># This will loop forever until a task is available</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Got new task: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">set_task_in_progress</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Task </span><span class="si">%d</span><span class="s2"> set to in progress&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+        <span class="c1"># Set the log file for this task</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;task_</span><span class="si">{</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">await</span> <span class="n">set_log_file</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">)</span>
+        <span class="n">rl</span><span class="o">.</span><span class="n">change_log_file</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="k">await</span> <span class="n">set_started_now</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">update_task_status</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">IN_PROGRESS</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting task </span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+        <span class="c1"># Execute the task</span>
+        <span class="n">inst</span><span class="o">.</span><span class="n">pressure_on</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">synthesize</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">Seq</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">sequence</span><span class="p">))</span>
+        <span class="n">inst</span><span class="o">.</span><span class="n">pressure_off</span><span class="p">()</span>
+
+        <span class="k">await</span> <span class="n">set_completed_now</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">update_task_status</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">COMPLETE</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Task </span><span class="si">%d</span><span class="s2"> complete&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 
 
-<span class="c1"># phosphoramidite_dict = {</span>
-<span class="c1">#    &quot;A&quot;: &quot;Adenosine&quot;,</span>
-<span class="c1">#    &quot;T&quot;: &quot;Thymidine&quot;,</span>
-<span class="c1">#    &quot;G&quot;: &quot;Guanosine&quot;,</span>
-<span class="c1">#    &quot;C&quot;: &quot;Cytidine&quot;,</span>
-<span class="c1">#    &quot;U&quot;: &quot;Uridine&quot;,</span>
-<span class="c1">#    &quot;5mC&quot;: &quot;5-Methylcytidine&quot;,</span>
-<span class="c1">#    &quot;GalNAc&quot;: &quot;N-Acetylgalactosamine&quot;,</span>
-<span class="c1"># }</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># def is_valid_oligo(sequence: str) -&gt; bool:</span>
-<span class="c1">#    &quot;&quot;&quot;</span>
-<span class="c1">#    Given a sequence, check if it is a valid oligo sequence.</span>
-<span class="c1">#</span>
-<span class="c1">#    Example:</span>
-<span class="c1">#        AAT5mC5mCAT5mC-GalNAc -&gt; valid</span>
-<span class="c1">#    &quot;&quot;&quot;</span>
-
-
-<span class="k">class</span> <span class="nc">Seq</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Representation of the sequence as a string.</span>
+<span class="sd">    Main entry point of the runner.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;OpenOligo Runner: Starting&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_dna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid DNA sequence&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Allows iteration over the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the next base in the sequence.</span>
-
-<span class="sd">        raises:</span>
-<span class="sd">            StopIteration: if the end of the sequence is reached.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">):</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">return</span> <span class="n">result</span>
-        <span class="k">raise</span> <span class="ne">StopIteration</span>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns string representation of the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span>
-
-    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        get the length of the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Allows indexing of the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">run</span><span class="p">(</span><span class="n">worker</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Keyboard interrupt detected, shutting down&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">_exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># A hard exit is required to kill the logging thread</span>
 
 
-<span class="k">class</span> <span class="nc">SeqCategory</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Enum for the different sequence categories.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">DNA</span> <span class="o">=</span> <span class="s2">&quot;DNA&quot;</span>
-    <span class="n">RNA</span> <span class="o">=</span> <span class="s2">&quot;RNA&quot;</span>
-    <span class="n">MODIFIED</span> <span class="o">=</span> <span class="s2">&quot;MODIFIED&quot;</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;OpenOligo Runner: Natural exit, SHOULD NEVER HAPPEN.&quot;</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1201,29 +1195,124 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   </header>
 
   <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="openoligo.scripts.runner.logger" class="name">var <span class="ident">logger</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="openoligo.scripts.runner.ol" class="name">var <span class="ident">ol</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="openoligo.scripts.runner.rl" class="name">var <span class="ident">rl</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="openoligo.scripts.runner.root_logger" class="name">var <span class="ident">root_logger</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
 
     <h2 class="section-title" id="header-functions">Functions</h2>
       
   <div class="item">
-    <div class="name def" id="openoligo.seq.is_valid_dna">
-    <p>def <span class="ident">is_valid_dna</span>(</p><p>sequence)</p>
+    <div class="name def" id="openoligo.scripts.runner.main">
+    <p>def <span class="ident">main</span>(</p><p>)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Check if a sequence is a valid DNA sequence.</p></div>
+    <div class="desc"><p>Main entry point of the runner.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.seq.is_valid_dna', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.seq.is_valid_dna" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">is_valid_dna</span><span class="p">(</span><span class="n">sequence</span><span class="p">):</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.scripts.runner.main', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.scripts.runner.main" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Check if a sequence is a valid DNA sequence.</span>
+<span class="sd">    Main entry point of the runner.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^[ATCGatcg]*$&quot;</span>
-    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">sequence</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;OpenOligo Runner: Starting&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">run</span><span class="p">(</span><span class="n">worker</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Keyboard interrupt detected, shutting down&quot;</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">_exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># A hard exit is required to kill the logging thread</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.scripts.runner.worker">
+    <p>async def <span class="ident">worker</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>This is the actual worker.</p>
+<p>Essentially, it will loop forever, checking for new tasks in the database and executing them.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.scripts.runner.worker', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.scripts.runner.worker" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">worker</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is the actual worker.</span>
+
+<span class="sd">    Essentially, it will loop forever, checking for new tasks in the database and executing them.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;OpenOligo Runner: Worker process started&quot;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">db_init</span><span class="p">(</span><span class="n">get_db_url</span><span class="p">(</span><span class="n">__platform__</span><span class="p">))</span>
+    <span class="n">inst</span> <span class="o">=</span> <span class="n">Instrument</span><span class="p">()</span>
+    <span class="n">inst</span><span class="o">.</span><span class="n">register_error_handler</span><span class="p">(</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_next_task</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">task</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="k">continue</span>  <span class="c1"># This will loop forever until a task is available</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Got new task: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">set_task_in_progress</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Task </span><span class="si">%d</span><span class="s2"> set to in progress&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+        <span class="c1"># Set the log file for this task</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;task_</span><span class="si">{</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">await</span> <span class="n">set_log_file</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">)</span>
+        <span class="n">rl</span><span class="o">.</span><span class="n">change_log_file</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="k">await</span> <span class="n">set_started_now</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">update_task_status</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">IN_PROGRESS</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting task </span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+        <span class="c1"># Execute the task</span>
+        <span class="n">inst</span><span class="o">.</span><span class="n">pressure_on</span><span class="p">()</span>
+        <span class="k">await</span> <span class="n">synthesize</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">Seq</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">sequence</span><span class="p">))</span>
+        <span class="n">inst</span><span class="o">.</span><span class="n">pressure_off</span><span class="p">()</span>
+
+        <span class="k">await</span> <span class="n">set_completed_now</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">update_task_status</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">COMPLETE</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Task </span><span class="si">%d</span><span class="s2"> complete&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1232,157 +1321,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   </div>
   
 
-    <h2 class="section-title" id="header-classes">Classes</h2>
-      
-      <div class="item">
-      <p id="openoligo.seq.Seq" class="name">class <span class="ident">Seq</span></p>
-      
-  
-    <div class="desc"><p>Representation of the sequence as a string.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.seq.Seq', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.seq.Seq" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Seq</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Representation of the sequence as a string.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_dna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid DNA sequence&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Allows iteration over the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the next base in the sequence.</span>
-
-<span class="sd">        raises:</span>
-<span class="sd">            StopIteration: if the end of the sequence is reached.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">):</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">return</span> <span class="n">result</span>
-        <span class="k">raise</span> <span class="ne">StopIteration</span>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns string representation of the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span>
-
-    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        get the length of the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Allows indexing of the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-</pre></div>
-
-  </div>
-</div>
-
-
-      <div class="class">
-      </div>
-      </div>
-      
-      <div class="item">
-      <p id="openoligo.seq.SeqCategory" class="name">class <span class="ident">SeqCategory</span></p>
-      
-  
-    <div class="desc"><p>Enum for the different sequence categories.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.seq.SeqCategory', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.seq.SeqCategory" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">SeqCategory</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Enum for the different sequence categories.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">DNA</span> <span class="o">=</span> <span class="s2">&quot;DNA&quot;</span>
-    <span class="n">RNA</span> <span class="o">=</span> <span class="s2">&quot;RNA&quot;</span>
-    <span class="n">MODIFIED</span> <span class="o">=</span> <span class="s2">&quot;MODIFIED&quot;</span>
-</pre></div>
-
-  </div>
-</div>
-
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="/builtins.str.ext">builtins.str</a></li>
-          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
-          </ul>
-          <h3>Class variables</h3>
-            <div class="item">
-            <p id="openoligo.seq.SeqCategory.DNA" class="name">var <span class="ident">DNA</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.seq.SeqCategory.MODIFIED" class="name">var <span class="ident">MODIFIED</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.seq.SeqCategory.RNA" class="name">var <span class="ident">RNA</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.seq.SeqCategory.name" class="name">var <span class="ident">name</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.seq.SeqCategory.value" class="name">var <span class="ident">value</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-      </div>
-      </div>
 
   </section>
 </article>

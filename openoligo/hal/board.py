@@ -21,10 +21,10 @@ class FixedPinoutDict(TypedDict):
     rxn_out: Valve
     sol: Valve
     gas: Valve
-    valve_pressure: Switch
-    gas_pressure: Switch
-    valve_regulator_err: DigitalSensor
-    flow_regulator_err: DigitalSensor
+    liquid_pressure: Switch
+    air_pressure: Switch
+    liquid_regulator_err: DigitalSensor
+    air_regulator_err: DigitalSensor
 
 
 fixed_pinout: FixedPinoutDict = {
@@ -35,10 +35,10 @@ fixed_pinout: FixedPinoutDict = {
     "rxn_out": Valve(gpio_pin=board.P13, role=ValveRole.TRANSIT),
     "sol": Valve(gpio_pin=board.P3),
     "gas": Valve(gpio_pin=board.P10),
-    "valve_pressure": Switch(gpio_pin=board.P11),
-    "gas_pressure": Switch(gpio_pin=board.P29),
-    "valve_regulator_err": DigitalSensor(gpio_pin=board.P31),
-    "flow_regulator_err": DigitalSensor(gpio_pin=board.P33),
+    "liquid_pressure": Switch(gpio_pin=board.P11),
+    "air_pressure": Switch(gpio_pin=board.P29),
+    "liquid_regulator_err": DigitalSensor(gpio_pin=board.P31),
+    "air_regulator_err": DigitalSensor(gpio_pin=board.P33),
 }
 
 
@@ -129,6 +129,14 @@ class Pinout(metaclass=Singleton):
             raise NoSuchPinInPinout(
                 f"Pin {name} not found in pinout. \n\nAvailable pins are: {list(self.__pinout)}"
             ) from exc
+
+    def get_error_sensors(self) -> dict[str, DigitalSensor]:
+        """
+        Return a dictionary of all error sensors with their names.
+        """
+        return {
+            name: sensor for name, sensor in self.fixed.items() if isinstance(sensor, DigitalSensor)
+        }
 
     def __repr__(self):
         """

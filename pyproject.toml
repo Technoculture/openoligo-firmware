@@ -10,6 +10,7 @@ keywords = ["DNA", "synthesis", "genetics", "open-source"]
 [tool.poetry.scripts]
 oligo-server = 'openoligo.scripts.server:main'
 oligo-runner = 'openoligo.scripts.runner:main'
+oligo-hil = 'openoligo.scripts.hil:main'
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -57,7 +58,6 @@ addopts = "--cov=openoligo --cov-config=pyproject.toml --cov-report=term-missing
 
 [tool.coverage.run]
 source = ["openoligo"]
-#omit = ["**/types.py"]
 
 [tool.poetry.extras]
 rpi = ["RPi.GPIO"]

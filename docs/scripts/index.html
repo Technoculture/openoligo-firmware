@@ -4,8 +4,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
   
-  <title>openoligo.seq API documentation</title>
-  <meta name="description" content="Sequence class for DNA, RNA and modified Nucleic Acid sequences." />
+  <title>openoligo.scripts API documentation</title>
+  <meta name="description" content="Provides the top level executables: Runner and Server for OpenOligo Instrument." />
 
 
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -1061,27 +1061,15 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       </ul>
     </li>
 
-    <li class="set"><h3><a href="#header-functions">Functions</a></h3>
-      
-  <ul>
-    <li class="mono"><a href="#openoligo.seq.is_valid_dna">is_valid_dna</a></li>
-  </ul>
 
-    </li>
 
-    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
+    <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
       <ul>
-        <li class="mono">
-        <span class="class_name"><a href="#openoligo.seq.Seq">Seq</a></span>
-        
-        </li>
-        <li class="mono">
-        <span class="class_name"><a href="#openoligo.seq.SeqCategory">SeqCategory</a></span>
-        
-        </li>
+        <li class="mono"><a href="hil.html">openoligo.scripts.hil</a></li>
+        <li class="mono"><a href="runner.html">openoligo.scripts.runner</a></li>
+        <li class="mono"><a href="server.html">openoligo.scripts.server</a></li>
       </ul>
     </li>
-
     </ul>
   </div>
 
@@ -1092,108 +1080,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">openoligo.seq</span> module</h1>
-  <p>Sequence class for DNA, RNA and modified Nucleic Acid sequences.</p>
+  <h1 class="title"><span class="name">openoligo.scripts</span> module</h1>
+  <p>Provides the top level executables: Runner and Server for OpenOligo Instrument.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.seq', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.seq" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.scripts', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.scripts" class="source">
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Sequence class for DNA, RNA and modified Nucleic Acid sequences.</span>
+<span class="sd">Provides the top level executables: Runner and Server for OpenOligo Instrument.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-
-
-<span class="k">def</span> <span class="nf">is_valid_dna</span><span class="p">(</span><span class="n">sequence</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Check if a sequence is a valid DNA sequence.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^[ATCGatcg]*$&quot;</span>
-    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">sequence</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">return</span> <span class="kc">False</span>
-
-
-<span class="c1"># phosphoramidite_dict = {</span>
-<span class="c1">#    &quot;A&quot;: &quot;Adenosine&quot;,</span>
-<span class="c1">#    &quot;T&quot;: &quot;Thymidine&quot;,</span>
-<span class="c1">#    &quot;G&quot;: &quot;Guanosine&quot;,</span>
-<span class="c1">#    &quot;C&quot;: &quot;Cytidine&quot;,</span>
-<span class="c1">#    &quot;U&quot;: &quot;Uridine&quot;,</span>
-<span class="c1">#    &quot;5mC&quot;: &quot;5-Methylcytidine&quot;,</span>
-<span class="c1">#    &quot;GalNAc&quot;: &quot;N-Acetylgalactosamine&quot;,</span>
-<span class="c1"># }</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># def is_valid_oligo(sequence: str) -&gt; bool:</span>
-<span class="c1">#    &quot;&quot;&quot;</span>
-<span class="c1">#    Given a sequence, check if it is a valid oligo sequence.</span>
-<span class="c1">#</span>
-<span class="c1">#    Example:</span>
-<span class="c1">#        AAT5mC5mCAT5mC-GalNAc -&gt; valid</span>
-<span class="c1">#    &quot;&quot;&quot;</span>
-
-
-<span class="k">class</span> <span class="nc">Seq</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Representation of the sequence as a string.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_dna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid DNA sequence&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Allows iteration over the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the next base in the sequence.</span>
-
-<span class="sd">        raises:</span>
-<span class="sd">            StopIteration: if the end of the sequence is reached.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">):</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">return</span> <span class="n">result</span>
-        <span class="k">raise</span> <span class="ne">StopIteration</span>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns string representation of the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span>
-
-    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        get the length of the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Allows indexing of the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-
-
-<span class="k">class</span> <span class="nc">SeqCategory</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Enum for the different sequence categories.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">DNA</span> <span class="o">=</span> <span class="s2">&quot;DNA&quot;</span>
-    <span class="n">RNA</span> <span class="o">=</span> <span class="s2">&quot;RNA&quot;</span>
-    <span class="n">MODIFIED</span> <span class="o">=</span> <span class="s2">&quot;MODIFIED&quot;</span>
 </pre></div>
 
   </div>
@@ -1202,188 +1096,30 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
   <section id="section-items">
 
-    <h2 class="section-title" id="header-functions">Functions</h2>
-      
-  <div class="item">
-    <div class="name def" id="openoligo.seq.is_valid_dna">
-    <p>def <span class="ident">is_valid_dna</span>(</p><p>sequence)</p>
-    </div>
-    
 
-    
-  
-    <div class="desc"><p>Check if a sequence is a valid DNA sequence.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.seq.is_valid_dna', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.seq.is_valid_dna" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">is_valid_dna</span><span class="p">(</span><span class="n">sequence</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Check if a sequence is a valid DNA sequence.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;^[ATCGatcg]*$&quot;</span>
-    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">sequence</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">return</span> <span class="kc">False</span>
-</pre></div>
 
-  </div>
-</div>
-
-  </div>
-  
-
-    <h2 class="section-title" id="header-classes">Classes</h2>
-      
+    <h2 class="section-title" id="header-submodules">Sub-modules</h2>
       <div class="item">
-      <p id="openoligo.seq.Seq" class="name">class <span class="ident">Seq</span></p>
+      <p class="name"><a href="hil.html">openoligo.scripts.hil</a></p>
       
   
-    <div class="desc"><p>Representation of the sequence as a string.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.seq.Seq', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.seq.Seq" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Seq</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Representation of the sequence as a string.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_valid_dna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid DNA sequence&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
-
-    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Allows iteration over the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the next base in the sequence.</span>
-
-<span class="sd">        raises:</span>
-<span class="sd">            StopIteration: if the end of the sequence is reached.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">):</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">return</span> <span class="n">result</span>
-        <span class="k">raise</span> <span class="ne">StopIteration</span>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns string representation of the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span>
-
-    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        get the length of the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Allows indexing of the sequence.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-</pre></div>
-
-  </div>
-</div>
-
-
-      <div class="class">
       </div>
-      </div>
-      
       <div class="item">
-      <p id="openoligo.seq.SeqCategory" class="name">class <span class="ident">SeqCategory</span></p>
+      <p class="name"><a href="runner.html">openoligo.scripts.runner</a></p>
       
   
-    <div class="desc"><p>Enum for the different sequence categories.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.seq.SeqCategory', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.seq.SeqCategory" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">SeqCategory</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Enum for the different sequence categories.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <div class="desc"><p>Runner Script.</p>
+<p>This script runs the infinite loop that checks for new tasks and executes them.</p></div>
 
-    <span class="n">DNA</span> <span class="o">=</span> <span class="s2">&quot;DNA&quot;</span>
-    <span class="n">RNA</span> <span class="o">=</span> <span class="s2">&quot;RNA&quot;</span>
-    <span class="n">MODIFIED</span> <span class="o">=</span> <span class="s2">&quot;MODIFIED&quot;</span>
-</pre></div>
-
-  </div>
-</div>
-
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="/builtins.str.ext">builtins.str</a></li>
-          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
-          </ul>
-          <h3>Class variables</h3>
-            <div class="item">
-            <p id="openoligo.seq.SeqCategory.DNA" class="name">var <span class="ident">DNA</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.seq.SeqCategory.MODIFIED" class="name">var <span class="ident">MODIFIED</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.seq.SeqCategory.RNA" class="name">var <span class="ident">RNA</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.seq.SeqCategory.name" class="name">var <span class="ident">name</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="openoligo.seq.SeqCategory.value" class="name">var <span class="ident">value</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
       </div>
-      </div>
+      <div class="item">
+      <p class="name"><a href="server.html">openoligo.scripts.server</a></p>
+      
+  
+    <div class="desc"><p>Script to start the REST API server for OpenOligo.</p></div>
 
+      </div>
   </section>
 </article>
   <div class="clear"> </div>

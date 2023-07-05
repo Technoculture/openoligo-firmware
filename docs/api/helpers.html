@@ -1067,6 +1067,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <li class="mono"><a href="#openoligo.api.helpers.get_log_file">get_log_file</a></li>
     <li class="mono"><a href="#openoligo.api.helpers.get_next_task">get_next_task</a></li>
     <li class="mono"><a href="#openoligo.api.helpers.set_completed_now">set_completed_now</a></li>
+    <li class="mono"><a href="#openoligo.api.helpers.set_failed_now">set_failed_now</a></li>
     <li class="mono"><a href="#openoligo.api.helpers.set_log_file">set_log_file</a></li>
     <li class="mono"><a href="#openoligo.api.helpers.set_started_now">set_started_now</a></li>
     <li class="mono"><a href="#openoligo.api.helpers.set_task_in_progress">set_task_in_progress</a></li>
@@ -1113,6 +1114,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">set_completed_now</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the completed_at timestamp of a synthesis task.&quot;&quot;&quot;</span>
     <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">completed_at</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">set_failed_now</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the completed_at timestamp of a synthesis task.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">update_task_status</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">FAILED</span><span class="p">)</span>
 
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">set_task_in_progress</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
@@ -1212,6 +1218,29 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">set_completed_now</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the completed_at timestamp of a synthesis task.&quot;&quot;&quot;</span>
     <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">completed_at</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.api.helpers.set_failed_now">
+    <p>async def <span class="ident">set_failed_now</span>(</p><p>task_id: int)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Set the completed_at timestamp of a synthesis task.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.helpers.set_failed_now', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.helpers.set_failed_now" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">set_failed_now</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the completed_at timestamp of a synthesis task.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">update_task_status</span><span class="p">(</span><span class="n">task_id</span><span class="p">,</span> <span class="n">TaskStatus</span><span class="o">.</span><span class="n">FAILED</span><span class="p">)</span>
 </pre></div>
 
   </div>

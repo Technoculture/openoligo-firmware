@@ -1,5 +1,5 @@
 """
-Imports all the modules in the utils directory.
+Various unrelated modules and functions for logging, simulation, busy waiting, etc.
 """
 from openoligo.utils.sim import SIMULATION_SPEEDUP_FACTOR
 from openoligo.utils.wait import ms, wait, wait_async

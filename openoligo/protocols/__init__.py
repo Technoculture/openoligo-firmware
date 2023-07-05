@@ -1,3 +1,3 @@
 """
-Import convenience for the protocol module.
+Protocols provide built-in protocols for common synthesis workflows.
 """

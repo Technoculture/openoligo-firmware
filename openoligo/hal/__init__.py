@@ -1,5 +1,8 @@
 """
-Driver imports for convenience.
+Hardware Abstraction Layer for OpenOligo.
+
+This includes multiple layers of abstractions on top of GPIO pins.
+The GPIO pins themselves are abstracted to be generic for Raspberry Pi, BeagleBone, etc.
 """
 
 from openoligo.hal.board import Pinout, list_configurable_pins

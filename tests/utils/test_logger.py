@@ -1,6 +1,6 @@
 import logging
 from logging.handlers import RotatingFileHandler
-from unittest.mock import MagicMock, create_autospec, patch, call
+from unittest.mock import MagicMock, call, create_autospec, patch
 
 import pytest
 

@@ -1077,6 +1077,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
           
   <ul>
     <li class="mono"><a href="#openoligo.hal.instrument.Instrument.all_except">all_except</a></li>
+    <li class="mono"><a href="#openoligo.hal.instrument.Instrument.pressure_off">pressure_off</a></li>
+    <li class="mono"><a href="#openoligo.hal.instrument.Instrument.pressure_on">pressure_on</a></li>
+    <li class="mono"><a href="#openoligo.hal.instrument.Instrument.register_error_handler">register_error_handler</a></li>
     <li class="mono"><a href="#openoligo.hal.instrument.Instrument.validate_valve_set">validate_valve_set</a></li>
   </ul>
 
@@ -1103,9 +1106,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">Unified access to configuring and using the instrument.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+
+<span class="kn">import</span> <span class="nn">anyio</span>
 
 <span class="kn">from</span> <span class="nn">openoligo.hal.board</span> <span class="kn">import</span> <span class="n">Pinout</span>
-<span class="kn">from</span> <span class="nn">openoligo.hal.devices</span> <span class="kn">import</span> <span class="n">Valve</span>
+<span class="kn">from</span> <span class="nn">openoligo.hal.devices</span> <span class="kn">import</span> <span class="n">DigitalSensor</span><span class="p">,</span> <span class="n">Valve</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.gpio</span> <span class="kn">import</span> <span class="n">get_gpio</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.types</span> <span class="kn">import</span> <span class="n">OneDestinationException</span><span class="p">,</span> <span class="n">OneSourceException</span><span class="p">,</span> <span class="n">ValveRole</span><span class="p">,</span> <span class="n">board</span>
 <span class="kn">from</span> <span class="nn">openoligo.utils.singleton</span> <span class="kn">import</span> <span class="n">Singleton</span>
@@ -1218,6 +1224,47 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s2">&quot;Set </span><span class="si">%s</span><span class="s2"> to [bold]open[/] and all others to close.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
         <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">register_error_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="kc">None</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Register an error handler.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            handler: A function that takes no arguments and returns nothing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pressure_error_sensors</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DigitalSensor</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">get_error_sensors</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">sensor</span> <span class="ow">in</span> <span class="n">pressure_error_sensors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">sensor</span><span class="o">.</span><span class="n">register_callback</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">pressure_on</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Switches the gas inlet ON by switching on the pressure regulator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;air_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;liquid_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">pressure_off</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Switches the gas inlet ON by switching on the pressure regulator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;liquid_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;air_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#async def monitor_pressure(self) -&gt; None:</span>
+    <span class="c1">#    &quot;&quot;&quot;</span>
+    <span class="c1">#    Monitor the pressure sensors.</span>
+    <span class="c1">#    &quot;&quot;&quot;</span>
+    <span class="c1">#    pressure_error_sensors: dict[str, DigitalSensor] = self.pinout.get_error_sensors()</span>
+    <span class="c1">#    while True:</span>
+    <span class="c1">#        pressure_errors = {k: v.value() for k, v in pressure_error_sensors.items()}</span>
+    <span class="c1">#        logging.debug(&quot;Pressure errors: %s&quot;, pressure_errors)</span>
+    <span class="c1">#        if pressure_errors[&quot;liquid_pressure&quot;] and pressure_errors[&quot;air_pressure&quot;]:</span>
+    <span class="c1">#            raise RuntimeError(&quot;Both liquid and air pressure are low&quot;)</span>
+    <span class="c1">#        elif pressure_errors[&quot;liquid_pressure&quot;]:</span>
+    <span class="c1">#            raise RuntimeError(&quot;Liquid pressure error&quot;)</span>
+    <span class="c1">#        elif pressure_errors[&quot;air_pressure&quot;]:</span>
+    <span class="c1">#            raise RuntimeError(&quot;Air pressure error&quot;)</span>
+    <span class="c1">#        await anyio.sleep(1)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1343,6 +1390,47 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             <span class="s2">&quot;Set </span><span class="si">%s</span><span class="s2"> to [bold]open[/] and all others to close.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
         <span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">register_error_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="kc">None</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Register an error handler.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            handler: A function that takes no arguments and returns nothing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pressure_error_sensors</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DigitalSensor</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">get_error_sensors</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">sensor</span> <span class="ow">in</span> <span class="n">pressure_error_sensors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">sensor</span><span class="o">.</span><span class="n">register_callback</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">pressure_on</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Switches the gas inlet ON by switching on the pressure regulator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;air_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;liquid_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">pressure_off</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Switches the gas inlet ON by switching on the pressure regulator.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;liquid_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;air_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1">#async def monitor_pressure(self) -&gt; None:</span>
+    <span class="c1">#    &quot;&quot;&quot;</span>
+    <span class="c1">#    Monitor the pressure sensors.</span>
+    <span class="c1">#    &quot;&quot;&quot;</span>
+    <span class="c1">#    pressure_error_sensors: dict[str, DigitalSensor] = self.pinout.get_error_sensors()</span>
+    <span class="c1">#    while True:</span>
+    <span class="c1">#        pressure_errors = {k: v.value() for k, v in pressure_error_sensors.items()}</span>
+    <span class="c1">#        logging.debug(&quot;Pressure errors: %s&quot;, pressure_errors)</span>
+    <span class="c1">#        if pressure_errors[&quot;liquid_pressure&quot;] and pressure_errors[&quot;air_pressure&quot;]:</span>
+    <span class="c1">#            raise RuntimeError(&quot;Both liquid and air pressure are low&quot;)</span>
+    <span class="c1">#        elif pressure_errors[&quot;liquid_pressure&quot;]:</span>
+    <span class="c1">#            raise RuntimeError(&quot;Liquid pressure error&quot;)</span>
+    <span class="c1">#        elif pressure_errors[&quot;air_pressure&quot;]:</span>
+    <span class="c1">#            raise RuntimeError(&quot;Air pressure error&quot;)</span>
+    <span class="c1">#        await anyio.sleep(1)</span>
+
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a string representation of the instrument.</span>
@@ -1395,6 +1483,89 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
         <span class="s2">&quot;Set </span><span class="si">%s</span><span class="s2"> to [bold]open[/] and all others to close.&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
     <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.instrument.Instrument.pressure_off">
+    <p>def <span class="ident">pressure_off</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Switches the gas inlet ON by switching on the pressure regulator.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.instrument.Instrument.pressure_off', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.instrument.Instrument.pressure_off" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">pressure_off</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Switches the gas inlet ON by switching on the pressure regulator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;liquid_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;air_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.instrument.Instrument.pressure_on">
+    <p>def <span class="ident">pressure_on</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Switches the gas inlet ON by switching on the pressure regulator.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.instrument.Instrument.pressure_on', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.instrument.Instrument.pressure_on" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">pressure_on</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Switches the gas inlet ON by switching on the pressure regulator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;air_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;liquid_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="openoligo.hal.instrument.Instrument.register_error_handler">
+    <p>def <span class="ident">register_error_handler</span>(</p><p>self, handler: Callable[[NoneType], NoneType])</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Register an error handler.</p>
+<p>Args:
+    handler: A function that takes no arguments and returns nothing.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.hal.instrument.Instrument.register_error_handler', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.hal.instrument.Instrument.register_error_handler" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">register_error_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="kc">None</span><span class="p">],</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Register an error handler.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        handler: A function that takes no arguments and returns nothing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pressure_error_sensors</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DigitalSensor</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">get_error_sensors</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">sensor</span> <span class="ow">in</span> <span class="n">pressure_error_sensors</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">sensor</span><span class="o">.</span><span class="n">register_callback</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
 </pre></div>
 
   </div>
