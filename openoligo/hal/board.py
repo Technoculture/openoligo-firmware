@@ -25,6 +25,8 @@ class FixedPinoutDict(TypedDict):
     air_pressure: Switch
     liquid_regulator_err: DigitalSensor
     air_regulator_err: DigitalSensor
+    server_led: Switch
+    runner_led: Switch
 
 
 fixed_pinout: FixedPinoutDict = {
@@ -39,6 +41,17 @@ fixed_pinout: FixedPinoutDict = {
     "air_pressure": Switch(gpio_pin=board.P29),
     "liquid_regulator_err": DigitalSensor(gpio_pin=board.P31),
     "air_regulator_err": DigitalSensor(gpio_pin=board.P33),
+    "server_led": Switch(gpio_pin=board.P36),
+    "runner_led": Switch(gpio_pin=board.P38),
+}
+
+reactants = {
+    "ACT": Valve(gpio_pin=board.P18),
+    "OXI": Valve(gpio_pin=board.P19),
+    "CAP1": Valve(gpio_pin=board.P21),
+    "CAP2": Valve(gpio_pin=board.P22),
+    "DEB": Valve(gpio_pin=board.P23),
+    "CLDE": Valve(gpio_pin=board.P24),
 }
 
 
@@ -59,14 +72,14 @@ class Pinout(metaclass=Singleton):
     def __init__(
         self,
         phosphoramidites: Dict[str, Valve],
-        reactants: Dict[str, Valve],
     ):
         """
         Initialize the pinout.
         """
         self.fixed = fixed_pinout
-        self.phosphoramidites = phosphoramidites
         self.reactants = reactants
+
+        self.phosphoramidites = phosphoramidites
 
         self.__pinout: Dict[str, Switchable] = {}
         self.init_pinout()

@@ -7,7 +7,7 @@ APIDIR:=$(LIBNAME)/api
 EXECNAME:=$(EXAMPLEDIR)/dna_synthesis.py
 SERVER_EXECNAME:=$(APIDIR)/server.py
 
-TARGET_HOSTNAME?=192.168.1.2
+TARGET_HOSTNAME?=openoligo.local
 TARGET_USER?=root
 TARGET_DIR?=/home/$(TARGET_USER)
 LOCAL_DIR:=$(shell pwd)
@@ -65,6 +65,9 @@ run:
 
 server:
 	@python $(SERVER_EXECNAME)
+
+build:
+	@poetry build
 
 format:
 	@isort $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR) $(EXECNAME)
@@ -129,7 +132,7 @@ jupyter:
 	@echo
 	ssh -N -L 8880:localhost:8888 $(TARGET_USER)@$(TARGET_HOSTNAME)
 
-deploy:
+deploy: req build
 	rsync -avz $(LOCAL_DIR) $(TARGET_USER)@$(TARGET_HOSTNAME):$(TARGET_DIR)
 
 pull:

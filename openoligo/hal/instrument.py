@@ -20,14 +20,6 @@ default_pinout = Pinout(
         "G": Valve(gpio_pin=board.P15),
         "T": Valve(gpio_pin=board.P16),
     },
-    reactants={
-        "ACT": Valve(gpio_pin=board.P18),
-        "OXI": Valve(gpio_pin=board.P19),
-        "CAP1": Valve(gpio_pin=board.P21),
-        "CAP2": Valve(gpio_pin=board.P22),
-        "DEB": Valve(gpio_pin=board.P23),
-        "CLDE": Valve(gpio_pin=board.P24),
-    },
 )
 
 
