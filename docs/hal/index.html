@@ -1635,14 +1635,14 @@ set self.<strong>traceback</strong> to tb and return self.</p></div>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">phosphoramidites</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Valve</span><span class="p">],</span>
-        <span class="n">reactants</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Valve</span><span class="p">],</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the pinout.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fixed</span> <span class="o">=</span> <span class="n">fixed_pinout</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">phosphoramidites</span> <span class="o">=</span> <span class="n">phosphoramidites</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reactants</span> <span class="o">=</span> <span class="n">reactants</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phosphoramidites</span> <span class="o">=</span> <span class="n">phosphoramidites</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__pinout</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Switchable</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_pinout</span><span class="p">()</span>

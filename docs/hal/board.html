@@ -1064,6 +1064,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       
   <ul>
     <li class="mono"><a href="#openoligo.hal.board.fixed_pinout">fixed_pinout</a></li>
+    <li class="mono"><a href="#openoligo.hal.board.reactants">reactants</a></li>
   </ul>
 
     </li>
@@ -1155,6 +1156,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">air_pressure</span><span class="p">:</span> <span class="n">Switch</span>
     <span class="n">liquid_regulator_err</span><span class="p">:</span> <span class="n">DigitalSensor</span>
     <span class="n">air_regulator_err</span><span class="p">:</span> <span class="n">DigitalSensor</span>
+    <span class="n">server_led</span><span class="p">:</span> <span class="n">Switch</span>
+    <span class="n">runner_led</span><span class="p">:</span> <span class="n">Switch</span>
 
 
 <span class="n">fixed_pinout</span><span class="p">:</span> <span class="n">FixedPinoutDict</span> <span class="o">=</span> <span class="p">{</span>
@@ -1169,6 +1172,17 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="s2">&quot;air_pressure&quot;</span><span class="p">:</span> <span class="n">Switch</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P29</span><span class="p">),</span>
     <span class="s2">&quot;liquid_regulator_err&quot;</span><span class="p">:</span> <span class="n">DigitalSensor</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P31</span><span class="p">),</span>
     <span class="s2">&quot;air_regulator_err&quot;</span><span class="p">:</span> <span class="n">DigitalSensor</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P33</span><span class="p">),</span>
+    <span class="s2">&quot;server_led&quot;</span><span class="p">:</span> <span class="n">Switch</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P36</span><span class="p">),</span>
+    <span class="s2">&quot;runner_led&quot;</span><span class="p">:</span> <span class="n">Switch</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P38</span><span class="p">),</span>
+<span class="p">}</span>
+
+<span class="n">reactants</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;ACT&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P18</span><span class="p">),</span>
+    <span class="s2">&quot;OXI&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P19</span><span class="p">),</span>
+    <span class="s2">&quot;CAP1&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P21</span><span class="p">),</span>
+    <span class="s2">&quot;CAP2&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P22</span><span class="p">),</span>
+    <span class="s2">&quot;DEB&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P23</span><span class="p">),</span>
+    <span class="s2">&quot;CLDE&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P24</span><span class="p">),</span>
 <span class="p">}</span>
 
 
@@ -1189,14 +1203,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">phosphoramidites</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Valve</span><span class="p">],</span>
-        <span class="n">reactants</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Valve</span><span class="p">],</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the pinout.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fixed</span> <span class="o">=</span> <span class="n">fixed_pinout</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">phosphoramidites</span> <span class="o">=</span> <span class="n">phosphoramidites</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reactants</span> <span class="o">=</span> <span class="n">reactants</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phosphoramidites</span> <span class="o">=</span> <span class="n">phosphoramidites</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__pinout</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Switchable</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_pinout</span><span class="p">()</span>
@@ -1289,6 +1303,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 
       </div>
+      <div class="item">
+      <p id="openoligo.hal.board.reactants" class="name">var <span class="ident">reactants</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
 
     <h2 class="section-title" id="header-functions">Functions</h2>
       
@@ -1346,6 +1368,8 @@ These ar all pins in the board that are not part of the fiixed pinout.</p></div>
     <span class="n">air_pressure</span><span class="p">:</span> <span class="n">Switch</span>
     <span class="n">liquid_regulator_err</span><span class="p">:</span> <span class="n">DigitalSensor</span>
     <span class="n">air_regulator_err</span><span class="p">:</span> <span class="n">DigitalSensor</span>
+    <span class="n">server_led</span><span class="p">:</span> <span class="n">Switch</span>
+    <span class="n">runner_led</span><span class="p">:</span> <span class="n">Switch</span>
 </pre></div>
 
   </div>
@@ -1550,14 +1574,14 @@ In either case, this is followed by: for k in F:  D[k] = F[k]</p></div>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">phosphoramidites</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Valve</span><span class="p">],</span>
-        <span class="n">reactants</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Valve</span><span class="p">],</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize the pinout.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fixed</span> <span class="o">=</span> <span class="n">fixed_pinout</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">phosphoramidites</span> <span class="o">=</span> <span class="n">phosphoramidites</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reactants</span> <span class="o">=</span> <span class="n">reactants</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phosphoramidites</span> <span class="o">=</span> <span class="n">phosphoramidites</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__pinout</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Switchable</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_pinout</span><span class="p">()</span>

@@ -1108,13 +1108,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
 
-<span class="kn">import</span> <span class="nn">anyio</span>
-
 <span class="kn">from</span> <span class="nn">openoligo.hal.board</span> <span class="kn">import</span> <span class="n">Pinout</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.devices</span> <span class="kn">import</span> <span class="n">DigitalSensor</span><span class="p">,</span> <span class="n">Valve</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.gpio</span> <span class="kn">import</span> <span class="n">get_gpio</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.types</span> <span class="kn">import</span> <span class="n">OneDestinationException</span><span class="p">,</span> <span class="n">OneSourceException</span><span class="p">,</span> <span class="n">ValveRole</span><span class="p">,</span> <span class="n">board</span>
 <span class="kn">from</span> <span class="nn">openoligo.utils.singleton</span> <span class="kn">import</span> <span class="n">Singleton</span>
+
+<span class="c1"># import anyio</span>
+
 
 <span class="n">default_pinout</span> <span class="o">=</span> <span class="n">Pinout</span><span class="p">(</span>
     <span class="n">phosphoramidites</span><span class="o">=</span><span class="p">{</span>
@@ -1122,14 +1123,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P28</span><span class="p">),</span>
         <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P15</span><span class="p">),</span>
         <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P16</span><span class="p">),</span>
-    <span class="p">},</span>
-    <span class="n">reactants</span><span class="o">=</span><span class="p">{</span>
-        <span class="s2">&quot;ACT&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P18</span><span class="p">),</span>
-        <span class="s2">&quot;OXI&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P19</span><span class="p">),</span>
-        <span class="s2">&quot;CAP1&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P21</span><span class="p">),</span>
-        <span class="s2">&quot;CAP2&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P22</span><span class="p">),</span>
-        <span class="s2">&quot;DEB&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P23</span><span class="p">),</span>
-        <span class="s2">&quot;CLDE&quot;</span><span class="p">:</span> <span class="n">Valve</span><span class="p">(</span><span class="n">gpio_pin</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">P24</span><span class="p">),</span>
     <span class="p">},</span>
 <span class="p">)</span>
 
@@ -1250,7 +1243,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;liquid_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;air_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="c1">#async def monitor_pressure(self) -&gt; None:</span>
+    <span class="c1"># async def monitor_pressure(self) -&gt; None:</span>
     <span class="c1">#    &quot;&quot;&quot;</span>
     <span class="c1">#    Monitor the pressure sensors.</span>
     <span class="c1">#    &quot;&quot;&quot;</span>
@@ -1415,7 +1408,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;liquid_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pinout</span><span class="o">.</span><span class="n">fixed</span><span class="p">[</span><span class="s2">&quot;air_pressure&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="c1">#async def monitor_pressure(self) -&gt; None:</span>
+    <span class="c1"># async def monitor_pressure(self) -&gt; None:</span>
     <span class="c1">#    &quot;&quot;&quot;</span>
     <span class="c1">#    Monitor the pressure sensors.</span>
     <span class="c1">#    &quot;&quot;&quot;</span>
