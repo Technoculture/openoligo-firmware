@@ -17,7 +17,8 @@ def log_path(name: Optional[str]) -> str:
     """
     Get the path to the log file
     """
-    log_dir = os.getenv("OO_LOG_DIR", os.path.expanduser("~/.openoligo/logs"))
+    tmp_dir = os.getenv("OO_TMP_DIR", os.path.expanduser("~/.openoligo/"))
+    log_dir = os.path.join(tmp_dir, "logs")
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
         print(f"Created log directory: {log_dir}")
@@ -98,14 +99,14 @@ class OligoLogger:
         if self.rotates:
             raise ValueError("Cannot change log file when rotating is enabled")
 
-        if self.name == new_name:
+        if self.name == new_name:  # pragma: no cover
             logging.warning("Log file name is already set to %s. No change needed.", new_name)
             return
 
         log_level = self.logger.level
 
         for handler in self.logger.handlers[:]:
-            if isinstance(handler, logging.FileHandler):
+            if isinstance(handler, type(logging.FileHandler)):
                 self.logger.removeHandler(handler)
 
         new_file_handler = logging.FileHandler(log_path(new_name))
