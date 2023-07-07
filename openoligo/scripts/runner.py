@@ -18,7 +18,7 @@ from openoligo.api.helpers import (
 from openoligo.api.models import TaskStatus
 from openoligo.hal.instrument import Instrument
 from openoligo.hal.platform import __platform__
-from openoligo.protocols.dna_synthesis import synthesize
+from openoligo.protocols.oligosynthesis import synthesize_ssdna
 from openoligo.seq import Seq
 from openoligo.utils.logger import OligoLogger
 
@@ -62,7 +62,7 @@ async def worker():
 
         # Execute the task
         inst.pressure_on()
-        await synthesize(inst, Seq(task.sequence))
+        await synthesize_ssdna(inst, Seq(task.sequence))
         inst.pressure_off()
 
         await set_completed_now(task.id)

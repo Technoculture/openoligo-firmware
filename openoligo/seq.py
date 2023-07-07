@@ -117,6 +117,11 @@ class Seq:
         """
         return self.seq[key]
 
+    def reverse_complement(self) -> "Seq":
+        """Return the reverse complement of the input sequence"""
+        complement = {"A": "T", "T": "A", "C": "G", "G": "C"}
+        return Seq("".join([complement[base] for base in self.seq[::-1]]))
+
 
 class SeqCategory(str, Enum):
     """

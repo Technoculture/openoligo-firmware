@@ -18,14 +18,14 @@ pip install openoligo
 import asyncio
 
 from openoligo.instrument import Instrument
-from openoligo.protocols.dna_synthesis import synthesize
+from openoligo.protocols.oligosynthesize import synthesize_ssdna
 from openoligo.seq import Seq
 
 
 inst = Instrument()
 
 try:
-    asyncio.run(synthesize(inst, Seq("ATCGAAATTTTT")))
+    asyncio.run(synthesize_ssdna(inst, Seq("ATCGAAATTTTT")))
 except KeyboardInterrupt:
     print("Keyboard interrupt received, exiting...")
 ```

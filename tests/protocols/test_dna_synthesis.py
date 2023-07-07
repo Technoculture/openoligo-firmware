@@ -2,7 +2,7 @@ import asyncio
 from unittest.mock import AsyncMock, patch  # , call
 
 from openoligo.hal.instrument import Instrument
-from openoligo.protocols.dna_synthesis import synthesize
+from openoligo.protocols.oligosynthesis import synthesize_ssdna
 from openoligo.seq import Seq
 from openoligo.steps.flow import send_to_waste_rxn
 from openoligo.utils import wait_async
@@ -17,7 +17,7 @@ def test_synthesize():
         mock_seq = Seq("ATGC")  # or use a mock, depending on Seq class complexity
 
         # Running the function
-        asyncio.run(synthesize(mock_instrument, mock_seq))
+        asyncio.run(synthesize_ssdna(mock_instrument, mock_seq))
 
         ## Checking that the function calls the correct functions in the correct order
         # mock_wait_async.assert_has_calls(

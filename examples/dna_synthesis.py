@@ -5,7 +5,7 @@ A minimal example of using the DNA synthesis API.
 import asyncio
 
 from openoligo.hal.instrument import Instrument
-from openoligo.protocols.dna_synthesis import synthesize
+from openoligo.protocols.oligosynthesis import synthesize_ssdna
 from openoligo.seq import Seq
 from openoligo.utils.logger import OligoLogger
 
@@ -17,7 +17,7 @@ def main():
     inst = Instrument()
 
     try:
-        asyncio.run(synthesize(inst, Seq("ATCGAAATTTTT")))
+        asyncio.run(synthesize_ssdna(inst, Seq("ATCGAAATTTTT")))
         logger.info("Synthesis Complete! Exiting...")
     except KeyboardInterrupt:
         logger.warning("Keyboard interrupt received, exiting...")

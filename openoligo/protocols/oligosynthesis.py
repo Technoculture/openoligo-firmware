@@ -69,7 +69,7 @@ async def deprotect(instrument: Instrument) -> None:
     await wait_async(45)
 
 
-async def synthesize(instrument: Instrument, seq: Seq) -> None:
+async def synthesize_ssdna(instrument: Instrument, seq: Seq) -> None:
     """
     Synthesize a DNA sequence.
 
@@ -118,4 +118,24 @@ async def synthesize(instrument: Instrument, seq: Seq) -> None:
     elapsed_time_in_minutes = ((end_time - start_time) / 60) * utils.SIMULATION_SPEEDUP_FACTOR
     logging.info(
         "Synthesis complete for DNA sequence: '%s' in %s minutes", seq, elapsed_time_in_minutes
+    )
+
+
+async def synthesize_dsdna(instrument: Instrument, seq: Seq) -> None:
+    """Synthesize both strands of a DNA sequence and output them one after the other.
+
+    Args:
+        instrument (Instrument): Instrument object.
+        seq (Seq): DNA sequence to synthesize.
+    """
+    logging.info("Synthesizing the positive strand of DNA sequence: '%s'", seq)
+    await synthesize_ssdna(instrument, seq)
+    logging.info(
+        "Synthesizing the negative strand of DNA sequence: '%s' which is '%s'",
+        seq,
+        seq.reverse_complement(),
+    )
+    await synthesize_ssdna(instrument, seq.reverse_complement())
+    logging.info(
+        "Synthesis complete for both strands: '%s' and '%s'", seq, seq.reverse_complement()
     )
