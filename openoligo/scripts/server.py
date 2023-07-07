@@ -1,17 +1,34 @@
 """
 Script to start the REST API server for OpenOligo.
 """
+import uuid
 from typing import Optional
 
+import requests
 import uvicorn
 from fastapi import Body, FastAPI, HTTPException, status
 from tortoise.exceptions import ValidationError
 
 from openoligo.api.db import db_init, get_db_url
-from openoligo.api.models import SynthesisQueue, SynthesisQueueModel, TaskStatus, ValidSeq
+
+# from openoligo.api.models import Settings  # pylint: disable=unused-import
+from openoligo.api.models import (  # EssentialReagentsModel,; SequencePartReagentsModel,
+    AllReagents,
+    EssentialReagents,
+    SequencePartReagents,
+    Settings,
+    SettingsModel,
+    SynthesisQueue,
+    SynthesisQueueModel,
+    TaskStatus,
+    ValidSeq,
+)
 from openoligo.hal.platform import __platform__
 from openoligo.seq import SeqCategory
 from openoligo.utils.logger import OligoLogger
+
+# from openoligo.api.helpers import get_settings
+
 
 ol = OligoLogger(name="server", rotates=True)
 logger = ol.get_logger()
@@ -63,13 +80,63 @@ app = FastAPI(
 )
 
 
+def get_public_ip() -> str:
+    """Get the public IP address of the instrument."""
+    try:
+        return requests.get("https://api.ipify.org", timeout=1).text
+    except requests.exceptions.Timeout:
+        return ""
+
+
+def get_mac() -> str:
+    """Get the MAC address of the instrument."""
+    return f"{uuid.getnode():012x}"
+
+
+async def service_discovery(register: bool):
+    """
+    Register the service with the discovery service.
+
+    Inform the service discovery node about the service,
+    pass it our mac address, IP address and port
+    """
+    mac = get_mac()
+    ip = get_public_ip()  # pylint: disable=invalid-name
+    port = 9191
+
+    print(f"MAC address: {mac}, IP address: {ip}, Service port: {port} -> {register}")
+
+    # Call the service discovery node and register the service.
+    # response = requests.post(
+    #    "http://service_discovery_node_endpoint",
+    #    json={
+    #        "mac_address": mac,
+    #        "ip_address": ip,
+    #        "port": port,
+    #    },
+    # )
+
+    # Check if the service was registered successfully.
+    # if response.status_code == 200:
+    #    print("Service registered successfully.")
+    # else:
+    #    print(f"Failed to register service. Status code: {response.status_code}")
+
+
 @app.on_event("startup")
 async def startup_event():
     """Startup event for the FastAPI server."""
     logger.info("Starting the API server...")  # pragma: no cover
     db_url = get_db_url(__platform__)  # pragma: no cover
     logger.info("Using database: '%s'", db_url)  # pragma: no cover
+    await service_discovery(True)
     await db_init(db_url)
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Shutdown event for the FastAPI server."""
+    logger.info("Shutting down the API server...")
 
 
 @app.get("/health", status_code=200, tags=["Utilities"])
@@ -177,10 +244,40 @@ async def delete_synthesis_task_by_id(task_id: int):
     return task
 
 
+@app.get(
+    "/about",
+    tags=["Instrument"],
+    response_model=list[SettingsModel],  # type: ignore
+    status_code=200,
+)
+async def get_instrument_info():
+    """Get information about the instrument."""
+    settings = await Settings.first().values()
+    if not settings:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Instrument not configured with an Organisation",
+        )
+    return settings
+
+
+@app.get(
+    "/reagents",
+    tags=["Instrument"],
+    status_code=200,
+    response_model=AllReagents,
+)
+async def get_all_reagents():
+    """Get all reagents."""
+    reactants = await EssentialReagents.all().values()
+    components = await SequencePartReagents.all().values()
+    return AllReagents(reactants=reactants, components=components)
+
+
 def main():
     """Main function to start the server."""
     uvicorn.run(
-        "openoligo.scripts.server:app", host="127.0.0.1", port=9191, reload=True
+        "openoligo.scripts.server:app", host="0.0.0.0", port=9191, reload=True
     )  # pragma: no cover
 
 

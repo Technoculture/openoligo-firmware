@@ -3,9 +3,8 @@ Runner Script.
 
 This script runs the infinite loop that checks for new tasks and executes them.
 """
+import asyncio
 import os
-
-from anyio import run, sleep
 
 from openoligo.api.db import db_init, get_db_url
 from openoligo.api.helpers import get_next_task  # set_failed_now,
@@ -45,7 +44,7 @@ async def worker():
     while True:
         task = await get_next_task()
         if task is None:
-            await sleep(5)
+            await asyncio.sleep(5)
             continue  # This will loop forever until a task is available
 
         logger.info("Got new task: %s", task)
@@ -78,7 +77,7 @@ def main():
     logger.info("OpenOligo Runner: Starting")
 
     try:
-        run(worker)
+        asyncio.run(worker())
     except KeyboardInterrupt:
         logger.error("Keyboard interrupt detected, shutting down")
         os._exit(0)  # A hard exit is required to kill the logging thread

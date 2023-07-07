@@ -15,24 +15,55 @@ def is_valid_dna(sequence):
     return False
 
 
-# phosphoramidite_dict = {
-#    "A": "Adenosine",
-#    "T": "Thymidine",
-#    "G": "Guanosine",
-#    "C": "Cytidine",
-#    "U": "Uridine",
-#    "5mC": "5-Methylcytidine",
-#    "GalNAc": "N-Acetylgalactosamine",
-# }
-#
-#
-# def is_valid_oligo(sequence: str) -> bool:
+class Phosphoramidite(Enum):
+    """All available Phosphoramidites."""
+
+    A = "A"
+    T = "T"
+    G = "G"
+    C = "C"
+    U = "U"
+    M5C = "5mC"
+    GALNAC = "-GalNAc"
+
+
+phosphoramidite_dict = {
+    "A": "Adenosine",
+    "T": "Thymidine",
+    "G": "Guanosine",
+    "C": "Cytidine",
+    "U": "Uridine",
+    "5mC": "5-Methylcytidine",
+    "GalNAc": "N-Acetylgalactosamine",
+}
+
+
+# def parse_sequence(sequence: str) -> list[Phosphoramidite]:
 #    """
-#    Given a sequence, check if it is a valid oligo sequence.
+#    Given a sequence in str, return a list of Phosphoramidite in the correct order.
 #
 #    Example:
-#        AAT5mC5mCAT5mC-GalNAc -> valid
+#        AAT5mC5mCAT5mC-GalNAc -> [A, A, T, M5C, M5C, A, T, M5C, GALNAC]
 #    """
+
+
+def parse_sequence(sequence: str) -> list[Phosphoramidite]:
+    """
+    Given a sequence in str, return a list of Phosphoramidite in the correct order.
+
+    Example:
+        AAT5mC5mCAT5mC-GalNAc -> [A, A, T, M5C, M5C, A, T, M5C, GALNAC]
+    """
+    parsed_sequence = []
+    buffer = ""
+    for char in sequence:
+        buffer += char
+        if buffer in Phosphoramidite.__members__:
+            parsed_sequence.append(Phosphoramidite[buffer])
+            buffer = ""
+    if buffer:
+        raise ValueError(f"Invalid sequence: {buffer}")
+    return parsed_sequence
 
 
 class Seq:

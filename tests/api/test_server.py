@@ -1,3 +1,4 @@
+import os
 from unittest.mock import patch
 
 import pytest
@@ -142,12 +143,22 @@ def test_delete_synthesis_task_by_id(db):
     assert response.status_code == 404
 
 
-def test_get_db_url():
-    url = get_db_url(Platform.RPI)
-    assert url == "sqlite:////var/log/openoligo.db"
+@patch("os.path.expanduser")
+def test_get_db_url(mock_expanduser):
+    global tmp_dir  # Assuming tmp_dir is a global variable
+    tmp_dir = "/tmp"
 
-    url = get_db_url(Platform.BB)
-    assert url == "sqlite:////var/log/openoligo.db"
+    # Setup the mock functions
+    mock_expanduser.return_value = "/home/user/.openoligo"
 
-    url = get_db_url(Platform.SIM)
-    assert url == "sqlite://openoligo.db"
+    # Test the case when platform is RPI
+    platform = Platform.RPI
+    assert get_db_url(platform) == "sqlite:///tmp/openoligo/openoligo.db"
+
+    # Test the case when platform is BB
+    platform = Platform.BB
+    assert get_db_url(platform) == "sqlite:///tmp/openoligo/openoligo.db"
+
+    # Test the case when platform is anything else
+    platform = Platform.SIM
+    assert get_db_url(platform) == "sqlite:///home/user/.openoligo/openoligo.db"

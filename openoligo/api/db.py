@@ -1,20 +1,22 @@
 """
 Conviniences for initializing the database.
 """
+import os
+
 from tortoise import Tortoise
 
 from openoligo.hal.platform import Platform
 
+tmp_dir = os.getenv("OO_TMP_DIR", "/tmp")
+
 
 def get_db_url(platform: Platform) -> str:
     """Get the database URL for the given platform."""
-    # if not platform:
-    #    logging.error("Platform not supported.")
-    #    raise RuntimeError("No platform detected")
 
-    db_url = "sqlite://openoligo.db"
+    base_dir = os.path.expanduser("~/.openoligo")
     if platform in (Platform.RPI, Platform.BB):
-        db_url = "sqlite:////var/log/openoligo.db"
+        base_dir = os.path.join(tmp_dir, "openoligo")
+    db_url = f"sqlite://{os.path.join(base_dir, 'openoligo.db')}"
 
     return db_url
 

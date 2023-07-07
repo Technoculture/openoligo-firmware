@@ -4,7 +4,13 @@ Convinience functions for code interaction with the database.
 from datetime import datetime
 from typing import Optional
 
-from openoligo.api.models import SynthesisQueue, TaskStatus
+from openoligo.api.models import (
+    EssentialReagents,
+    SequencePartReagents,
+    Settings,
+    SynthesisQueue,
+    TaskStatus,
+)
 
 
 async def update_task_status(task_id: int, status: TaskStatus):
@@ -40,6 +46,49 @@ async def set_log_file(task_id: int, log_file: str):
 async def get_log_file(task_id: int) -> str:
     """Get the log file name of a synthesis task."""
     return await SynthesisQueue.get(id=task_id).values_list("log_file", flat=True)
+
+
+async def set_org_id(org_id: str) -> None:
+    """Set the organisation ID."""
+    await Settings.create(org_id=org_id)
+
+
+async def get_settings() -> list[Settings]:
+    """Get the organisation ID."""
+    settings = await Settings.first().values()
+    return settings if settings else []
+
+
+async def essential_reagent_used(accronym: str, volume: float) -> None:
+    """Reduce the volume of a reagent by the given amount."""
+    assert volume >= 0, "Volume must be positive"
+    await EssentialReagents.filter(accronym=accronym).update(
+        current_volume=EssentialReagents.current_volume - volume
+    )
+
+
+async def get_all_essential_reagents() -> list[EssentialReagents]:
+    """Get all essential reagents."""
+    return await EssentialReagents.all()
+
+
+async def get_all_sequence_parts() -> list[SequencePartReagents]:
+    """Get all sequence parts."""
+    return await SequencePartReagents.all()
+
+
+async def create_new_essential_reagent(name: str, accronym: str, volume: float) -> None:
+    """Create a new essential reagent."""
+    await EssentialReagents.create(
+        name=name, accronym=accronym, volume=volume, current_volume=volume
+    )
+
+
+async def create_new_sequence_part(name: str, accronym: str, volume: float) -> None:
+    """Create a new sequence part."""
+    await SequencePartReagents.create(
+        name=name, accronym=accronym, volume=volume, current_volume=volume
+    )
 
 
 async def get_next_task() -> Optional[SynthesisQueue]:

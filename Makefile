@@ -3,9 +3,10 @@ TESTDIR:=tests
 EXAMPLEDIR:=examples
 DOCSDIR:=docs
 APIDIR:=$(LIBNAME)/api
+SCRIPTSDIR:=$(LIBNAME)/scripts
 
 EXECNAME:=$(EXAMPLEDIR)/dna_synthesis.py
-SERVER_EXECNAME:=$(APIDIR)/server.py
+SERVER_EXECNAME:=$(SCRIPTSDIR)/server.py
 
 TARGET_HOSTNAME?=openoligo.local
 TARGET_USER?=root
