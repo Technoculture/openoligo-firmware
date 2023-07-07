@@ -4,8 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
   
-  <title>openoligo.scripts.hil API documentation</title>
-  <meta name="description" content="" />
+  <title>openoligo.scripts.orchestrator API documentation</title>
+  <meta name="description" content="A minimal script for running the server and the runner in parallel,
+and keeping them alive for the w..." />
 
 
   <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -1060,7 +1061,21 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <li class="mono"><a href="index.html">openoligo.scripts</a></li>
       </ul>
     </li>
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#openoligo.scripts.orchestrator.loop_forever">loop_forever</a></li>
+  </ul>
 
+    </li>
+
+    <li class="set"><h3><a href="#header-functions">Functions</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#openoligo.scripts.orchestrator.main">main</a></li>
+  </ul>
+
+    </li>
 
 
     </ul>
@@ -1073,58 +1088,39 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">openoligo.scripts.hil</span> module</h1>
+  <h1 class="title"><span class="name">openoligo.scripts.orchestrator</span> module</h1>
+  <p>A minimal script for running the server and the runner in parallel,
+and keeping them alive for the whole time.</p>
   
-  
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.scripts.hil', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.scripts.hil" class="source">
-    <div class="codehilite"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># from openoligo.hal.board import Pinout, list_configurable_pins</span>
-<span class="c1"># from openoligo.hal.devices import Valve</span>
-<span class="c1"># from openoligo.hal.instrument import Instrument</span>
-<span class="c1"># from openoligo.hal.types import board</span>
-<span class="c1"># from openoligo.hil.board import Hil</span>
-<span class="c1"># from openoligo.utils.logger import OligoLogger</span>
-<span class="c1"># from openoligo.utils.wait import wait</span>
-<span class="c1">#</span>
-<span class="c1"># rl = OligoLogger(rotates=True)</span>
-<span class="c1"># root_logger = rl.get_logger()</span>
-<span class="c1">#</span>
-<span class="c1"># print(len(list_configurable_pins()))</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.scripts.orchestrator', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.scripts.orchestrator" class="source">
+    <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A minimal script for running the server and the runner in parallel,</span>
+<span class="sd">and keeping them alive for the whole time.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="c1"># pinout = Pinout(</span>
-<span class="c1">#    phosphoramidites={</span>
-<span class="c1">#        &quot;A&quot;: Valve(gpio_pin=board.P26),</span>
-<span class="c1">#        &quot;C&quot;: Valve(gpio_pin=board.P28),</span>
-<span class="c1">#        &quot;G&quot;: Valve(gpio_pin=board.P15),</span>
-<span class="c1">#        &quot;T&quot;: Valve(gpio_pin=board.P16),</span>
-<span class="c1">#    },</span>
-<span class="c1">#    reactants={</span>
-<span class="c1">#        &quot;ACT&quot;: Valve(gpio_pin=board.P18),</span>
-<span class="c1">#        &quot;OXI&quot;: Valve(gpio_pin=board.P19),</span>
-<span class="c1">#        &quot;CAP1&quot;: Valve(gpio_pin=board.P21),</span>
-<span class="c1">#        &quot;CAP2&quot;: Valve(gpio_pin=board.P22),</span>
-<span class="c1">#        &quot;DEB&quot;: Valve(gpio_pin=board.P23),</span>
-<span class="c1">#        &quot;CLDE&quot;: Valve(gpio_pin=board.P24),</span>
-<span class="c1">#    },</span>
-<span class="c1"># )</span>
-
-<span class="c1"># hil = Hil(pinout=pinout)</span>
+<span class="n">loop_forever</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OO_LOOP_FOREVER&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
 
 
-<span class="c1"># def main():</span>
-<span class="c1">#    ins = Instrument(pinout=pinout)</span>
-<span class="c1">#</span>
-<span class="c1">#    pins = pinout.pins()</span>
-<span class="c1">#    print(f&quot;{pins=}, {len(pins)=}&quot;)</span>
-<span class="c1">#</span>
-<span class="c1">#    for pin in pins:</span>
-<span class="c1">#        p = pinout.get(pin)</span>
-<span class="c1">#        print(f&quot;{type(p)=}, {p=}&quot;)</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># if __name__ == &quot;__main__&quot;:</span>
-<span class="c1">#    main()</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Starts two subprocesses: Runner and Server and keeps them available for the whole time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s2">&quot;oligo-server&quot;</span><span class="p">],</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">process</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s2">&quot;oligo-runner&quot;</span><span class="p">],</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">runner</span><span class="p">:</span>
+                <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+                <span class="n">runner</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Keyboard interrupt received. Exiting...&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
 </pre></div>
 
   </div>
@@ -1132,7 +1128,49 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   </header>
 
   <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="openoligo.scripts.orchestrator.loop_forever" class="name">var <span class="ident">loop_forever</span></p>
+      
+  
+  <div class="source_cont">
+</div>
 
+      </div>
+
+    <h2 class="section-title" id="header-functions">Functions</h2>
+      
+  <div class="item">
+    <div class="name def" id="openoligo.scripts.orchestrator.main">
+    <p>def <span class="ident">main</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Starts two subprocesses: Runner and Server and keeps them available for the whole time.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.scripts.orchestrator.main', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.scripts.orchestrator.main" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Starts two subprocesses: Runner and Server and keeps them available for the whole time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s2">&quot;oligo-server&quot;</span><span class="p">],</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">process</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s2">&quot;oligo-runner&quot;</span><span class="p">],</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">runner</span><span class="p">:</span>
+                <span class="n">process</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+                <span class="n">runner</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Keyboard interrupt received. Exiting...&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
 
 
   </section>

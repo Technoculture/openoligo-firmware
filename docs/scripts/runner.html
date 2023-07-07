@@ -1104,9 +1104,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 <span class="sd">This script runs the infinite loop that checks for new tasks and executes them.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">os</span>
-
-<span class="kn">from</span> <span class="nn">anyio</span> <span class="kn">import</span> <span class="n">run</span><span class="p">,</span> <span class="n">sleep</span>
 
 <span class="kn">from</span> <span class="nn">openoligo.api.db</span> <span class="kn">import</span> <span class="n">db_init</span><span class="p">,</span> <span class="n">get_db_url</span>
 <span class="kn">from</span> <span class="nn">openoligo.api.helpers</span> <span class="kn">import</span> <span class="n">get_next_task</span>  <span class="c1"># set_failed_now,</span>
@@ -1120,7 +1119,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="kn">from</span> <span class="nn">openoligo.api.models</span> <span class="kn">import</span> <span class="n">TaskStatus</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.instrument</span> <span class="kn">import</span> <span class="n">Instrument</span>
 <span class="kn">from</span> <span class="nn">openoligo.hal.platform</span> <span class="kn">import</span> <span class="n">__platform__</span>
-<span class="kn">from</span> <span class="nn">openoligo.protocols.dna_synthesis</span> <span class="kn">import</span> <span class="n">synthesize</span>
+<span class="kn">from</span> <span class="nn">openoligo.protocols.oligosynthesis</span> <span class="kn">import</span> <span class="n">synthesize_ssdna</span>
 <span class="kn">from</span> <span class="nn">openoligo.seq</span> <span class="kn">import</span> <span class="n">Seq</span>
 <span class="kn">from</span> <span class="nn">openoligo.utils.logger</span> <span class="kn">import</span> <span class="n">OligoLogger</span>
 
@@ -1146,7 +1145,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">task</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_next_task</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">task</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">await</span> <span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
             <span class="k">continue</span>  <span class="c1"># This will loop forever until a task is available</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Got new task: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
@@ -1164,7 +1163,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
         <span class="c1"># Execute the task</span>
         <span class="n">inst</span><span class="o">.</span><span class="n">pressure_on</span><span class="p">()</span>
-        <span class="k">await</span> <span class="n">synthesize</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">Seq</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">sequence</span><span class="p">))</span>
+        <span class="k">await</span> <span class="n">synthesize_ssdna</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">Seq</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">sequence</span><span class="p">))</span>
         <span class="n">inst</span><span class="o">.</span><span class="n">pressure_off</span><span class="p">()</span>
 
         <span class="k">await</span> <span class="n">set_completed_now</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
@@ -1179,7 +1178,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;OpenOligo Runner: Starting&quot;</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">run</span><span class="p">(</span><span class="n">worker</span><span class="p">)</span>
+        <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">worker</span><span class="p">())</span>
     <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Keyboard interrupt detected, shutting down&quot;</span><span class="p">)</span>
         <span class="n">os</span><span class="o">.</span><span class="n">_exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># A hard exit is required to kill the logging thread</span>
@@ -1250,7 +1249,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;OpenOligo Runner: Starting&quot;</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">run</span><span class="p">(</span><span class="n">worker</span><span class="p">)</span>
+        <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">worker</span><span class="p">())</span>
     <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Keyboard interrupt detected, shutting down&quot;</span><span class="p">)</span>
         <span class="n">os</span><span class="o">.</span><span class="n">_exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># A hard exit is required to kill the logging thread</span>
@@ -1289,7 +1288,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="n">task</span> <span class="o">=</span> <span class="k">await</span> <span class="n">get_next_task</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">task</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">await</span> <span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
             <span class="k">continue</span>  <span class="c1"># This will loop forever until a task is available</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Got new task: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">task</span><span class="p">)</span>
@@ -1307,7 +1306,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
         <span class="c1"># Execute the task</span>
         <span class="n">inst</span><span class="o">.</span><span class="n">pressure_on</span><span class="p">()</span>
-        <span class="k">await</span> <span class="n">synthesize</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">Seq</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">sequence</span><span class="p">))</span>
+        <span class="k">await</span> <span class="n">synthesize_ssdna</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">Seq</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">sequence</span><span class="p">))</span>
         <span class="n">inst</span><span class="o">.</span><span class="n">pressure_off</span><span class="p">()</span>
 
         <span class="k">await</span> <span class="n">set_completed_now</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>

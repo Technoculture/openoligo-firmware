@@ -1064,11 +1064,18 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
+    <li class="mono"><a href="#openoligo.api.helpers.create_new_essential_reagent">create_new_essential_reagent</a></li>
+    <li class="mono"><a href="#openoligo.api.helpers.create_new_sequence_part">create_new_sequence_part</a></li>
+    <li class="mono"><a href="#openoligo.api.helpers.essential_reagent_used">essential_reagent_used</a></li>
+    <li class="mono"><a href="#openoligo.api.helpers.get_all_essential_reagents">get_all_essential_reagents</a></li>
+    <li class="mono"><a href="#openoligo.api.helpers.get_all_sequence_parts">get_all_sequence_parts</a></li>
     <li class="mono"><a href="#openoligo.api.helpers.get_log_file">get_log_file</a></li>
     <li class="mono"><a href="#openoligo.api.helpers.get_next_task">get_next_task</a></li>
+    <li class="mono"><a href="#openoligo.api.helpers.get_settings">get_settings</a></li>
     <li class="mono"><a href="#openoligo.api.helpers.set_completed_now">set_completed_now</a></li>
     <li class="mono"><a href="#openoligo.api.helpers.set_failed_now">set_failed_now</a></li>
     <li class="mono"><a href="#openoligo.api.helpers.set_log_file">set_log_file</a></li>
+    <li class="mono"><a href="#openoligo.api.helpers.set_org_id">set_org_id</a></li>
     <li class="mono"><a href="#openoligo.api.helpers.set_started_now">set_started_now</a></li>
     <li class="mono"><a href="#openoligo.api.helpers.set_task_in_progress">set_task_in_progress</a></li>
     <li class="mono"><a href="#openoligo.api.helpers.update_task_status">update_task_status</a></li>
@@ -1098,7 +1105,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
 
-<span class="kn">from</span> <span class="nn">openoligo.api.models</span> <span class="kn">import</span> <span class="n">SynthesisQueue</span><span class="p">,</span> <span class="n">TaskStatus</span>
+<span class="kn">from</span> <span class="nn">openoligo.api.models</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">EssentialReagents</span><span class="p">,</span>
+    <span class="n">SequencePartReagents</span><span class="p">,</span>
+    <span class="n">Settings</span><span class="p">,</span>
+    <span class="n">SynthesisQueue</span><span class="p">,</span>
+    <span class="n">TaskStatus</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">update_task_status</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">status</span><span class="p">:</span> <span class="n">TaskStatus</span><span class="p">):</span>
@@ -1136,6 +1149,49 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="k">return</span> <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">values_list</span><span class="p">(</span><span class="s2">&quot;log_file&quot;</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 
+<span class="k">async</span> <span class="k">def</span> <span class="nf">set_org_id</span><span class="p">(</span><span class="n">org_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the organisation ID.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">Settings</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">org_id</span><span class="o">=</span><span class="n">org_id</span><span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_settings</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Settings</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the organisation ID.&quot;&quot;&quot;</span>
+    <span class="n">settings</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Settings</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">settings</span> <span class="k">if</span> <span class="n">settings</span> <span class="k">else</span> <span class="p">[]</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">essential_reagent_used</span><span class="p">(</span><span class="n">accronym</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reduce the volume of a reagent by the given amount.&quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">volume</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Volume must be positive&quot;</span>
+    <span class="k">await</span> <span class="n">EssentialReagents</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">accronym</span><span class="o">=</span><span class="n">accronym</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">current_volume</span><span class="o">=</span><span class="n">EssentialReagents</span><span class="o">.</span><span class="n">current_volume</span> <span class="o">-</span> <span class="n">volume</span>
+    <span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_all_essential_reagents</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">EssentialReagents</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get all essential reagents.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">EssentialReagents</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">get_all_sequence_parts</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SequencePartReagents</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get all sequence parts.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">SequencePartReagents</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">create_new_essential_reagent</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">accronym</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new essential reagent.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">EssentialReagents</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">accronym</span><span class="o">=</span><span class="n">accronym</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="n">volume</span><span class="p">,</span> <span class="n">current_volume</span><span class="o">=</span><span class="n">volume</span>
+    <span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">create_new_sequence_part</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">accronym</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new sequence part.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">SequencePartReagents</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">accronym</span><span class="o">=</span><span class="n">accronym</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="n">volume</span><span class="p">,</span> <span class="n">current_volume</span><span class="o">=</span><span class="n">volume</span>
+    <span class="p">)</span>
+
+
 <span class="k">async</span> <span class="k">def</span> <span class="nf">get_next_task</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SynthesisQueue</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the next synthesis task.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span>
@@ -1152,6 +1208,128 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <section id="section-items">
 
     <h2 class="section-title" id="header-functions">Functions</h2>
+      
+  <div class="item">
+    <div class="name def" id="openoligo.api.helpers.create_new_essential_reagent">
+    <p>async def <span class="ident">create_new_essential_reagent</span>(</p><p>name: str, accronym: str, volume: float)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Create a new essential reagent.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.helpers.create_new_essential_reagent', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.helpers.create_new_essential_reagent" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">create_new_essential_reagent</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">accronym</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new essential reagent.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">EssentialReagents</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">accronym</span><span class="o">=</span><span class="n">accronym</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="n">volume</span><span class="p">,</span> <span class="n">current_volume</span><span class="o">=</span><span class="n">volume</span>
+    <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.api.helpers.create_new_sequence_part">
+    <p>async def <span class="ident">create_new_sequence_part</span>(</p><p>name: str, accronym: str, volume: float)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Create a new sequence part.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.helpers.create_new_sequence_part', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.helpers.create_new_sequence_part" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">create_new_sequence_part</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">accronym</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a new sequence part.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">SequencePartReagents</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">accronym</span><span class="o">=</span><span class="n">accronym</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="n">volume</span><span class="p">,</span> <span class="n">current_volume</span><span class="o">=</span><span class="n">volume</span>
+    <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.api.helpers.essential_reagent_used">
+    <p>async def <span class="ident">essential_reagent_used</span>(</p><p>accronym: str, volume: float)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Reduce the volume of a reagent by the given amount.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.helpers.essential_reagent_used', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.helpers.essential_reagent_used" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">essential_reagent_used</span><span class="p">(</span><span class="n">accronym</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">volume</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reduce the volume of a reagent by the given amount.&quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">volume</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Volume must be positive&quot;</span>
+    <span class="k">await</span> <span class="n">EssentialReagents</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">accronym</span><span class="o">=</span><span class="n">accronym</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+        <span class="n">current_volume</span><span class="o">=</span><span class="n">EssentialReagents</span><span class="o">.</span><span class="n">current_volume</span> <span class="o">-</span> <span class="n">volume</span>
+    <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.api.helpers.get_all_essential_reagents">
+    <p>async def <span class="ident">get_all_essential_reagents</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Get all essential reagents.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.helpers.get_all_essential_reagents', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.helpers.get_all_essential_reagents" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">get_all_essential_reagents</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">EssentialReagents</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get all essential reagents.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">EssentialReagents</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.api.helpers.get_all_sequence_parts">
+    <p>async def <span class="ident">get_all_sequence_parts</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Get all sequence parts.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.helpers.get_all_sequence_parts', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.helpers.get_all_sequence_parts" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">get_all_sequence_parts</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">SequencePartReagents</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get all sequence parts.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">SequencePartReagents</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
       
   <div class="item">
     <div class="name def" id="openoligo.api.helpers.get_log_file">
@@ -1195,6 +1373,30 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s2">&quot;-rank&quot;</span><span class="p">,</span> <span class="s2">&quot;created_at&quot;</span><span class="p">)</span>
         <span class="o">.</span><span class="n">first</span><span class="p">()</span>
     <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.api.helpers.get_settings">
+    <p>async def <span class="ident">get_settings</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Get the organisation ID.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.helpers.get_settings', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.helpers.get_settings" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">get_settings</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Settings</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the organisation ID.&quot;&quot;&quot;</span>
+    <span class="n">settings</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Settings</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">settings</span> <span class="k">if</span> <span class="n">settings</span> <span class="k">else</span> <span class="p">[]</span>
 </pre></div>
 
   </div>
@@ -1264,6 +1466,29 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">set_log_file</span><span class="p">(</span><span class="n">task_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">log_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the log file of a synthesis task.&quot;&quot;&quot;</span>
     <span class="k">await</span> <span class="n">SynthesisQueue</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">log_file</span><span class="o">=</span><span class="n">log_file</span><span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.api.helpers.set_org_id">
+    <p>async def <span class="ident">set_org_id</span>(</p><p>org_id: str)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Set the organisation ID.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.api.helpers.set_org_id', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.api.helpers.set_org_id" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">set_org_id</span><span class="p">(</span><span class="n">org_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the organisation ID.&quot;&quot;&quot;</span>
+    <span class="k">await</span> <span class="n">Settings</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">org_id</span><span class="o">=</span><span class="n">org_id</span><span class="p">)</span>
 </pre></div>
 
   </div>

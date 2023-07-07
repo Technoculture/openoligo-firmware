@@ -4,7 +4,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
   
-  <title>openoligo.protocols.dna_synthesis API documentation</title>
+  <title>openoligo.protocols.oligosynthesis API documentation</title>
   <meta name="description" content="DNA Snthesis Protocol" />
 
 
@@ -1064,13 +1064,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
-    <li class="mono"><a href="#openoligo.protocols.dna_synthesis.activate">activate</a></li>
-    <li class="mono"><a href="#openoligo.protocols.dna_synthesis.cap">cap</a></li>
-    <li class="mono"><a href="#openoligo.protocols.dna_synthesis.cleave">cleave</a></li>
-    <li class="mono"><a href="#openoligo.protocols.dna_synthesis.deprotect">deprotect</a></li>
-    <li class="mono"><a href="#openoligo.protocols.dna_synthesis.detritylate">detritylate</a></li>
-    <li class="mono"><a href="#openoligo.protocols.dna_synthesis.oxidize">oxidize</a></li>
-    <li class="mono"><a href="#openoligo.protocols.dna_synthesis.synthesize">synthesize</a></li>
+    <li class="mono"><a href="#openoligo.protocols.oligosynthesis.activate">activate</a></li>
+    <li class="mono"><a href="#openoligo.protocols.oligosynthesis.cap">cap</a></li>
+    <li class="mono"><a href="#openoligo.protocols.oligosynthesis.cleave">cleave</a></li>
+    <li class="mono"><a href="#openoligo.protocols.oligosynthesis.deprotect">deprotect</a></li>
+    <li class="mono"><a href="#openoligo.protocols.oligosynthesis.detritylate">detritylate</a></li>
+    <li class="mono"><a href="#openoligo.protocols.oligosynthesis.oxidize">oxidize</a></li>
+    <li class="mono"><a href="#openoligo.protocols.oligosynthesis.synthesize_dsdna">synthesize_dsdna</a></li>
+    <li class="mono"><a href="#openoligo.protocols.oligosynthesis.synthesize_ssdna">synthesize_ssdna</a></li>
   </ul>
 
     </li>
@@ -1086,11 +1087,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">openoligo.protocols.dna_synthesis</span> module</h1>
+  <h1 class="title"><span class="name">openoligo.protocols.oligosynthesis</span> module</h1>
   <p>DNA Snthesis Protocol</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.dna_synthesis', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.protocols.dna_synthesis" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.oligosynthesis', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.protocols.oligosynthesis" class="source">
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">DNA Snthesis Protocol</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -1162,7 +1163,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="k">await</span> <span class="n">wait_async</span><span class="p">(</span><span class="mi">45</span><span class="p">)</span>
 
 
-<span class="k">async</span> <span class="k">def</span> <span class="nf">synthesize</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="n">Seq</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">synthesize_ssdna</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="n">Seq</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Synthesize a DNA sequence.</span>
 
@@ -1212,6 +1213,26 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
         <span class="s2">&quot;Synthesis complete for DNA sequence: &#39;</span><span class="si">%s</span><span class="s2">&#39; in </span><span class="si">%s</span><span class="s2"> minutes&quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">elapsed_time_in_minutes</span>
     <span class="p">)</span>
+
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">synthesize_dsdna</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="n">Seq</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Synthesize both strands of a DNA sequence and output them one after the other.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        instrument (Instrument): Instrument object.</span>
+<span class="sd">        seq (Seq): DNA sequence to synthesize.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Synthesizing the positive strand of DNA sequence: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">synthesize_ssdna</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;Synthesizing the negative strand of DNA sequence: &#39;</span><span class="si">%s</span><span class="s2">&#39; which is &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span>
+        <span class="n">seq</span><span class="p">,</span>
+        <span class="n">seq</span><span class="o">.</span><span class="n">reverse_complement</span><span class="p">(),</span>
+    <span class="p">)</span>
+    <span class="k">await</span> <span class="n">synthesize_ssdna</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">seq</span><span class="o">.</span><span class="n">reverse_complement</span><span class="p">())</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;Synthesis complete for both strands: &#39;</span><span class="si">%s</span><span class="s2">&#39; and &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">seq</span><span class="o">.</span><span class="n">reverse_complement</span><span class="p">()</span>
+    <span class="p">)</span>
 </pre></div>
 
   </div>
@@ -1223,7 +1244,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <h2 class="section-title" id="header-functions">Functions</h2>
       
   <div class="item">
-    <div class="name def" id="openoligo.protocols.dna_synthesis.activate">
+    <div class="name def" id="openoligo.protocols.oligosynthesis.activate">
     <p>async def <span class="ident">activate</span>(</p><p>instrument: openoligo.hal.instrument.Instrument)</p>
     </div>
     
@@ -1232,8 +1253,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
     <div class="desc"><p>Add 0.1 M phosphoramidite monomer and 0.5 M tetrazole to the reactor</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.dna_synthesis.activate', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.protocols.dna_synthesis.activate" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.oligosynthesis.activate', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.protocols.oligosynthesis.activate" class="source">
     <div class="codehilite"><pre><span></span><span class="nd">@step</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1250,7 +1271,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
       
   <div class="item">
-    <div class="name def" id="openoligo.protocols.dna_synthesis.cap">
+    <div class="name def" id="openoligo.protocols.oligosynthesis.cap">
     <p>async def <span class="ident">cap</span>(</p><p>instrument: openoligo.hal.instrument.Instrument)</p>
     </div>
     
@@ -1259,8 +1280,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
     <div class="desc"><p>Add acetic anhydride/pyridine/THF and N-methyl imidazole to the reactor</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.dna_synthesis.cap', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.protocols.dna_synthesis.cap" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.oligosynthesis.cap', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.protocols.oligosynthesis.cap" class="source">
     <div class="codehilite"><pre><span></span><span class="nd">@step</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">cap</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1278,7 +1299,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
       
   <div class="item">
-    <div class="name def" id="openoligo.protocols.dna_synthesis.cleave">
+    <div class="name def" id="openoligo.protocols.oligosynthesis.cleave">
     <p>async def <span class="ident">cleave</span>(</p><p>instrument: openoligo.hal.instrument.Instrument)</p>
     </div>
     
@@ -1287,8 +1308,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
     <div class="desc"><p>Cleave the DNA sequence from the solid support.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.dna_synthesis.cleave', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.protocols.dna_synthesis.cleave" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.oligosynthesis.cleave', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.protocols.oligosynthesis.cleave" class="source">
     <div class="codehilite"><pre><span></span><span class="nd">@step</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">cleave</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1305,7 +1326,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
       
   <div class="item">
-    <div class="name def" id="openoligo.protocols.dna_synthesis.deprotect">
+    <div class="name def" id="openoligo.protocols.oligosynthesis.deprotect">
     <p>async def <span class="ident">deprotect</span>(</p><p>instrument: openoligo.hal.instrument.Instrument)</p>
     </div>
     
@@ -1314,8 +1335,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
     <div class="desc"><p>Remove the protecting groups from the DNA sequence.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.dna_synthesis.deprotect', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.protocols.dna_synthesis.deprotect" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.oligosynthesis.deprotect', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.protocols.oligosynthesis.deprotect" class="source">
     <div class="codehilite"><pre><span></span><span class="nd">@step</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">deprotect</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1332,7 +1353,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
       
   <div class="item">
-    <div class="name def" id="openoligo.protocols.dna_synthesis.detritylate">
+    <div class="name def" id="openoligo.protocols.oligosynthesis.detritylate">
     <p>async def <span class="ident">detritylate</span>(</p><p>instrument: openoligo.hal.instrument.Instrument)</p>
     </div>
     
@@ -1341,8 +1362,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
     <div class="desc"><p>Add 3% trichloroacetic acid in dichloromethane to the reactor</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.dna_synthesis.detritylate', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.protocols.dna_synthesis.detritylate" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.oligosynthesis.detritylate', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.protocols.oligosynthesis.detritylate" class="source">
     <div class="codehilite"><pre><span></span><span class="nd">@step</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">detritylate</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1359,7 +1380,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
       
   <div class="item">
-    <div class="name def" id="openoligo.protocols.dna_synthesis.oxidize">
+    <div class="name def" id="openoligo.protocols.oligosynthesis.oxidize">
     <p>async def <span class="ident">oxidize</span>(</p><p>instrument: openoligo.hal.instrument.Instrument)</p>
     </div>
     
@@ -1368,8 +1389,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
     <div class="desc"><p>Add 0.015 M iodine in water/pyridine/THF to the reactor</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.dna_synthesis.oxidize', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.protocols.dna_synthesis.oxidize" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.oligosynthesis.oxidize', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.protocols.oligosynthesis.oxidize" class="source">
     <div class="codehilite"><pre><span></span><span class="nd">@step</span>
 <span class="k">async</span> <span class="k">def</span> <span class="nf">oxidize</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1386,8 +1407,49 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   
       
   <div class="item">
-    <div class="name def" id="openoligo.protocols.dna_synthesis.synthesize">
-    <p>async def <span class="ident">synthesize</span>(</p><p>instrument: openoligo.hal.instrument.Instrument, seq: openoligo.seq.Seq)</p>
+    <div class="name def" id="openoligo.protocols.oligosynthesis.synthesize_dsdna">
+    <p>async def <span class="ident">synthesize_dsdna</span>(</p><p>instrument: openoligo.hal.instrument.Instrument, seq: openoligo.seq.Seq)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Synthesize both strands of a DNA sequence and output them one after the other.</p>
+<p>Args:
+    instrument (Instrument): Instrument object.
+    seq (Seq): DNA sequence to synthesize.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.oligosynthesis.synthesize_dsdna', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.protocols.oligosynthesis.synthesize_dsdna" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">synthesize_dsdna</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="n">Seq</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Synthesize both strands of a DNA sequence and output them one after the other.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        instrument (Instrument): Instrument object.</span>
+<span class="sd">        seq (Seq): DNA sequence to synthesize.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Synthesizing the positive strand of DNA sequence: &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">synthesize_ssdna</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">seq</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;Synthesizing the negative strand of DNA sequence: &#39;</span><span class="si">%s</span><span class="s2">&#39; which is &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span>
+        <span class="n">seq</span><span class="p">,</span>
+        <span class="n">seq</span><span class="o">.</span><span class="n">reverse_complement</span><span class="p">(),</span>
+    <span class="p">)</span>
+    <span class="k">await</span> <span class="n">synthesize_ssdna</span><span class="p">(</span><span class="n">instrument</span><span class="p">,</span> <span class="n">seq</span><span class="o">.</span><span class="n">reverse_complement</span><span class="p">())</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s2">&quot;Synthesis complete for both strands: &#39;</span><span class="si">%s</span><span class="s2">&#39; and &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span><span class="p">,</span> <span class="n">seq</span><span class="p">,</span> <span class="n">seq</span><span class="o">.</span><span class="n">reverse_complement</span><span class="p">()</span>
+    <span class="p">)</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="openoligo.protocols.oligosynthesis.synthesize_ssdna">
+    <p>async def <span class="ident">synthesize_ssdna</span>(</p><p>instrument: openoligo.hal.instrument.Instrument, seq: openoligo.seq.Seq)</p>
     </div>
     
 
@@ -1397,9 +1459,9 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <p>args:
     seq: DNA sequence to synthesize.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.dna_synthesis.synthesize', this);">Show source &equiv;</a></p>
-  <div id="source-openoligo.protocols.dna_synthesis.synthesize" class="source">
-    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">synthesize</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="n">Seq</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.protocols.oligosynthesis.synthesize_ssdna', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.protocols.oligosynthesis.synthesize_ssdna" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">synthesize_ssdna</span><span class="p">(</span><span class="n">instrument</span><span class="p">:</span> <span class="n">Instrument</span><span class="p">,</span> <span class="n">seq</span><span class="p">:</span> <span class="n">Seq</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Synthesize a DNA sequence.</span>
 

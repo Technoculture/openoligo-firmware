@@ -1060,6 +1060,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <li class="mono"><a href="index.html">openoligo.api</a></li>
       </ul>
     </li>
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#openoligo.api.db.tmp_dir">tmp_dir</a></li>
+  </ul>
+
+    </li>
 
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
@@ -1089,20 +1096,22 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <div class="codehilite"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Conviniences for initializing the database.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
 <span class="kn">from</span> <span class="nn">tortoise</span> <span class="kn">import</span> <span class="n">Tortoise</span>
 
 <span class="kn">from</span> <span class="nn">openoligo.hal.platform</span> <span class="kn">import</span> <span class="n">Platform</span>
 
+<span class="n">tmp_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OO_TMP_DIR&quot;</span><span class="p">,</span> <span class="s2">&quot;/tmp&quot;</span><span class="p">)</span>
+
 
 <span class="k">def</span> <span class="nf">get_db_url</span><span class="p">(</span><span class="n">platform</span><span class="p">:</span> <span class="n">Platform</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the database URL for the given platform.&quot;&quot;&quot;</span>
-    <span class="c1"># if not platform:</span>
-    <span class="c1">#    logging.error(&quot;Platform not supported.&quot;)</span>
-    <span class="c1">#    raise RuntimeError(&quot;No platform detected&quot;)</span>
 
-    <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite://openoligo.db&quot;</span>
+    <span class="n">base_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.openoligo&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">platform</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Platform</span><span class="o">.</span><span class="n">RPI</span><span class="p">,</span> <span class="n">Platform</span><span class="o">.</span><span class="n">BB</span><span class="p">):</span>
-        <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite:////var/log/openoligo.db&quot;</span>
+        <span class="n">base_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">,</span> <span class="s2">&quot;openoligo&quot;</span><span class="p">)</span>
+    <span class="n">db_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sqlite://</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_dir</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;openoligo.db&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="k">return</span> <span class="n">db_url</span>
 
@@ -1121,6 +1130,15 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   </header>
 
   <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="openoligo.api.db.tmp_dir" class="name">var <span class="ident">tmp_dir</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
 
     <h2 class="section-title" id="header-functions">Functions</h2>
       
@@ -1165,13 +1183,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   <div id="source-openoligo.api.db.get_db_url" class="source">
     <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">get_db_url</span><span class="p">(</span><span class="n">platform</span><span class="p">:</span> <span class="n">Platform</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the database URL for the given platform.&quot;&quot;&quot;</span>
-    <span class="c1"># if not platform:</span>
-    <span class="c1">#    logging.error(&quot;Platform not supported.&quot;)</span>
-    <span class="c1">#    raise RuntimeError(&quot;No platform detected&quot;)</span>
 
-    <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite://openoligo.db&quot;</span>
+    <span class="n">base_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.openoligo&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">platform</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Platform</span><span class="o">.</span><span class="n">RPI</span><span class="p">,</span> <span class="n">Platform</span><span class="o">.</span><span class="n">BB</span><span class="p">):</span>
-        <span class="n">db_url</span> <span class="o">=</span> <span class="s2">&quot;sqlite:////var/log/openoligo.db&quot;</span>
+        <span class="n">base_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp_dir</span><span class="p">,</span> <span class="s2">&quot;openoligo&quot;</span><span class="p">)</span>
+    <span class="n">db_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sqlite://</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_dir</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;openoligo.db&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="k">return</span> <span class="n">db_url</span>
 </pre></div>

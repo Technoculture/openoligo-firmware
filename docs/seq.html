@@ -1060,11 +1060,19 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <li class="mono"><a href="index.html">openoligo</a></li>
       </ul>
     </li>
+    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#openoligo.seq.phosphoramidite_dict">phosphoramidite_dict</a></li>
+  </ul>
+
+    </li>
 
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
     <li class="mono"><a href="#openoligo.seq.is_valid_dna">is_valid_dna</a></li>
+    <li class="mono"><a href="#openoligo.seq.parse_sequence">parse_sequence</a></li>
   </ul>
 
     </li>
@@ -1072,8 +1080,17 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
+        <span class="class_name"><a href="#openoligo.seq.Phosphoramidite">Phosphoramidite</a></span>
+        
+        </li>
+        <li class="mono">
         <span class="class_name"><a href="#openoligo.seq.Seq">Seq</a></span>
         
+          
+  <ul>
+    <li class="mono"><a href="#openoligo.seq.Seq.reverse_complement">reverse_complement</a></li>
+  </ul>
+
         </li>
         <li class="mono">
         <span class="class_name"><a href="#openoligo.seq.SeqCategory">SeqCategory</a></span>
@@ -1114,24 +1131,55 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="k">return</span> <span class="kc">False</span>
 
 
-<span class="c1"># phosphoramidite_dict = {</span>
-<span class="c1">#    &quot;A&quot;: &quot;Adenosine&quot;,</span>
-<span class="c1">#    &quot;T&quot;: &quot;Thymidine&quot;,</span>
-<span class="c1">#    &quot;G&quot;: &quot;Guanosine&quot;,</span>
-<span class="c1">#    &quot;C&quot;: &quot;Cytidine&quot;,</span>
-<span class="c1">#    &quot;U&quot;: &quot;Uridine&quot;,</span>
-<span class="c1">#    &quot;5mC&quot;: &quot;5-Methylcytidine&quot;,</span>
-<span class="c1">#    &quot;GalNAc&quot;: &quot;N-Acetylgalactosamine&quot;,</span>
-<span class="c1"># }</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># def is_valid_oligo(sequence: str) -&gt; bool:</span>
+<span class="k">class</span> <span class="nc">Phosphoramidite</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;All available Phosphoramidites.&quot;&quot;&quot;</span>
+
+    <span class="n">A</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="s2">&quot;T&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="s2">&quot;G&quot;</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="s2">&quot;U&quot;</span>
+    <span class="n">M5C</span> <span class="o">=</span> <span class="s2">&quot;5mC&quot;</span>
+    <span class="n">GALNAC</span> <span class="o">=</span> <span class="s2">&quot;-GalNAc&quot;</span>
+
+
+<span class="n">phosphoramidite_dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;Adenosine&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="s2">&quot;Thymidine&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="s2">&quot;Guanosine&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="s2">&quot;Cytidine&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;U&quot;</span><span class="p">:</span> <span class="s2">&quot;Uridine&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;5mC&quot;</span><span class="p">:</span> <span class="s2">&quot;5-Methylcytidine&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;GalNAc&quot;</span><span class="p">:</span> <span class="s2">&quot;N-Acetylgalactosamine&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="c1"># def parse_sequence(sequence: str) -&gt; list[Phosphoramidite]:</span>
 <span class="c1">#    &quot;&quot;&quot;</span>
-<span class="c1">#    Given a sequence, check if it is a valid oligo sequence.</span>
+<span class="c1">#    Given a sequence in str, return a list of Phosphoramidite in the correct order.</span>
 <span class="c1">#</span>
 <span class="c1">#    Example:</span>
-<span class="c1">#        AAT5mC5mCAT5mC-GalNAc -&gt; valid</span>
+<span class="c1">#        AAT5mC5mCAT5mC-GalNAc -&gt; [A, A, T, M5C, M5C, A, T, M5C, GALNAC]</span>
 <span class="c1">#    &quot;&quot;&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">parse_sequence</span><span class="p">(</span><span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Phosphoramidite</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a sequence in str, return a list of Phosphoramidite in the correct order.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        AAT5mC5mCAT5mC-GalNAc -&gt; [A, A, T, M5C, M5C, A, T, M5C, GALNAC]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parsed_sequence</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">sequence</span><span class="p">:</span>
+        <span class="n">buffer</span> <span class="o">+=</span> <span class="n">char</span>
+        <span class="k">if</span> <span class="n">buffer</span> <span class="ow">in</span> <span class="n">Phosphoramidite</span><span class="o">.</span><span class="n">__members__</span><span class="p">:</span>
+            <span class="n">parsed_sequence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Phosphoramidite</span><span class="p">[</span><span class="n">buffer</span><span class="p">])</span>
+            <span class="n">buffer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">buffer</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid sequence: </span><span class="si">{</span><span class="n">buffer</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">parsed_sequence</span>
 
 
 <span class="k">class</span> <span class="nc">Seq</span><span class="p">:</span>
@@ -1185,6 +1233,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
+    <span class="k">def</span> <span class="nf">reverse_complement</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Seq&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the reverse complement of the input sequence&quot;&quot;&quot;</span>
+        <span class="n">complement</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="s2">&quot;C&quot;</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">Seq</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">complement</span><span class="p">[</span><span class="n">base</span><span class="p">]</span> <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]]))</span>
+
 
 <span class="k">class</span> <span class="nc">SeqCategory</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1201,6 +1254,15 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
   </header>
 
   <section id="section-items">
+    <h2 class="section-title" id="header-variables">Module variables</h2>
+      <div class="item">
+      <p id="openoligo.seq.phosphoramidite_dict" class="name">var <span class="ident">phosphoramidite_dict</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
 
     <h2 class="section-title" id="header-functions">Functions</h2>
       
@@ -1231,8 +1293,170 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
   </div>
   
+      
+  <div class="item">
+    <div class="name def" id="openoligo.seq.parse_sequence">
+    <p>def <span class="ident">parse_sequence</span>(</p><p>sequence: str)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Given a sequence in str, return a list of Phosphoramidite in the correct order.</p>
+<p>Example:
+    AAT5mC5mCAT5mC-GalNAc -&gt; [A, A, T, M5C, M5C, A, T, M5C, GALNAC]</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.seq.parse_sequence', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.seq.parse_sequence" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">parse_sequence</span><span class="p">(</span><span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Phosphoramidite</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a sequence in str, return a list of Phosphoramidite in the correct order.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        AAT5mC5mCAT5mC-GalNAc -&gt; [A, A, T, M5C, M5C, A, T, M5C, GALNAC]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parsed_sequence</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">buffer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">sequence</span><span class="p">:</span>
+        <span class="n">buffer</span> <span class="o">+=</span> <span class="n">char</span>
+        <span class="k">if</span> <span class="n">buffer</span> <span class="ow">in</span> <span class="n">Phosphoramidite</span><span class="o">.</span><span class="n">__members__</span><span class="p">:</span>
+            <span class="n">parsed_sequence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Phosphoramidite</span><span class="p">[</span><span class="n">buffer</span><span class="p">])</span>
+            <span class="n">buffer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">buffer</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid sequence: </span><span class="si">{</span><span class="n">buffer</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">parsed_sequence</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
 
     <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="openoligo.seq.Phosphoramidite" class="name">class <span class="ident">Phosphoramidite</span></p>
+      
+  
+    <div class="desc"><p>All available Phosphoramidites.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.seq.Phosphoramidite', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.seq.Phosphoramidite" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">class</span> <span class="nc">Phosphoramidite</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;All available Phosphoramidites.&quot;&quot;&quot;</span>
+
+    <span class="n">A</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="s2">&quot;T&quot;</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="s2">&quot;G&quot;</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span>
+    <span class="n">U</span> <span class="o">=</span> <span class="s2">&quot;U&quot;</span>
+    <span class="n">M5C</span> <span class="o">=</span> <span class="s2">&quot;5mC&quot;</span>
+    <span class="n">GALNAC</span> <span class="o">=</span> <span class="s2">&quot;-GalNAc&quot;</span>
+</pre></div>
+
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="/enum.Enum.ext">enum.Enum</a></li>
+          </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="openoligo.seq.Phosphoramidite.A" class="name">var <span class="ident">A</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.seq.Phosphoramidite.C" class="name">var <span class="ident">C</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.seq.Phosphoramidite.G" class="name">var <span class="ident">G</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.seq.Phosphoramidite.GALNAC" class="name">var <span class="ident">GALNAC</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.seq.Phosphoramidite.M5C" class="name">var <span class="ident">M5C</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.seq.Phosphoramidite.T" class="name">var <span class="ident">T</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.seq.Phosphoramidite.U" class="name">var <span class="ident">U</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.seq.Phosphoramidite.name" class="name">var <span class="ident">name</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="openoligo.seq.Phosphoramidite.value" class="name">var <span class="ident">value</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+      </div>
+      </div>
       
       <div class="item">
       <p id="openoligo.seq.Seq" class="name">class <span class="ident">Seq</span></p>
@@ -1292,6 +1516,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="sd">        Allows indexing of the sequence.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">reverse_complement</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Seq&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the reverse complement of the input sequence&quot;&quot;&quot;</span>
+        <span class="n">complement</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="s2">&quot;C&quot;</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">Seq</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">complement</span><span class="p">[</span><span class="n">base</span><span class="p">]</span> <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]]))</span>
 </pre></div>
 
   </div>
@@ -1299,6 +1528,31 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 
       <div class="class">
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="openoligo.seq.Seq.reverse_complement">
+    <p>def <span class="ident">reverse_complement</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Return the reverse complement of the input sequence</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-openoligo.seq.Seq.reverse_complement', this);">Show source &equiv;</a></p>
+  <div id="source-openoligo.seq.Seq.reverse_complement" class="source">
+    <div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">reverse_complement</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Seq&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the reverse complement of the input sequence&quot;&quot;&quot;</span>
+    <span class="n">complement</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="s2">&quot;C&quot;</span><span class="p">}</span>
+    <span class="k">return</span> <span class="n">Seq</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">complement</span><span class="p">[</span><span class="n">base</span><span class="p">]</span> <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">seq</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]]))</span>
+</pre></div>
+
+  </div>
+</div>
+
+  </div>
+  
       </div>
       </div>
       
