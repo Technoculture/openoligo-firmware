@@ -4,7 +4,6 @@ Tortoise ORM Models for the OpenOligo API
 import re
 from enum import Enum
 
-from pydantic import BaseModel  # pylint: disable=no-name-in-module
 from tortoise import fields
 from tortoise.contrib.pydantic import pydantic_model_creator
 from tortoise.exceptions import ValidationError
@@ -23,13 +22,14 @@ class TaskStatus(str, Enum):
     FAILED = "failed"
 
 
-class PartType(str, Enum):
+class ReactantType(str, Enum):
     """Type of Sequence Part."""
 
     TERMINAL3 = "terminal3"
     TERMINAL5 = "terminal5"
     NUCLEOTIDE = "nucleotide"
     MODIFIED_NUCLEOTIDE = "modified_nucleotide"
+    REACTANT = "reactant"
 
 
 class ValidSeq(Validator):  # pylint: disable=too-few-public-methods
@@ -99,29 +99,7 @@ class Settings(Model):
         exclude = ["id"]
 
 
-class EssentialReagents(Model):
-    """Essential Reagents for this particular instrument."""
-
-    accronym = fields.CharField(
-        pk=True, max_length=7, description="Accronym of the reagent", unique=True
-    )
-    name = fields.TextField(description="Name of the reagent")
-    volume = fields.FloatField(description="Volume of the reagents in mL")
-    current_volume = fields.FloatField(
-        description="Volume of the reagents estimated to be available currently in mL"
-    )
-    inserted_at = fields.DatetimeField(
-        auto_now_add=True, description="When was this reagent inserted?"
-    )
-    updated_at = fields.DatetimeField(auto_now_add=True, description="Last time this part was used")
-
-    class PydanticMeta:  # pylint: disable=too-few-public-methods
-        """Pydantic configuration"""
-
-        ordering = ["current_volume", "-updated_at", "-inserted_at"]
-
-
-class SequencePartReagents(Model):
+class Reactant(Model):
     """A part of a sequence, such as nucleotides, or terminal modifications."""
 
     accronym = fields.CharField(
@@ -132,7 +110,7 @@ class SequencePartReagents(Model):
     current_volume = fields.FloatField(
         description="Volume of the reagents estimated to be available currently in mL"
     )
-    part_type = fields.CharEnumField(PartType, description="Type of sequence part")
+    reactant_type = fields.CharEnumField(ReactantType, description="Type of sequence part")
     inserted_at = fields.DatetimeField(
         auto_now_add=True, description="When was this reagent inserted?"
     )
@@ -148,14 +126,4 @@ SynthesisQueueModel = pydantic_model_creator(SynthesisQueue, name="SynthesisQueu
 
 SettingsModel = pydantic_model_creator(Settings, name="Settings")
 
-EssentialReagentsModel = pydantic_model_creator(EssentialReagents, name="EssentialReagents")
-SequencePartReagentsModel = pydantic_model_creator(
-    SequencePartReagents, name="SequencePartReagents"
-)
-
-
-class AllReagents(BaseModel):  # pylint: disable=too-few-public-methods
-    """All reagents in the instrument."""
-
-    reactants: EssentialReagentsModel
-    components: SequencePartReagentsModel
+ReactantModel = pydantic_model_creator(Reactant, name="ReactantModel")

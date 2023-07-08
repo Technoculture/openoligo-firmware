@@ -13,9 +13,8 @@ from openoligo.api.db import db_init, get_db_url
 
 # from openoligo.api.models import Settings  # pylint: disable=unused-import
 from openoligo.api.models import (  # EssentialReagentsModel,; SequencePartReagentsModel,
-    AllReagents,
-    EssentialReagents,
-    SequencePartReagents,
+    Reactant,
+    ReactantModel,
     Settings,
     SettingsModel,
     SynthesisQueue,
@@ -26,9 +25,6 @@ from openoligo.api.models import (  # EssentialReagentsModel,; SequencePartReage
 from openoligo.hal.platform import __platform__
 from openoligo.seq import SeqCategory
 from openoligo.utils.logger import OligoLogger
-
-# from openoligo.api.helpers import get_settings
-
 
 ol = OligoLogger(name="server", rotates=True)
 logger = ol.get_logger()
@@ -265,13 +261,11 @@ async def get_instrument_info():
     "/reagents",
     tags=["Instrument"],
     status_code=200,
-    response_model=AllReagents,
+    response_model=ReactantModel,
 )
 async def get_all_reagents():
     """Get all reagents."""
-    reactants = await EssentialReagents.all().values()
-    components = await SequencePartReagents.all().values()
-    return AllReagents(reactants=reactants, components=components)
+    return await Reactant.all().values()
 
 
 def main():
