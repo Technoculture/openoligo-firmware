@@ -2,11 +2,8 @@
 A minimal script for running the server and the runner in parallel,
 and keeping them alive for the whole time.
 """
-import os
 import subprocess
 import sys
-
-loop_forever = os.getenv("OO_LOOP_FOREVER", "true").lower() == "true"
 
 
 def main() -> None:
