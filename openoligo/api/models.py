@@ -8,7 +8,13 @@ from tortoise import fields
 from tortoise.contrib.pydantic import pydantic_model_creator
 from tortoise.exceptions import ValidationError
 from tortoise.models import Model
-from tortoise.validators import MinLengthValidator, RegexValidator, Validator
+from tortoise.validators import (
+    MaxValueValidator,
+    MinLengthValidator,
+    MinValueValidator,
+    RegexValidator,
+    Validator,
+)
 
 from openoligo.seq import Seq, SeqCategory
 
@@ -89,13 +95,15 @@ class Settings(Model):
     """Settings for this particular instrument."""
 
     id = fields.IntField(pk=True, autoincrement=True, description="Settings ID")
-    org_uuid = fields.TextField(description="UUID of the organisation")
-    updated_at = fields.DatetimeField(auto_now_add=True)
+    org_uuid = fields.TextField(
+        description="UUID of the organisation", validators=[MinLengthValidator(8)]
+    )
+    created_at = fields.DatetimeField(auto_now_add=True)
 
     class PydanticMeta:  # pylint: disable=too-few-public-methods
         """Pydantic configuration"""
 
-        ordering = ["-updated_at"]
+        ordering = ["-created_at"]
         exclude = ["id"]
 
 
@@ -103,12 +111,16 @@ class Reactant(Model):
     """A part of a sequence, such as nucleotides, or terminal modifications."""
 
     accronym = fields.CharField(
-        pk=True, max_length=7, description="Accronym of the reagent", unique=True
+        pk=True, max_length=10, description="Accronym of the reagent", unique=True
     )
     name = fields.TextField(description="Name of the part")
-    volume = fields.FloatField(description="Volume of the part in mL")
+    volume = fields.FloatField(
+        description="Volume of the part in mL",
+        validators=[MinValueValidator(0.0), MaxValueValidator(1000.0)],
+    )
     current_volume = fields.FloatField(
-        description="Volume of the reagents estimated to be available currently in mL"
+        description="Volume of the reagents estimated to be available currently in mL",
+        validators=[MinValueValidator(0.0), MaxValueValidator(1000.0)],
     )
     reactant_type = fields.CharEnumField(ReactantType, description="Type of sequence part")
     inserted_at = fields.DatetimeField(

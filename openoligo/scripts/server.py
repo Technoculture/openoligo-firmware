@@ -6,7 +6,7 @@ from typing import Optional
 
 import requests
 import uvicorn
-from fastapi import Body, FastAPI, HTTPException, status
+from fastapi import Body, FastAPI, HTTPException, Query, status
 from tortoise.exceptions import ValidationError
 
 from openoligo.api.db import db_init, get_db_url
@@ -15,6 +15,7 @@ from openoligo.api.db import db_init, get_db_url
 from openoligo.api.models import (  # EssentialReagentsModel,; SequencePartReagentsModel,
     Reactant,
     ReactantModel,
+    ReactantType,
     Settings,
     SettingsModel,
     SynthesisQueue,
@@ -141,14 +142,18 @@ def get_health_status():
     return {"status": "ok"}
 
 
-@app.post("/queue", status_code=status.HTTP_201_CREATED, tags=["Synthesis Queue"])
+@app.post(
+    "/queue",
+    status_code=status.HTTP_201_CREATED,
+    response_model=SynthesisQueueModel,
+    tags=["Synthesis Queue"],
+)
 async def add_a_task_to_synthesis_queue(
     sequence: str, category: SeqCategory = SeqCategory.DNA, rank: int = 0
 ):
     """Add a synthesis task to the synthesis task queue by providing a sequence and its category."""
     try:
-        model = await SynthesisQueue.create(sequence=sequence, category=category, rank=rank)
-        return model
+        return await SynthesisQueue.create(sequence=sequence, category=category, rank=rank)
     except ValidationError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     finally:
@@ -243,12 +248,12 @@ async def delete_synthesis_task_by_id(task_id: int):
 @app.get(
     "/about",
     tags=["Instrument"],
-    response_model=list[SettingsModel],  # type: ignore
-    status_code=200,
+    response_model=SettingsModel,  # type: ignore
+    status_code=status.HTTP_200_OK,
 )
 async def get_instrument_info():
     """Get information about the instrument."""
-    settings = await Settings.first().values()
+    settings = await Settings.all().order_by("-created_at").first()
     if not settings:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -257,15 +262,69 @@ async def get_instrument_info():
     return settings
 
 
+@app.post(
+    "/about",
+    tags=["Instrument"],
+    response_model=SettingsModel,  # type: ignore
+    status_code=status.HTTP_201_CREATED,
+)
+async def post_instrument_info(
+    org_uuid: str = Query(
+        ..., alias="organisation", description="Organisation UUID", min_length=8, max_length=36
+    ),
+):
+    """Post information about the instrument."""
+    try:
+        return await Settings.create(
+            org_uuid=org_uuid,
+        )
+    except ValidationError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
+
 @app.get(
     "/reagents",
     tags=["Instrument"],
-    status_code=200,
-    response_model=ReactantModel,
+    status_code=status.HTTP_200_OK,
+    response_model=list[ReactantModel],  # type: ignore
 )
 async def get_all_reagents():
     """Get all reagents."""
-    return await Reactant.all().values()
+    return await Reactant.all()
+
+
+@app.post(
+    "/reagents",
+    tags=["Instrument"],
+    status_code=status.HTTP_201_CREATED,
+    response_model=ReactantModel,
+)
+async def add_reagent_to_inventory(
+    name: str = Query(..., min_length=1, max_length=100),
+    accronym: str = Query(
+        description="Exact representation of the reagent in a Sequence",
+        example="5mC, -GalNAc, U, T, etc.",
+        min_length=1,
+        max_length=10,
+        regex=r"^[A-Za-z0-9\-]+$",
+    ),
+    volume_in_ml: float = Query(0.0, ge=0.0, le=1000.0),
+    reactant_type: ReactantType = ReactantType.REACTANT,
+):
+    """Add a reagent to the inventory."""
+    try:
+        model = await Reactant.create(
+            name=name,
+            accronym=accronym,
+            volume=volume_in_ml,
+            reactant_type=reactant_type,
+            current_volume=volume_in_ml,
+        )
+        return model
+    except ValidationError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+    finally:
+        logger.info("Added reagent '%s' to the inventory.", name)
 
 
 def main():

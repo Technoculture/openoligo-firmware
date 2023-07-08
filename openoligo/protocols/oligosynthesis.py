@@ -111,6 +111,10 @@ async def synthesize_ssdna(instrument: Instrument, seq: Seq) -> None:
             pbar.update(1)
 
         await cleave(instrument)
+
+        await solvent_wash_all(instrument)
+        await dry_all(instrument)
+
         await deprotect(instrument)
 
         pbar.update(1)

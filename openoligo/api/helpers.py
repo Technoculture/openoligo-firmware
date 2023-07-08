@@ -47,13 +47,18 @@ async def set_org_id(org_id: str) -> None:
     await Settings.create(org_id=org_id)
 
 
+async def get_instrument_settings() -> Optional[Settings]:
+    """Get the instrument settings."""
+    return await Settings.first()
+
+
 async def get_settings() -> Optional[list[Settings]]:
     """Get the organisation ID."""
     settings = await Settings.first().values()
     return [Settings(**setting) for setting in settings] if settings else None
 
 
-async def reactant_used(accronym: str, volume: float) -> None:
+async def update_reactant_used(accronym: str, volume: float) -> None:
     """Reduce the volume of a reagent by the given amount."""
     assert volume >= 0, "Volume must be positive"
     reagent = await Reactant.get(accronym=accronym).values("current_volume")

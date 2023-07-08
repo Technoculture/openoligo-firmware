@@ -75,7 +75,7 @@ class Seq:
         """
         Initialize the sequence.
         """
-        self.seq = seq.upper()
+        self.seq = seq
         if not is_valid_dna(self.seq):
             raise ValueError("Invalid DNA sequence")
         self.index = 0
