@@ -174,5 +174,5 @@ dockcross-linux-armv7
 node_modules
 .serverless
 *.lock
-*-lock.json
+#*-lock.json
 .serverless*

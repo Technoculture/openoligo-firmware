@@ -17,9 +17,9 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - name: Change to subdirectory
-      run: cd oligocloud
+    - name: Install dependencies
+      working-directory: ./oligocloud # Navigate to the correct directory
+      run: npm ci
     - name: serverless deploy
       uses: serverless/github-action@v3.2
       with:
