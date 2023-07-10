@@ -18,12 +18,11 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - name: Change to subdirectory
-      run: cd oligocloud
     - run: npm ci
     - name: serverless deploy
       uses: serverless/github-action@v3.2
       with:
-        args: deploy
+        args: -c "cd ./oligocloud && serverless deploy"
+        entrypoint: /bin/sh
       env:
         SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
