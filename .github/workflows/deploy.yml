@@ -1,8 +1,9 @@
-name: Deploy master branch
+name: Deploy using Serverless on Release
 
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -23,6 +24,7 @@ jobs:
     - name: serverless deploy
       uses: serverless/github-action@v3.2
       with:
-        args: deploy
+        args: -c "cd ./oligocloud && serverless deploy"
+        entrypoint: /bin/sh
       env:
         SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
