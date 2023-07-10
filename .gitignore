@@ -170,3 +170,9 @@ requirements.txt
 TODO.md
 dockcross
 dockcross-linux-armv7
+
+node_modules
+.serverless
+*.lock
+*-lock.json
+.serverless*

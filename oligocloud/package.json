@@ -1,0 +1,10 @@
+{
+  "name": "openoligo-mqtt-to-ws",
+  "version": "1.0.0",
+  "description": "OpenOligo MQTT messages aggreated in a db and exposed via an websocket API",
+  "author": "Satyam Tiwary",
+  "devDependencies": {
+    "serverless-python-requirements": "^6.0.0",
+    "serverless-wsgi": "^3.0.1"
+  }
+}
