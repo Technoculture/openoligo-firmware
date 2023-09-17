@@ -7,7 +7,7 @@ from enum import Enum
 def is_rpi() -> bool:
     """Returns True if running on a Raspberry Pi, False otherwise."""
     try:
-        with open("/proc/cpuinfo", "r", encoding="utf-8") as file:
+        with open("/proc/cpuinfo", encoding="utf-8") as file:
             return "Raspberry" in file.read()
     except FileNotFoundError:
         return False
@@ -16,7 +16,7 @@ def is_rpi() -> bool:
 def is_bb() -> bool:
     """Returns True if running on a Raspberry Pi, False otherwise."""
     try:
-        with open("/proc/cpuinfo", "r", encoding="utf-8") as file:
+        with open("/proc/cpuinfo", encoding="utf-8") as file:
             return "AM33XX" in file.read()
     except FileNotFoundError:
         return False

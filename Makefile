@@ -71,15 +71,14 @@ build:
 	@poetry build
 
 format:
-	@isort $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR) $(EXECNAME)
-	@black $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
+	isort $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR) $(EXECNAME)
+	black $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
 
 format-check:
 	@black --check $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
 
 lint:
-	@pylint $(LIBNAME)
-	@flake8 $(LIBNAME)
+	@ruff check . --fix
 
 type:
 	@mypy $(LIBNAME) $(EXAMPLEDIR) --check-untyped-defs --ignore-missing-imports

@@ -1,6 +1,4 @@
-"""
-Utilities for waiting.
-"""
+"""Utilities for waiting."""
 import asyncio
 import logging
 import time

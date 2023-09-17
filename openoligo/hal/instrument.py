@@ -7,7 +7,7 @@ from typing import Callable
 from openoligo.hal.board import Pinout
 from openoligo.hal.devices import DigitalSensor, Valve
 from openoligo.hal.gpio import get_gpio
-from openoligo.hal.types import OneDestinationException, OneSourceException, ValveRole, board
+from openoligo.hal.types import OneDestinationError, OneSourceError, ValveRole, board
 from openoligo.utils.singleton import Singleton
 
 # import anyio
@@ -59,8 +59,8 @@ class Instrument(metaclass=Singleton):
             name: list of valve names
 
         raises:
-            OneSourceException: If there is not exactly one source valve.
-            OneDestinationException: If there is not exactly one destination valve.
+            OneSourceError: If there is not exactly one source valve.
+            OneDestinationError: If there is not exactly one destination valve.
         """
         valve_types: dict[ValveRole, list[Valve]] = {
             ValveRole.INLET: [],
@@ -80,10 +80,10 @@ class Instrument(metaclass=Singleton):
             valve_types[valve.role].append(valve)
 
         if len(valve_types[ValveRole.INLET]) != 1:
-            raise OneSourceException("There must be exactly one source valve")
+            raise OneSourceError("There must be exactly one source valve")
 
         if len(valve_types[ValveRole.OUTLET]) != 1:
-            raise OneDestinationException("There must be exactly one destination valve")
+            raise OneDestinationError("There must be exactly one destination valve")
 
         if len(valve_types[ValveRole.TRANSIT]) > 0:
             logging.debug(
@@ -99,8 +99,8 @@ class Instrument(metaclass=Singleton):
             state: The state of the pin.
 
         raises:
-            OneSourceException: If there is not exactly one source valve.
-            OneDestinationException: If there is not exactly one destination valve.
+            OneSourceError: If there is not exactly one source valve.
+            OneDestinationError: If there is not exactly one destination valve.
         """
         self.validate_valve_set(name)
 

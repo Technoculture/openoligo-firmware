@@ -4,7 +4,7 @@ Pins in the Raspberry Pi GPIO header.
 from typing import Dict, TypedDict
 
 from openoligo.hal.devices import DigitalSensor, Switch, Valve
-from openoligo.hal.types import Board, NoSuchPinInPinout, Switchable, ValveRole, board
+from openoligo.hal.types import Board, NoSuchPinInPinoutError, Switchable, ValveRole, board
 from openoligo.utils.singleton import Singleton
 
 
@@ -139,7 +139,7 @@ class Pinout(metaclass=Singleton):
         try:
             return self.__pinout[name.lower()]
         except KeyError as exc:
-            raise NoSuchPinInPinout(
+            raise NoSuchPinInPinoutError(
                 f"Pin {name} not found in pinout. \n\nAvailable pins are: {list(self.__pinout)}"
             ) from exc
 

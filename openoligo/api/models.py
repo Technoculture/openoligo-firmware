@@ -2,6 +2,7 @@
 Tortoise ORM Models for the OpenOligo API
 """
 import re
+from dataclasses import dataclass
 from enum import Enum
 
 from tortoise import fields
@@ -16,7 +17,7 @@ from tortoise.validators import (
     Validator,
 )
 
-from openoligo.seq import Seq, SeqCategory
+from openoligo.seq import Seq
 
 
 class TaskStatus(str, Enum):
@@ -53,7 +54,76 @@ class ValidSeq(Validator):  # pylint: disable=too-few-public-methods
             raise ValidationError(str(exc)) from exc
 
 
-class SynthesisQueue(Model):
+class Backbone(str, Enum):
+    """Backbone of a sequence."""
+
+    PO = "PO"
+    PS = "PS"
+
+
+class Nucleobase(str, Enum):
+    """Nucleobase of a nucleotide."""
+
+    A = "Adenine"
+    C = "Cytosine"
+    G = "Guanine"
+    T = "Thymine"
+    U = "Uracil"
+    I = "Inosine"  # noqa: E741
+
+
+@dataclass
+class NucleobaseInfo:
+    """Information regarding a particular nucleotide"""
+
+    name: str
+    is_terminal: bool = False
+
+
+NucleobasesInfo: dict[Nucleobase, NucleobaseInfo] = {
+    Nucleobase.A: NucleobaseInfo(name="Adenine"),
+    Nucleobase.T: NucleobaseInfo(name="Thymine"),
+    Nucleobase.G: NucleobaseInfo(name="Guanine"),
+    Nucleobase.C: NucleobaseInfo(name="Cytosine"),
+    Nucleobase.I: NucleobaseInfo(name="Inosine"),
+}
+
+
+class Sugar(str, Enum):
+    """Sugar of a nucleotide."""
+
+    OH = "OH"
+    H = "H"
+    MOE = "MOE"
+    OMOE = "OMOE"
+    F = "F"
+
+
+class SolidSupport(str, Enum):
+    """Solid support of a nucleotide."""
+
+    UNIVERSAL = "Universal"
+    GALNAC = "GalNAc"
+
+
+class Nucleotide(Model):
+    """Nucleotide Model"""
+
+    id = fields.IntField(pk=True, autoincrement=True, description="The ID of the nucleotide")
+    accronym = fields.CharField(
+        max_length=10, unique=True, description="The accronym of the nucleotide"
+    )
+    backbone = fields.CharEnumField(
+        Backbone, default=Backbone.PO, description="The backbone of the nucleotide"
+    )
+    sugar = fields.CharEnumField(Sugar, default=Sugar.H, description="Sugar of the nucleotide")
+    base = fields.CharEnumField(Nucleobase, description="The nucleobase of the nucleotide")
+    quantity = fields.IntField(
+        default=0, description="The quantity of the nucleotide in the inventory"
+    )
+
+
+class SynthesisTask(Model):
     """A synthesis task in the queue."""
 
     id = fields.IntField(pk=True, autoincrement=True, description="Synthesis ID")
@@ -62,11 +132,7 @@ class SynthesisQueue(Model):
         validators=[ValidSeq()],
         description="Sequence of the Nucliec Acid to synthesize",
     )
-    category = fields.CharEnumField(
-        SeqCategory,
-        default=SeqCategory.DNA,
-        description="Category of the sequence, eg. DNA, RNA, or MIXED",
-    )
+
     status = fields.CharEnumField(TaskStatus, default=TaskStatus.QUEUED)
 
     rank = fields.IntField(
@@ -134,7 +200,7 @@ class Reactant(Model):
         ordering = ["current_volume", "-updated_at", "-inserted_at"]
 
 
-SynthesisQueueModel = pydantic_model_creator(SynthesisQueue, name="SynthesisQueue")
+SynthesisTaskModel = pydantic_model_creator(SynthesisTask, name="SynthesisTask")
 
 SettingsModel = pydantic_model_creator(Settings, name="Settings")
 
