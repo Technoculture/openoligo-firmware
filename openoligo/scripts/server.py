@@ -22,6 +22,7 @@ from openoligo.api.models import (  # EssentialReagentsModel,; SequencePartReage
     SynthesisQueueModel,
     TaskStatus,
     ValidSeq,
+    InstrumentHealth
 )
 from openoligo.hal.platform import __platform__
 from openoligo.seq import SeqCategory
@@ -139,7 +140,7 @@ async def shutdown_event():
 @app.get("/health", status_code=200, tags=["Utilities"])
 def get_health_status():
     """Health check."""
-    return {"status": "ok"}
+    return { "status": InstrumentHealth.OPERATIONAL }
 
 
 @app.post(

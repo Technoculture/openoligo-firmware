@@ -38,6 +38,15 @@ class ReactantType(str, Enum):
     REACTANT = "reactant"
 
 
+class InstrumentHealth(str, Enum):
+    """Instrument health status"""
+
+    OPERATIONAL = "Operational"
+    DEGRADED = "Degraded"
+    MAINTAINANCE = "Maintenance"
+    OFFLINE = "Offline"
+
+
 class ValidSeq(Validator):  # pylint: disable=too-few-public-methods
     """Validate that the value is a valid NA sequence"""
 
