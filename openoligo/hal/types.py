@@ -4,13 +4,7 @@ This module contains definitions of protocols and exceptions related to switchab
 from enum import Enum
 from typing import Iterator, Protocol
 
-from openoligo.hal.platform import (
-    PLATFORM_TO_BOARD,
-    MinimumCommonPinout,
-    Platform,
-    __platform__,
-    rpi_board_pins,
-)
+from openoligo.hal.platform import PLATFORM_TO_BOARD, MinimumCommonPinout, Platform, __platform__, rpi_board_pins
 
 
 class Board:
@@ -147,19 +141,19 @@ class InvalidManifoldSizeError(Exception):
     """
 
 
-class NoSuchPinInPinout(Exception):
+class NoSuchPinInPinoutError(Exception):
     """
     Thrown when a pin for a given name is not found in the pinout.
     """
 
 
-class OneSourceException(SwitchingError):
+class OneSourceError(SwitchingError):
     """
     When more than one source valve is being attempted to be used.
     """
 
 
-class OneDestinationException(SwitchingError):
+class OneDestinationError(SwitchingError):
     """
     When more than one destination valve is being attempted to be used.
     """

@@ -6,7 +6,7 @@ from openoligo.hal.board import Pinout
 from openoligo.hal.devices import Valve
 from openoligo.hal.gpio import get_gpio
 from openoligo.hal.instrument import Instrument
-from openoligo.hal.types import OneDestinationException, OneSourceException, ValveRole, board
+from openoligo.hal.types import OneDestinationError, OneSourceError, ValveRole, board
 
 
 @pytest.fixture
@@ -71,7 +71,7 @@ def test_validate_valve_set(mock_pinout):
     # with multiple inlet valves
     instrument.pinout.get("I1").role = ValveRole.INLET
 
-    with pytest.raises(OneSourceException):
+    with pytest.raises(OneSourceError):
         instrument.validate_valve_set(["I1", "I2"])
         instrument.validate_valve_set(["I1", "I2", "I3"])
         instrument.validate_valve_set(["I1", "I2", "O1"])
@@ -79,7 +79,7 @@ def test_validate_valve_set(mock_pinout):
     # with multiple outlet valves
     instrument.pinout.get("O2").role = ValveRole.OUTLET
 
-    with pytest.raises(OneDestinationException):
+    with pytest.raises(OneDestinationError):
         instrument.validate_valve_set(["I1", "O1", "O2"])
 
 

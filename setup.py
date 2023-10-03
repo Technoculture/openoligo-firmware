@@ -1,9 +1,12 @@
-from setuptools import setup, find_packages
+"""Setup script for OpenOligo Library (and executable scripts). Added specifically to support yocto build."""
+from setuptools import find_packages, setup
 
 setup(
     name="OpenOligo",
     version="0.1.8",
-    description="An open-source platform for programmatically interacting with and managing Nucleic acid sequences synthesis processes.",
+    description=""" \
+    An open-source platform for programmatically interacting with and managing \
+    Nucleic acid sequences synthesis processes.""",
     license="Apache-2.0",
     author="Satyam Tiwary",
     author_email="satyam@technoculture.io",

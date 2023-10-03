@@ -18,8 +18,8 @@ from openoligo.api.models import (  # EssentialReagentsModel,; SequencePartReage
     ReactantType,
     Settings,
     SettingsModel,
-    SynthesisQueue,
-    SynthesisQueueModel,
+    SynthesisTask,
+    SynthesisTaskModel,
     TaskStatus,
     ValidSeq,
     InstrumentHealth
@@ -42,7 +42,7 @@ You can
 * Check the status of the sequences waiting to be synthesized.
 * Read and Update the configuration and the staus of the instrument.
 
-## SynthesisQueue
+## SynthesisTask
 
 You will be able to:
 
@@ -146,7 +146,7 @@ def get_health_status():
 @app.post(
     "/queue",
     status_code=status.HTTP_201_CREATED,
-    response_model=SynthesisQueueModel,
+    response_model=SynthesisTaskModel,
     tags=["Synthesis Queue"],
 )
 async def add_a_task_to_synthesis_queue(
@@ -154,7 +154,7 @@ async def add_a_task_to_synthesis_queue(
 ):
     """Add a synthesis task to the synthesis task queue by providing a sequence and its category."""
     try:
-        return await SynthesisQueue.create(sequence=sequence, category=category, rank=rank)
+        return await SynthesisTask.create(sequence=sequence, category=category, rank=rank)
     except ValidationError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     finally:
@@ -163,13 +163,13 @@ async def add_a_task_to_synthesis_queue(
 
 @app.get(
     "/queue",
-    response_model=list[SynthesisQueueModel],  # type: ignore
+    response_model=list[SynthesisTaskModel],  # type: ignore
     status_code=status.HTTP_200_OK,
     tags=["Synthesis Queue"],
 )
 async def get_all_tasks_in_synthesis_queue(filter_by: Optional[TaskStatus] = None):
     """Get the current synthesis task queue."""
-    tasks = SynthesisQueue.all().order_by("-rank", "-created_at")
+    tasks = SynthesisTask.all().order_by("-rank", "-created_at")
     if filter_by:
         tasks = tasks.filter(status=filter)
     return await tasks
@@ -178,13 +178,13 @@ async def get_all_tasks_in_synthesis_queue(filter_by: Optional[TaskStatus] = Non
 @app.delete("/queue", status_code=status.HTTP_200_OK, tags=["Synthesis Queue"])
 async def clear_all_queued_tasks_in_task_queue():
     """Delete all tasks in the QUEUED state."""
-    return await SynthesisQueue.filter(status=TaskStatus.QUEUED).delete()
+    return await SynthesisTask.filter(status=TaskStatus.QUEUED).delete()
 
 
-@app.get("/queue/{task_id}", response_model=SynthesisQueueModel, tags=["Synthesis Queue"])
+@app.get("/queue/{task_id}", response_model=SynthesisTaskModel, tags=["Synthesis Queue"])
 async def get_task_by_id(task_id: int):
     """Get a synthesis task from the queue."""
-    task = await SynthesisQueue.get_or_none(id=task_id)
+    task = await SynthesisTask.get_or_none(id=task_id)
     if task is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sythesis task not found")
     return task
@@ -192,7 +192,7 @@ async def get_task_by_id(task_id: int):
 
 @app.put(
     "/queue/{task_id}",
-    response_model=SynthesisQueueModel,
+    response_model=SynthesisTaskModel,
     status_code=status.HTTP_200_OK,
     tags=["Synthesis Queue"],
 )
@@ -200,7 +200,7 @@ async def update_a_synthesis_task(
     task_id: int, sequence: Optional[str] = Body(None), rank: Optional[int] = Body(None)
 ):
     """Update a particular task in the queue."""
-    task = await SynthesisQueue.get_or_none(id=task_id)
+    task = await SynthesisTask.get_or_none(id=task_id)
 
     if task is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sequence task not found")
@@ -236,7 +236,7 @@ async def update_a_synthesis_task(
 @app.delete("/queue/{task_id}", status_code=status.HTTP_200_OK, tags=["Synthesis Queue"])
 async def delete_synthesis_task_by_id(task_id: int):
     """Delete a synthesis task from the queue."""
-    task = await SynthesisQueue.get_or_none(id=task_id)
+    task = await SynthesisTask.get_or_none(id=task_id)
 
     if task is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sequence not found")
