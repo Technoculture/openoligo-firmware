@@ -1,10 +1,13 @@
 """
 Tortoise ORM Models for the OpenOligo API
 """
+import json
 import re
 from dataclasses import dataclass
 from enum import Enum
+from typing import Optional
 
+from pydantic import BaseModel
 from tortoise import fields
 from tortoise.contrib.pydantic import pydantic_model_creator
 from tortoise.exceptions import ValidationError
@@ -23,10 +26,13 @@ from openoligo.seq import Seq
 class TaskStatus(str, Enum):
     """Status of a synthesis task."""
 
-    QUEUED = "queued"
-    IN_PROGRESS = "in_progress"
-    COMPLETE = "complete"
-    FAILED = "failed"
+    ATTEMPTING_TO_SEND = ("Attempting to Send to Instrument",)
+    WAITING_IN_QUEUE = ("Waiting in Queue",)
+    WAITING_TO_INITIATE = ("Waiting to Initiate Synthesis",)
+    SYNTHESIS_IN_PROGRESS = ("Synthesis in Progress",)
+    SYNTHESIS_COMPLETE = ("Synthesis Complete",)
+    SYNTHESIS_FAILED = ("Synthesis Failed",)
+    SYNTHESIS_CANCELLED = ("Synthesis Cancelled",)
 
 
 class ReactantType(str, Enum):
@@ -132,17 +138,56 @@ class Nucleotide(Model):
     )
 
 
+# Some Code Duplication is Better than Over Engineering
+class NucleotideModel(BaseModel):
+    """NucleotideModel for the Nucleotide class"""
+
+    accronym: Optional[str]
+    backbone: Backbone
+    sugar: Sugar
+    base: Nucleobase
+
+    class Config:
+        json_encoders = {
+            "accronym": lambda accronym: accronym.value,
+            "backbone": lambda backbone: backbone.value,
+            "sugar": lambda sugar: sugar.value,
+            "base": lambda base: base.value,
+        }
+
+
+# NucleotidesModel = list[NucleotideModel] # but needs to be a pydantic model
+class NucleotidesModel(BaseModel):
+    """NucleotidesModel for the Nucleotide class"""
+
+    __root__: list[NucleotideModel]
+
+    class Config:
+        json_encoders = {
+            "NucelotidesModel": lambda lst: [item.dict() for item in lst],
+        }
+
+
+def json_to_seq(raw_json: str | bytes) -> NucleotidesModel:
+    """Convert json to a Nucleotide[]"""
+    seq: NucleotidesModel = NucleotidesModel.parse_raw(raw_json)
+    return seq
+
+
+def seq_to_json(seq: NucleotidesModel) -> str:
+    """Convert a sequence(Nucleotide[]) to a json"""
+    return seq.json()
+
+
 class SynthesisTask(Model):
     """A synthesis task in the queue."""
 
     id = fields.IntField(pk=True, autoincrement=True, description="Synthesis ID")
 
-    sequence = fields.TextField(
-        validators=[ValidSeq()],
-        description="Sequence of the Nucliec Acid to synthesize",
-    )
+    sequence = fields.JSONField(decoder=json_to_seq, encoder=seq_to_json)
 
-    status = fields.CharEnumField(TaskStatus, default=TaskStatus.QUEUED)
+    solid_support = fields.CharEnumField(SolidSupport, default=SolidSupport.UNIVERSAL)
+    status = fields.CharEnumField(TaskStatus, default=TaskStatus.WAITING_IN_QUEUE)
 
     rank = fields.IntField(
         default=0,

@@ -24,12 +24,12 @@ async def set_completed_now(task_id: int):
 
 async def set_failed_now(task_id: int):
     """Set the completed_at timestamp of a synthesis task."""
-    await update_task_status(task_id, TaskStatus.FAILED)
+    await update_task_status(task_id, TaskStatus.SYNTHESIS_FAILED)
 
 
 async def set_task_in_progress(task_id: int):
     """Set the status of a synthesis task."""
-    await SynthesisTask.filter(id=task_id).update(status=TaskStatus.IN_PROGRESS)
+    await SynthesisTask.filter(id=task_id).update(status=TaskStatus.SYNTHESIS_IN_PROGRESS)
 
 
 async def set_log_file(task_id: int, log_file: str):
@@ -79,5 +79,7 @@ async def create_new_reactant(name: str, accronym: str, volume: float) -> None:
 async def get_next_task() -> Optional[SynthesisTask]:
     """Get the next synthesis task."""
     return (
-        await SynthesisTask.filter(status=TaskStatus.QUEUED).order_by("-rank", "created_at").first()
+        await SynthesisTask.filter(status=TaskStatus.WAITING_IN_QUEUE)
+        .order_by("-rank", "created_at")
+        .first()
     )

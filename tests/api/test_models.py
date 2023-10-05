@@ -31,9 +31,7 @@ async def test_synthesis_queue_validation(db):
 
 @pytest.mark.asyncio
 async def test_update_synthesis_queue_status(db):
-    synthesis_queue = await SynthesisTask.create(
-        sequence="ATCG", status=TaskStatus.QUEUED, rank=0
-    )
+    synthesis_queue = await SynthesisTask.create(sequence="ATCG", status=TaskStatus.QUEUED, rank=0)
 
     await synthesis_queue.all().update(status=TaskStatus.IN_PROGRESS)
     synthesis_queue_updated = await SynthesisTask.get(id=synthesis_queue.id)

@@ -4,7 +4,13 @@ This module contains definitions of protocols and exceptions related to switchab
 from enum import Enum
 from typing import Iterator, Protocol
 
-from openoligo.hal.platform import PLATFORM_TO_BOARD, MinimumCommonPinout, Platform, __platform__, rpi_board_pins
+from openoligo.hal.platform import (
+    PLATFORM_TO_BOARD,
+    MinimumCommonPinout,
+    Platform,
+    __platform__,
+    rpi_board_pins,
+)
 
 
 class Board:

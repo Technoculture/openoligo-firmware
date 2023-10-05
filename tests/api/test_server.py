@@ -17,7 +17,7 @@ client = TestClient(app)
 def test_get_health():
     response = client.get("/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "ok"}
+    assert response.json() == {"status": "Operational"}
 
 
 def test_add_task_to_synthesis_queue(db):

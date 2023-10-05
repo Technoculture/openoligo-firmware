@@ -8,8 +8,8 @@ import os
 from typing import Optional
 
 from openoligo.api.db import db_init, get_db_url
+from openoligo.api.helpers import get_next_task  # set_failed_now,
 from openoligo.api.helpers import (
-    get_next_task,  # set_failed_now,
     set_completed_now,
     set_log_file,
     set_started_now,
@@ -58,7 +58,7 @@ async def worker():
         rl.change_log_file(name)
 
         await set_started_now(task.id)
-        await update_task_status(task.id, TaskStatus.IN_PROGRESS)
+        await update_task_status(task.id, TaskStatus.SYNTHESIS_IN_PROGRESS)
         logger.info("Starting task %d", task.id)
 
         # Execute the task
@@ -67,7 +67,7 @@ async def worker():
         inst.pressure_off()
 
         await set_completed_now(task.id)
-        await update_task_status(task.id, TaskStatus.COMPLETE)
+        await update_task_status(task.id, TaskStatus.SYNTHESIS_COMPLETE)
         logger.info("Task %d complete", task.id)
 
 
