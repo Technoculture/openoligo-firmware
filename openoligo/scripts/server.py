@@ -154,7 +154,7 @@ async def get_task_by_id(task_id: int):
     tags=["Synthesis Queue"],
 )
 async def update_a_synthesis_task(
-    task_id: int, sequence: Optional[str] = Body(None), rank: Optional[int] = Body(None)
+    task_id: int, sequence: NucleotidesModel, rank: Optional[int] = Body(None)
 ):
     """Update a particular task in the queue."""
     task = await SynthesisTask.get_or_none(id=task_id)
@@ -177,7 +177,7 @@ async def update_a_synthesis_task(
     if sequence is not None:
         try:
             seq_validator = ValidSeq()
-            seq_validator(sequence)
+            # seq_validator(sequence)
             task.sequence = sequence  # type: ignore
         except ValidationError as exc:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
