@@ -12,6 +12,13 @@ OpenOligo is an open-source platform for programmatically interacting with and m
 pip install openoligo
 ```
 
+In order to run one of the predefined scripts
+```sh
+git clone https://github.com/Technoculture/openoligo-firmware.git
+cd openoligo-firmware
+python3 ./examples/dna_synthesis.py
+```
+
 ### A simple Example
 
 ```py
