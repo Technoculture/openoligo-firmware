@@ -23,9 +23,6 @@ setup(
         "sh>=2.0.4",
         "anyio>=3.7.0",
         "types-requests>=2.31.0.1",
-        "jupyer>=1.0.0",
-        "jupyerlab>=4.0.2",
-        "setuptools>=68.0.0",
     ],
     extras_require={
         "rpi": ["RPi.GPIO>=0.7.1"],
