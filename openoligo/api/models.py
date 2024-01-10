@@ -8,6 +8,8 @@ from enum import Enum
 from typing import Optional
 
 from pydantic import BaseModel
+from pydantic import BaseModel
+# Existing import
 from tortoise import fields
 from tortoise.contrib.pydantic import pydantic_model_creator
 from tortoise.exceptions import ValidationError
