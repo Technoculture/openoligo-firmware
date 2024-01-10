@@ -171,7 +171,7 @@ class NucleotidesModel(BaseModel):
         }
 
 
-def json_to_seq(raw_json: str | bytes) -> NucleotidesModel:
+def json_to_seq(raw_json: 'Union[str, bytes]') -> NucleotidesModel:
     """Convert json to a Nucleotide[]"""
     seq: NucleotidesModel = NucleotidesModel.parse_raw(raw_json)
     return seq
