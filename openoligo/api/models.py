@@ -1,7 +1,7 @@
 """
 Tortoise ORM Models for the OpenOligo API
 """
-import json
+
 import re
 from dataclasses import dataclass
 from enum import Enum
@@ -23,6 +23,7 @@ from tortoise.validators import (
 )
 
 from openoligo.seq import Seq
+import json
 
 
 class TaskStatus(str, Enum):
