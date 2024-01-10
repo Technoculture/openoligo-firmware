@@ -1,13 +1,15 @@
 """
 Tortoise ORM Models for the OpenOligo API
 """
-import json
+
 import re
 from dataclasses import dataclass
 from enum import Enum
 from typing import Optional
 
 from pydantic import BaseModel
+from pydantic import BaseModel
+# Existing import
 from tortoise import fields
 from tortoise.contrib.pydantic import pydantic_model_creator
 from tortoise.exceptions import ValidationError
@@ -21,6 +23,7 @@ from tortoise.validators import (
 )
 
 from openoligo.seq import Seq
+import json
 
 
 class TaskStatus(str, Enum):
@@ -46,6 +49,7 @@ class ReactantType(str, Enum):
 
 
 class InstrumentHealth(str, Enum):
+    """Instrument health status"""
     """Instrument health status"""
 
     OPERATIONAL = "Operational"
@@ -168,7 +172,7 @@ class NucleotidesModel(BaseModel):
         }
 
 
-def json_to_seq(raw_json: str | bytes) -> NucleotidesModel:
+def json_to_seq(raw_json: 'Union[str, bytes]') -> NucleotidesModel:
     """Convert json to a Nucleotide[]"""
     seq: NucleotidesModel = NucleotidesModel.parse_raw(raw_json)
     return seq
@@ -197,6 +201,12 @@ class SynthesisTask(Model):
     )
     created_at = fields.DatetimeField(auto_now_add=True)
     started_at = fields.DatetimeField(null=True)
+    def public_method_one(self):
+        pass
+    
+    def public_method_two(self):
+        pass
+
     completed_at = fields.DatetimeField(null=True)
 
     log_file = fields.TextField(
