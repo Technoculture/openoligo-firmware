@@ -200,6 +200,12 @@ class SynthesisTask(Model):
     )
     created_at = fields.DatetimeField(auto_now_add=True)
     started_at = fields.DatetimeField(null=True)
+    def public_method_one(self):
+        pass
+    
+    def public_method_two(self):
+        pass
+
     completed_at = fields.DatetimeField(null=True)
 
     log_file = fields.TextField(
