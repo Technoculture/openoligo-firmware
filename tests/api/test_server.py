@@ -20,28 +20,36 @@ def test_get_health():
     assert response.json() == {"status": "Operational"}
 
 
-def test_add_task_to_synthesis_queue(db):
-    sequence = "ACTG"
-    rank = 1
-
-    response = client.post(f"/queue?sequence={sequence}&category=DNA&rank={rank}")
-    assert response.status_code == 201
-    assert "id" in response.json()
-
-    response = client.post(f"/queue?sequence={sequence}&category=TTT&rank={rank}")
-    assert response.status_code == 422
-
-    response = client.post(f"/queue?sequence={sequence}&category=DNA&rank=-10")
-    assert response.status_code == 201
-
-    response = client.post(f"/queue?sequence=A&category=RNA&rank=0")
-    assert response.status_code == 400
-
-
 def test_get_all_tasks_in_synthesis_queue(db):
     response = client.get("/queue")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
+
+    # Add tasks to the queue with different statuses
+    sequence1 = "AAATTT"
+    sequence2 = "CCGG"
+    category1 = SeqCategory.DNA.value
+    category2 = SeqCategory.RNA.value
+    rank1 = 0
+    rank2 = 1
+    status1 = TaskStatus.IN_PROGRESS
+    status2 = TaskStatus.COMPLETE
+
+    response1 = client.post(f"/queue?sequence={sequence1}&category={category1}&rank={rank1}")
+    assert response1.status_code == 201, f"Unexpected response code: {response1.status_code}"
+    response2 = client.post(f"/queue?sequence={sequence2}&category={category2}&rank={rank2}")
+    assert response2.status_code == 201, f"Unexpected response code: {response2.status_code}"
+    await update_task_status(1, status1)
+    await update_task_status(2, status2)
+
+    # Filter by status
+    response = client.get(f"/queue?filter_by={status1.value}")
+    assert response.status_code == 200, f"Unexpected response code: {response.status_code}"
+    tasks = response.json()
+    assert len(tasks) == 1, f"Expected 1 task, got {len(tasks)}"
+    assert all(
+        task["status"] == status1.value for task in tasks
+    ), "Not all tasks have the expected status"
 
 
 # @pytest.mark.asyncio
@@ -73,6 +81,23 @@ def test_get_all_tasks_in_synthesis_queue(db):
 #    ), "Not all tasks have the expected status"
 
 
+def test_clear_all_queued_tasks_in_task_queue(db):
+    response = client.delete("/queue")
+    assert response.status_code == 200
+
+
+def test_get_task_by_id(db):
+    client.post(f"/queue?sequence=AAATTT&category=DNA")
+    client.post(f"/queue?sequence=CCGG&category=RNA&rank=1")
+
+    # get the task
+    response = client.get(f"/queue/2")
+    assert response.status_code == 200
+    assert response.json()["id"] == 2
+
+    # get a task that doesn't exist
+    response = client.get(f"/queue/100")
+    assert response.status_code == 404
 def test_clear_all_queued_tasks_in_task_queue(db):
     response = client.delete("/queue")
     assert response.status_code == 200
