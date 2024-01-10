@@ -21,5 +21,5 @@ def test_examples():
                 print(f"{example} failed with error code {e.returncode}.")
                 pytest.fail(f"{example} failed with error code {e.returncode}.")
             except Exception as e:
-                print(f"{example} failed with an exception: {e}")
+                
                 pytest.fail(f"{example} failed with an exception: {e}")
