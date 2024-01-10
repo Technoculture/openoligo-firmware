@@ -147,19 +147,19 @@ class InvalidManifoldSizeError(Exception):
     """
 
 
-class NoSuchPinInPinout(Exception):
+class NoSuchPinInPinoutError(Exception):
     """
     Thrown when a pin for a given name is not found in the pinout.
     """
 
 
-class OneSourceException(SwitchingError):
+class OneSourceError(SwitchingError):
     """
     When more than one source valve is being attempted to be used.
     """
 
 
-class OneDestinationException(SwitchingError):
+class OneDestinationError(SwitchingError):
     """
     When more than one destination valve is being attempted to be used.
     """

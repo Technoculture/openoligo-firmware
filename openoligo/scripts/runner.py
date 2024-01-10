@@ -5,6 +5,7 @@ This script runs the infinite loop that checks for new tasks and executes them.
 """
 import asyncio
 import os
+from typing import Optional
 
 from openoligo.api.db import db_init, get_db_url
 from openoligo.api.helpers import get_next_task  # set_failed_now,
@@ -15,7 +16,7 @@ from openoligo.api.helpers import (
     set_task_in_progress,
     update_task_status,
 )
-from openoligo.api.models import TaskStatus
+from openoligo.api.models import SynthesisTask, TaskStatus
 from openoligo.hal.instrument import Instrument
 from openoligo.hal.platform import __platform__
 from openoligo.protocols.oligosynthesis import synthesize_ssdna
@@ -42,7 +43,7 @@ async def worker():
     inst.register_error_handler(logger.error)
 
     while True:
-        task = await get_next_task()
+        task: Optional[SynthesisTask] = await get_next_task()
         if task is None:
             await asyncio.sleep(5)
             continue  # This will loop forever until a task is available
@@ -57,7 +58,7 @@ async def worker():
         rl.change_log_file(name)
 
         await set_started_now(task.id)
-        await update_task_status(task.id, TaskStatus.IN_PROGRESS)
+        await update_task_status(task.id, TaskStatus.SYNTHESIS_IN_PROGRESS)
         logger.info("Starting task %d", task.id)
 
         # Execute the task
@@ -66,7 +67,7 @@ async def worker():
         inst.pressure_off()
 
         await set_completed_now(task.id)
-        await update_task_status(task.id, TaskStatus.COMPLETE)
+        await update_task_status(task.id, TaskStatus.SYNTHESIS_COMPLETE)
         logger.info("Task %d complete", task.id)
 
 

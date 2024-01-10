@@ -1,10 +1,8 @@
 """
 Script to start the REST API server for OpenOligo.
 """
-import uuid
 from typing import Optional
 
-import requests
 import uvicorn
 from fastapi import Body, FastAPI, HTTPException, Query, status
 from tortoise.exceptions import ValidationError
@@ -13,18 +11,20 @@ from openoligo.api.db import db_init, get_db_url
 
 # from openoligo.api.models import Settings  # pylint: disable=unused-import
 from openoligo.api.models import (  # EssentialReagentsModel,; SequencePartReagentsModel,
+    InstrumentHealth,
+    NucleotidesModel,
     Reactant,
     ReactantModel,
     ReactantType,
     Settings,
     SettingsModel,
-    SynthesisQueue,
-    SynthesisQueueModel,
+    SolidSupport,
+    SynthesisTask,
+    SynthesisTaskModel,
     TaskStatus,
     ValidSeq,
 )
 from openoligo.hal.platform import __platform__
-from openoligo.seq import SeqCategory
 from openoligo.utils.logger import OligoLogger
 
 ol = OligoLogger(name="server", rotates=True)
@@ -41,7 +41,7 @@ You can
 * Check the status of the sequences waiting to be synthesized.
 * Read and Update the configuration and the staus of the instrument.
 
-## SynthesisQueue
+## SynthesisTask
 
 You will be able to:
 
@@ -77,56 +77,12 @@ app = FastAPI(
 )
 
 
-def get_public_ip() -> str:
-    """Get the public IP address of the instrument."""
-    try:
-        return requests.get("https://api.ipify.org", timeout=1).text
-    except requests.exceptions.Timeout:
-        return ""
-
-
-def get_mac() -> str:
-    """Get the MAC address of the instrument."""
-    return f"{uuid.getnode():012x}"
-
-
-async def service_discovery(register: bool):
-    """
-    Register the service with the discovery service.
-
-    Inform the service discovery node about the service,
-    pass it our mac address, IP address and port
-    """
-    mac = get_mac()
-    ip = get_public_ip()  # pylint: disable=invalid-name
-    port = 9191
-
-    print(f"MAC address: {mac}, IP address: {ip}, Service port: {port} -> {register}")
-
-    # Call the service discovery node and register the service.
-    # response = requests.post(
-    #    "http://service_discovery_node_endpoint",
-    #    json={
-    #        "mac_address": mac,
-    #        "ip_address": ip,
-    #        "port": port,
-    #    },
-    # )
-
-    # Check if the service was registered successfully.
-    # if response.status_code == 200:
-    #    print("Service registered successfully.")
-    # else:
-    #    print(f"Failed to register service. Status code: {response.status_code}")
-
-
 @app.on_event("startup")
 async def startup_event():
     """Startup event for the FastAPI server."""
     logger.info("Starting the API server...")  # pragma: no cover
     db_url = get_db_url(__platform__)  # pragma: no cover
     logger.info("Using database: '%s'", db_url)  # pragma: no cover
-    await service_discovery(True)
     await db_init(db_url)
 
 
@@ -139,21 +95,23 @@ async def shutdown_event():
 @app.get("/health", status_code=200, tags=["Utilities"])
 def get_health_status():
     """Health check."""
-    return {"status": "ok"}
+    return {"status": InstrumentHealth.OPERATIONAL}
 
 
 @app.post(
     "/queue",
     status_code=status.HTTP_201_CREATED,
-    response_model=SynthesisQueueModel,
+    response_model=SynthesisTaskModel,
     tags=["Synthesis Queue"],
 )
 async def add_a_task_to_synthesis_queue(
-    sequence: str, category: SeqCategory = SeqCategory.DNA, rank: int = 0
+    sequence: NucleotidesModel, solid_support: SolidSupport, rank: int = 0
 ):
     """Add a synthesis task to the synthesis task queue by providing a sequence and its category."""
     try:
-        return await SynthesisQueue.create(sequence=sequence, category=category, rank=rank)
+        task = await SynthesisTask.create(sequence=sequence, solid_support=solid_support, rank=rank)
+        # return { "status": task.status, "created_at": task.created_at }
+        return task
     except ValidationError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
     finally:
@@ -162,13 +120,13 @@ async def add_a_task_to_synthesis_queue(
 
 @app.get(
     "/queue",
-    response_model=list[SynthesisQueueModel],  # type: ignore
+    response_model=list[SynthesisTaskModel],  # type: ignore
     status_code=status.HTTP_200_OK,
     tags=["Synthesis Queue"],
 )
 async def get_all_tasks_in_synthesis_queue(filter_by: Optional[TaskStatus] = None):
     """Get the current synthesis task queue."""
-    tasks = SynthesisQueue.all().order_by("-rank", "-created_at")
+    tasks = SynthesisTask.all().order_by("-rank", "-created_at")
     if filter_by:
         tasks = tasks.filter(status=filter)
     return await tasks
@@ -177,13 +135,13 @@ async def get_all_tasks_in_synthesis_queue(filter_by: Optional[TaskStatus] = Non
 @app.delete("/queue", status_code=status.HTTP_200_OK, tags=["Synthesis Queue"])
 async def clear_all_queued_tasks_in_task_queue():
     """Delete all tasks in the QUEUED state."""
-    return await SynthesisQueue.filter(status=TaskStatus.QUEUED).delete()
+    return await SynthesisTask.filter(status=TaskStatus.WAITING_IN_QUEUE).delete()
 
 
-@app.get("/queue/{task_id}", response_model=SynthesisQueueModel, tags=["Synthesis Queue"])
+@app.get("/queue/{task_id}", response_model=SynthesisTaskModel, tags=["Synthesis Queue"])
 async def get_task_by_id(task_id: int):
     """Get a synthesis task from the queue."""
-    task = await SynthesisQueue.get_or_none(id=task_id)
+    task = await SynthesisTask.get_or_none(id=task_id)
     if task is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sythesis task not found")
     return task
@@ -191,20 +149,20 @@ async def get_task_by_id(task_id: int):
 
 @app.put(
     "/queue/{task_id}",
-    response_model=SynthesisQueueModel,
+    response_model=SynthesisTaskModel,
     status_code=status.HTTP_200_OK,
     tags=["Synthesis Queue"],
 )
 async def update_a_synthesis_task(
-    task_id: int, sequence: Optional[str] = Body(None), rank: Optional[int] = Body(None)
+    task_id: int, sequence: NucleotidesModel, rank: Optional[int] = Body(None)
 ):
     """Update a particular task in the queue."""
-    task = await SynthesisQueue.get_or_none(id=task_id)
+    task = await SynthesisTask.get_or_none(id=task_id)
 
     if task is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sequence task not found")
 
-    if task.status != TaskStatus.QUEUED:
+    if task.status != TaskStatus.WAITING_IN_QUEUE:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Sequence task not in QUEUED state"
         )
@@ -219,7 +177,7 @@ async def update_a_synthesis_task(
     if sequence is not None:
         try:
             seq_validator = ValidSeq()
-            seq_validator(sequence)
+            # seq_validator(sequence)
             task.sequence = sequence  # type: ignore
         except ValidationError as exc:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
@@ -235,7 +193,7 @@ async def update_a_synthesis_task(
 @app.delete("/queue/{task_id}", status_code=status.HTTP_200_OK, tags=["Synthesis Queue"])
 async def delete_synthesis_task_by_id(task_id: int):
     """Delete a synthesis task from the queue."""
-    task = await SynthesisQueue.get_or_none(id=task_id)
+    task = await SynthesisTask.get_or_none(id=task_id)
 
     if task is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Sequence not found")
