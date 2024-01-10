@@ -8,7 +8,7 @@ def test_nc_no_valve():
     s1 = Valve(gpio_pin=board.P3, valve_type=ValveType.NORMALLY_CLOSED)
     s2 = Valve(gpio_pin=board.P5)
 
-    assert s1._state == ValveState.CLOSED_FLOW, "NC valve _state should be closed by default"
+    assert s1.state == ValveState.CLOSED_FLOW, "NC valve _state should be closed by default"
     assert not s1.value, "NC valve value should be closed by default"
     assert s2._state == ValveState.OPEN_FLOW, "NO valve _state should be open by default"
     assert s2.value, "NO valve value should be open by default"
