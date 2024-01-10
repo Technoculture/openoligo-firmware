@@ -176,7 +176,7 @@ async def update_a_synthesis_task(
 
     if sequence is not None:
         try:
-            seq_validator = ValidSeq()
+
             # seq_validator(sequence)
             task.sequence = sequence  # type: ignore
         except ValidationError as exc:
