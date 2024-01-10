@@ -4,10 +4,10 @@ from openoligo.seq import Seq, is_valid_dna
 
 
 def test_is_valid_dna():
-    assert is_valid_dna("ATCG") == True
-    assert is_valid_dna("ATCGatcg") == True
-    assert is_valid_dna("ABCDE") == False
-    assert is_valid_dna("") == True
+    assert is_valid_dna("ATCG") is True
+    assert is_valid_dna("ATCGatcg") is True
+    assert is_valid_dna("ABCDE") is False
+    assert is_valid_dna("") is True
 
 
 def test_Seq_initialization():

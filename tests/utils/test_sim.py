@@ -3,10 +3,9 @@ from importlib import reload
 from unittest.mock import patch
 
 import openoligo.utils.sim as simulation_params
-from openoligo.hal.types import Platform, __platform__
+from openoligo.hal.types import Platform
 
 # assuming the file is named `simulation_params.py`
-from openoligo.utils.sim import SIMULATION_SPEEDUP_FACTOR
 
 
 def test_simulation_speedup_env_var_set():

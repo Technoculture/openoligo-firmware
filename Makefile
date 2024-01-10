@@ -78,8 +78,7 @@ format-check:
 	@black --check $(LIBNAME) $(TESTDIR) $(EXAMPLEDIR)
 
 lint:
-	@pylint $(LIBNAME)
-	@flake8 $(LIBNAME)
+	@ruff check . --fix
 
 type:
 	@mypy $(LIBNAME) $(EXAMPLEDIR) --check-untyped-defs --ignore-missing-imports

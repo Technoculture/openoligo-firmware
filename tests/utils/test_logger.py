@@ -1,6 +1,5 @@
 import logging
-from logging.handlers import RotatingFileHandler
-from unittest.mock import MagicMock, call, create_autospec, patch
+from unittest.mock import create_autospec, patch
 
 import pytest
 
@@ -19,7 +18,7 @@ def test_log_path(tmpdir):
 
 
 def test_oligo_logger_initialization():
-    with patch("logging.getLogger", return_value=logging.Logger("test")) as mock_get_logger:
+    with patch("logging.getLogger", return_value=logging.Logger("test")):
         logger = OligoLogger("test")
         assert logger.name == "test"
         assert logger.log_level == "INFO"

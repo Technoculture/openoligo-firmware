@@ -3,7 +3,8 @@ from setuptools import setup, find_packages
 setup(
     name="OpenOligo",
     version="0.1.8",
-    description="An open-source platform for programmatically interacting with and managing Nucleic acid sequences synthesis processes.",
+    description="""An open-source platform for programmatically interacting with and 
+    managing Nucleic acid sequences synthesis processes.""",
     license="Apache-2.0",
     author="Satyam Tiwary",
     author_email="satyam@technoculture.io",
@@ -23,9 +24,6 @@ setup(
         "sh>=2.0.4",
         "anyio>=3.7.0",
         "types-requests>=2.31.0.1",
-        "jupyer>=1.0.0",
-        "jupyerlab>=4.0.2",
-        "setuptools>=68.0.0",
     ],
     extras_require={
         "rpi": ["RPi.GPIO>=0.7.1"],

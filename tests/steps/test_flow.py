@@ -1,9 +1,6 @@
 import asyncio
 from unittest.mock import AsyncMock, MagicMock, patch
 
-import pytest
-
-import openoligo.steps.flow as flowmodule
 from openoligo.steps.flow import (
     dry,
     dry_all,

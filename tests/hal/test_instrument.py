@@ -1,12 +1,11 @@
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 import pytest
 
 from openoligo.hal.board import Pinout
 from openoligo.hal.devices import Valve
-from openoligo.hal.gpio import get_gpio
 from openoligo.hal.instrument import Instrument
-from openoligo.hal.types import OneDestinationException, OneSourceException, ValveRole, board
+from openoligo.hal.types import OneDestinationException, OneSourceException, ValveRole
 
 
 @pytest.fixture

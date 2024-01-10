@@ -1,15 +1,12 @@
-import os
 from unittest.mock import patch
 
 import pytest
-from fastapi import HTTPException, status
 from fastapi.testclient import TestClient
 
 from openoligo.api.helpers import update_task_status
 from openoligo.api.models import TaskStatus
 from openoligo.hal.platform import Platform
 from openoligo.scripts.server import app, get_db_url
-from openoligo.seq import SeqCategory
 
 client = TestClient(app)
 
@@ -34,7 +31,7 @@ def test_add_task_to_synthesis_queue(db):
     response = client.post(f"/queue?sequence={sequence}&category=DNA&rank=-10")
     assert response.status_code == 201
 
-    response = client.post(f"/queue?sequence=A&category=RNA&rank=0")
+    response = client.post("/queue?sequence=A&category=RNA&rank=0")
     assert response.status_code == 400
 
 
@@ -79,16 +76,16 @@ def test_clear_all_queued_tasks_in_task_queue(db):
 
 
 def test_get_task_by_id(db):
-    client.post(f"/queue?sequence=AAATTT&category=DNA")
-    client.post(f"/queue?sequence=CCGG&category=RNA&rank=1")
+    client.post("/queue?sequence=AAATTT&category=DNA")
+    client.post("/queue?sequence=CCGG&category=RNA&rank=1")
 
     # get the task
-    response = client.get(f"/queue/2")
+    response = client.get("/queue/2")
     assert response.status_code == 200
     assert response.json()["id"] == 2
 
     # get a task that doesn't exist
-    response = client.get(f"/queue/100")
+    response = client.get("/queue/100")
     assert response.status_code == 404
 
 
@@ -111,22 +108,22 @@ async def test_update_a_synthesis_task(db):
     assert response.json()["sequence"] == "GTCA"
 
     # Try updating the task without providing the id
-    response = client.put(f"/queue/", json=updated_data)
+    response = client.put("/queue/", json=updated_data)
     assert response.status_code == 405
 
     # Try updating the task using the wrong id
-    response = client.put(f"/queue/999999", json=updated_data)
+    response = client.put("/queue/999999", json=updated_data)
     assert response.status_code == 404
 
     # Try updating the task that is already in progress, complete or failed
     await update_task_status(task_id1, TaskStatus.IN_PROGRESS)
-    response = client.put(f"/queue/1", json=updated_data)
+    response = client.put("/queue/1", json=updated_data)
     assert response.status_code == 400
 
-    response = client.put(f"/queue/2", json={"sequence": None, "rank": None})
+    response = client.put("/queue/2", json={"sequence": None, "rank": None})
     assert response.status_code == 400
 
-    response = client.put(f"/queue/2", json={"sequence": "AG", "rank": 1})
+    response = client.put("/queue/2", json={"sequence": "AG", "rank": 1})
     assert response.status_code == 400
 
 

@@ -37,7 +37,7 @@ def test_mock_gpio():
 
     assert (
         gpio.__repr__()
-        == "{'P3': False, 'P5': False, 'P7': False, 'P8': False, 'P10': False, 'P11': False, 'P12': False, 'P13': False, 'P15': False, 'P16': False, 'P18': False, 'P19': False, 'P21': True, 'P22': True, 'P23': False, 'P24': False, 'P26': False, 'P27': False, 'P28': False, 'P29': False, 'P31': False, 'P32': False, 'P33': False, 'P35': False, 'P36': False, 'P37': False, 'P38': False, 'P40': True}"
+        == "{'P3': False, 'P5': False, 'P7': False, 'P8': False, 'P10': False, 'P11': False, 'P12': False, 'P13': False, 'P15': False, 'P16': False, 'P18': False, 'P19': False, 'P21': True, 'P22': True, 'P23': False, 'P24': False, 'P26': False, 'P27': False, 'P28': False, 'P29': False, 'P31': False, 'P32': False, 'P33': False, 'P35': False, 'P36': False, 'P37': False, 'P38': False, 'P40': True}"  # noqa: E501
     ), "repr should return all pin states in (pin_number, 0 or 1) format"  # noqa: E501
 
     gpio.cleanup()
