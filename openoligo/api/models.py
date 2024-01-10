@@ -49,6 +49,7 @@ class ReactantType(str, Enum):
 
 class InstrumentHealth(str, Enum):
     """Instrument health status"""
+    """Instrument health status"""
 
     OPERATIONAL = "Operational"
     DEGRADED = "Degraded"
